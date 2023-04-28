@@ -7,6 +7,8 @@ import App from './App.tsx';
 import './index.css';
 import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage } from './pages/index.tsx';
 import { theme } from './theme.ts';
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
     {
@@ -41,9 +43,11 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <RouterProvider router={router} />
-            <App />
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={theme}>
+                <RouterProvider router={router} />
+                <App />
+            </ThemeProvider>
+        </QueryClientProvider>
     </React.StrictMode>
 );
