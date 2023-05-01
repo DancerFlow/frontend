@@ -13,9 +13,11 @@
     "@types/styled-components": "^5.1.26",
     "axios": "^1.4.0",
     "react": "^18.2.0",
+    "react-calendar": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.10.0",
+    "recharts": "^2.5.0",
     "styled-components": "^5.3.10"
   },
   "devDependencies": {
