@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import fakeData from '../data.json';
+import { motion } from 'framer-motion';
 
 import { useState } from 'react';
 
@@ -16,6 +17,28 @@ interface ISettings {
     rows: number;
     slidesPerRow: number;
 }
+
+const musciVariants = {
+    normal: {
+        scale: 1
+    },
+    hover: {
+        scale: 1.1,
+        transistion: {
+            delay: 2,
+            type: 'tween'
+        }
+    }
+};
+
+const musicInfoVariants = {
+    hover: {
+        opacity: 0.7,
+        transition: {
+            type: 'tween'
+        }
+    }
+};
 
 const ContentSlide = () => {
     const settings: ISettings = {
@@ -36,7 +59,12 @@ const ContentSlide = () => {
                         {fakeData.map((data) => {
                             return (
                                 <MusicWrap>
-                                    <Music img={data.img}>{data.title}</Music>
+                                    <Music img={data.img} whileHover="hover" initial="normal" variants={musciVariants}>
+                                        <MusicInfo variants={musicInfoVariants}>
+                                            <h1>{data.title}</h1>
+                                            <h4>{data.artist}</h4>
+                                        </MusicInfo>
+                                    </Music>
                                 </MusicWrap>
                             );
                         })}
@@ -62,7 +90,7 @@ const MusicWrap = styled.div`
     align-items: center;
 `;
 
-const Music = styled.div<{img:string}>`
+const Music = styled(motion.div)<{ img: string }>`
     width: 250px;
     height: 250px;
     background-color: white;
@@ -71,6 +99,36 @@ const Music = styled.div<{img:string}>`
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center center;
+    position: relative;
+`;
+
+const MusicInfo = styled(motion.div)`
+    padding: 20px;
+    background-color: ${(props) => props.theme.pink};
+    opacity: 0.3;
+    position: absolute;
+    bottom: 0;
+    width: 84%;
+    height: 15%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    h1 {
+        text-align: center;
+        font-size: 20px;
+        color: ${(props) => props.theme.yellow};
+        font-weight: 900;
+        z-index: 99;
+        margin-bottom: 5px;
+    }
+
+    h4 {
+        text-align: center;
+        font-size: 15px;
+        color: ${(props) => props.theme.blue};
+        font-weight: 700;
+
+    }
 `;
 
 export default ContentSlide;
