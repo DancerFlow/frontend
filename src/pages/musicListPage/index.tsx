@@ -1,18 +1,15 @@
 import styled from 'styled-components';
 import Header from './components/Header';
 import Filter from './components/Filter';
+import Content from './components/Content';
 
-const ContentWrap = styled.div`
-    height: 55%;
-    background-color: yellow;
-`;
 
 const MusicListPage = () => {
     return (
         <Wrapper>
             <Header></Header>
             <Filter />
-            <ContentWrap />
+            <Content/>
         </Wrapper>
     );
 };
