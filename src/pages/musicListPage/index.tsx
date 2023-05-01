@@ -1,9 +1,23 @@
-import React from 'react'
+import styled from 'styled-components';
+import Header from './components/Header';
+import Filter from './components/Filter';
+import Content from './components/Content';
+
 
 const MusicListPage = () => {
-  return (
-    <div>index</div>
-  )
-}
+    return (
+        <Wrapper>
+            <Header></Header>
+            <Filter />
+            <Content/>
+        </Wrapper>
+    );
+};
 
-export default MusicListPage
+const Wrapper = styled.div`
+    height: 100vh;
+    width: 100%;
+    background: #2a1e57;
+`;
+
+export default MusicListPage;
