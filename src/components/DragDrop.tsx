@@ -9,7 +9,7 @@ interface Props {
 const DragDrop = ({ file, setFile }: Props) => {
     const [isDragging, setIsDragging] = useState(false);
 
-    const handleDrag = (e) => {
+    const handleDrag = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -19,7 +19,7 @@ const DragDrop = ({ file, setFile }: Props) => {
         }
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
