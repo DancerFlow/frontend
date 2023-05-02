@@ -1,6 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
 
+interface ModalFrameProps {
+    modalOpen: boolean;
+    handleModal: () => void;
+    children: React.ReactNode;
+}
+
+const ModalFrame = ({ handleModal, children, modalOpen, ...rest }: ModalFrameProps) => {
+    return (
+        <>
+            {modalOpen && (
+                <Container>
+                    <Background onClick={handleModal} />
+                    <ModalBlock {...rest}>
+                        <Close onClick={handleModal} />
+                        <Contents>{children}</Contents>
+                    </ModalBlock>
+                </Container>
+            )}
+        </>
+    );
+};
+
 const Container = styled.div`
     position: absolute;
     width: 100%;
@@ -73,27 +95,5 @@ const Contents = styled.div`
     flex-direction: column;
     align-items: center;
 `;
-
-interface ModalFrameProps {
-    modalOpen: boolean;
-    handleModal: () => void;
-    children: React.ReactNode;
-}
-
-const ModalFrame = ({ handleModal, children, modalOpen, ...rest }: ModalFrameProps) => {
-    return (
-        <>
-            {modalOpen && (
-                <Container>
-                    <Background onClick={handleModal} />
-                    <ModalBlock {...rest}>
-                        <Close onClick={handleModal} />
-                        <Contents>{children}</Contents>
-                    </ModalBlock>
-                </Container>
-            )}
-        </>
-    );
-};
 
 export default ModalFrame;

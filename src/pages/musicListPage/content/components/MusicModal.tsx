@@ -1,4 +1,4 @@
-import ModalFrame from './ModalFrame';
+import ModalFrame from '../../common/ModalFrame';
 
 interface ModalFrameProps {
     modalOpen: boolean;
