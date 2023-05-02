@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import ContentSlide from './components/ContentSlide';
-import MusicModal from './components/MusicModal';
+import ContentSlide from './ContentSlide';
+import MusicModal from './MusicModal';
 
 const Content = () => {
     const [modalOpen, setModalOpen] = useState(false);

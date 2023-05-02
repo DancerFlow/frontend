@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Header from './header/Header';
-import Filter from './filter/Filter';
-import Content from './content/Content';
+import Header from '../../components/musicList/header/Header';
+import Filter from '../../components/musicList/filter/Filter';
+import Content from '../../components/musicList/content/';
 import { useState } from 'react';
 
 const MusicListPage = () => {

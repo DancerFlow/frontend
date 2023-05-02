@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import fakeData from '../../data.json';
+import fakeData from '../../../pages/musicListPage/musicFakeData.json';
 import { motion } from 'framer-motion';
 
 interface ISettings {
