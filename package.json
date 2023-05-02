@@ -16,6 +16,10 @@
         "@types/react-howler": "^5.2.0",
         "@types/styled-components": "^5.1.26",
         "axios": "^1.4.0",
+        "@types/react-slick": "^0.23.10",
+        "@types/styled-components": "^5.1.26",
+        "axios": "^1.4.0",
+        "framer-motion": "^10.12.4",
         "howler": "^2.2.3",
         "lottie-react": "^2.4.0",
         "react": "^18.2.0",
@@ -24,7 +28,9 @@
         "react-howler": "^5.2.0",
         "react-query": "^3.39.3",
         "react-router-dom": "^6.10.0",
+        "react-slick": "^0.29.0",
         "recharts": "^2.5.0",
+        "slick-carousel": "^1.8.1",
         "styled-components": "^5.3.10"
     },
     "devDependencies": {
