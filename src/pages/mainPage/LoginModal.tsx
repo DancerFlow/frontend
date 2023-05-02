@@ -10,6 +10,8 @@ interface Props {
 const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const passwordConfirmRef = useRef<HTMLInputElement>(null);
+    const nicknameRef = useRef<HTMLInputElement>(null);
     const [formValid, setFormValid] = useState<string>('');
     const [file, setFile] = useState<FileList | undefined>();
     const [registerStep, setRegisterStep] = useState(0);
@@ -20,7 +22,14 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
         setRegisterStep(0);
     };
 
-    const handleRegisterStep = () => {
+    const handleLogin = () => {
+        console.log(emailRef.current?.value, passwordRef.current?.value);
+    };
+    const handelSignup = () => {
+        console.log();
+    };
+
+    const renderRegisterStep = () => {
         switch (registerStep) {
             case 0:
                 return (
@@ -41,7 +50,7 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                                 />
                             </Fieldset>
 
-                            <LoginButton>LOGIN</LoginButton>
+                            <LoginButton onClick={handleLogin}>LOGIN</LoginButton>
                             <p>{formValid}</p>
                         </FieldContainer>
                         <SelectContainer>
@@ -58,7 +67,7 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                         </Fieldset>
 
                         <Fieldset>
-                            <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
+                            <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
                         </Fieldset>
 
                         <Fieldset>
@@ -66,7 +75,14 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                         </Fieldset>
 
                         <Fieldset>
-                            <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
+                            <input
+                                required
+                                ref={passwordConfirmRef}
+                                id="passwordConfirm"
+                                type="password"
+                                name="password"
+                                placeholder="confirm password"
+                            />
                         </Fieldset>
 
                         <LoginButton onClick={() => setRegisterStep(2)}>NEXT</LoginButton>
@@ -80,7 +96,7 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                             <DragDrop file={file} setFile={setFile}></DragDrop>
                         </Fieldset>
 
-                        <LoginButton>SIGNUP</LoginButton>
+                        <LoginButton onClick={handelSignup}>SIGNUP</LoginButton>
                         <p>{formValid}</p>
                     </FieldContainer>
                 );
@@ -91,7 +107,7 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
         <>
             <ModalBackground onClick={() => handleModalClick()}> </ModalBackground>
             <FormS>
-                <FormContainer>{handleRegisterStep()}</FormContainer>
+                <FormContainer>{renderRegisterStep()}</FormContainer>
             </FormS>
         </>
     );
@@ -138,6 +154,9 @@ const FormContainer = styled.div`
         margin-bottom: 20px;
         font-size: 0.9rem;
         letter-spacing: 2px;
+    }
+    input:focus {
+        outline: 2px solid #27fd1c;
     }
 `;
 
