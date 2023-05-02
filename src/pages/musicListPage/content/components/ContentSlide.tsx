@@ -99,8 +99,10 @@ const MusicWrap = styled.div`
 `;
 
 const Music = styled(motion.div)<{ img: string }>`
-    width: 250px;
-    height: 250px;
+    width: calc(100% - 40px);
+    height: 25vh;
+    max-width: 250px;
+    max-height: 250px;
     background-color: white;
     border-radius: 10px;
     margin: 15px;
@@ -116,7 +118,7 @@ const MusicInfo = styled(motion.div)`
     opacity: 0.3;
     position: absolute;
     bottom: 0;
-    width: 84%;
+    width: inherit;
     height: 15%;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -128,6 +130,9 @@ const MusicInfo = styled(motion.div)`
         font-weight: 900;
         z-index: 99;
         margin-bottom: 5px;
+        @media screen and (max-width: 1500px) {
+            font-size: 15px;
+        }
     }
 
     h4 {
@@ -135,6 +140,9 @@ const MusicInfo = styled(motion.div)`
         font-size: 15px;
         color: ${(props) => props.theme.blue};
         font-weight: 700;
+        @media screen and (max-width: 1500px) {
+            font-size: 10px;
+        }
     }
 `;
 
