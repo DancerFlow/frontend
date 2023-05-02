@@ -3,13 +3,12 @@ import Header from './components/Header';
 import Filter from './components/Filter';
 import Content from './components/Content';
 
-
 const MusicListPage = () => {
     return (
         <Wrapper>
             <Header></Header>
             <Filter />
-            <Content/>
+            <Content />
         </Wrapper>
     );
 };

@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import ContentSlide from './ContentSlide';
+import MusicModal from './MusicModal';
 
 const Content = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleModal = () => {
+        setModalOpen(!modalOpen);
+    };
     return (
         <Wrapper>
-            <ContentSlide />
+            <ContentSlide handleModal={handleModal} />
+            <MusicModal handleModal={handleModal} modalOpen={modalOpen} />
         </Wrapper>
     );
 };

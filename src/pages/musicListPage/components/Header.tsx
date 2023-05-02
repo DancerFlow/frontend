@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 const Header = () => {
     return (

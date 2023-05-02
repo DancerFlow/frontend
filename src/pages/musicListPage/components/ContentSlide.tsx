@@ -5,8 +5,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import fakeData from '../data.json';
 import { motion } from 'framer-motion';
 
-import { useState } from 'react';
-
 interface ISettings {
     className: string;
     centerMode: boolean;
@@ -40,7 +38,11 @@ const musicInfoVariants = {
     }
 };
 
-const ContentSlide = () => {
+interface ModalFrameProps {
+    handleModal: () => void;
+}
+
+const ContentSlide = ({ handleModal }: ModalFrameProps) => {
     const settings: ISettings = {
         className: 'center',
         centerMode: true,
@@ -59,7 +61,13 @@ const ContentSlide = () => {
                         {fakeData.map((data) => {
                             return (
                                 <MusicWrap>
-                                    <Music img={data.img} whileHover="hover" initial="normal" variants={musciVariants}>
+                                    <Music
+                                        onClick={handleModal}
+                                        img={data.img}
+                                        whileHover="hover"
+                                        initial="normal"
+                                        variants={musciVariants}
+                                    >
                                         <MusicInfo variants={musicInfoVariants}>
                                             <h1>{data.title}</h1>
                                             <h4>{data.artist}</h4>
@@ -127,7 +135,6 @@ const MusicInfo = styled(motion.div)`
         font-size: 15px;
         color: ${(props) => props.theme.blue};
         font-weight: 700;
-
     }
 `;
 
