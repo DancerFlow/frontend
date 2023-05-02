@@ -2,12 +2,18 @@ import styled from 'styled-components';
 import Header from './header/Header';
 import Filter from './filter/Filter';
 import Content from './content/Content';
+import { useState } from 'react';
 
 const MusicListPage = () => {
+    const [selectedFilter, setSelectedFilter] = useState('');
+
+    const handleClick = (item: string): void => {
+        setSelectedFilter(item);
+    };
     return (
         <Wrapper>
             <Header></Header>
-            <Filter />
+            <Filter handleClick={handleClick} selected={selectedFilter} />
             <Content />
         </Wrapper>
     );
