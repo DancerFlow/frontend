@@ -6,6 +6,7 @@ import fakeData from '../../data.json';
 import { motion } from 'framer-motion';
 
 interface ISettings {
+    dots: boolean;
     className: string;
     centerMode: boolean;
     infinite: boolean;
@@ -14,6 +15,8 @@ interface ISettings {
     speed: number;
     rows: number;
     slidesPerRow: number;
+    appendDots: (dots: any) => JSX.Element;
+    dotsClass: string;
 }
 
 const musciVariants = {
@@ -44,6 +47,7 @@ interface ModalFrameProps {
 
 const ContentSlide = ({ handleModal }: ModalFrameProps) => {
     const settings: ISettings = {
+        dots: true,
         className: 'center',
         centerMode: true,
         infinite: true,
@@ -51,8 +55,24 @@ const ContentSlide = ({ handleModal }: ModalFrameProps) => {
         slidesToShow: 3,
         speed: 500,
         rows: 2,
-        slidesPerRow: 1
+        slidesPerRow: 1,
+        appendDots: (dots: any) => (
+            <div
+                style={{
+                    width: '100%',
+                    position: 'absolute',
+                    bottom: '-15px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <ul> {dots} </ul>
+            </div>
+        ),
+        dotsClass: 'dots_custom'
     };
+
     return (
         <>
             <MusicListWrap>
