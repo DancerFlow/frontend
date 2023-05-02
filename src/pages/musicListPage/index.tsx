@@ -3,6 +3,7 @@ import Header from '../../components/musicList/header/Header';
 import Filter from '../../components/musicList/filter/Filter';
 import Content from '../../components/musicList/content/';
 import { useState } from 'react';
+import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 
 const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState('');
@@ -10,6 +11,8 @@ const MusicListPage = () => {
     const handleClick = (item: string): void => {
         setSelectedFilter(item);
     };
+    const { isLoading, error, data } = useGetMusicListQuery();
+    console.log(isLoading, error, data); //false, null, 데이터 (api 요청 성공)
     return (
         <Wrapper>
             <Header></Header>
