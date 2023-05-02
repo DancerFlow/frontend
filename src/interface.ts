@@ -1,17 +1,13 @@
-export interface Signup {
-    error: object;
-    massage: string;
+export interface Status {
+    error?: object;
+    massage?: string;
     status_code: number;
 }
 
-export interface Login {
-    error: object;
-    massage: string;
-    status_code: number;
+export interface User {
+    Status: Status;
     access_token: string;
 }
-
-//로그아웃, 탈퇴, 찜하기.... 메세지만 받는 api 어떻게 작성하는지???
 
 enum Tier {
     Bronze,
@@ -22,24 +18,16 @@ enum Tier {
 }
 
 export interface Profile {
-    error: object;
-    massage: string;
-    status_code: number;
+    Status: Status;
     user_nickname: string;
     user_email: string;
-    user_profile_image_url: string;
-    user_tier: Tier;
-    user_xp: number;
+    user_profile_image_url?: string;
+    user_tier?: Tier;
+    user_xp?: number;
 }
 
 export interface Calendar {
     calendar_date: Date[];
-}
-
-export interface UserLikes {
-    music_name: string;
-    music_image_url: string;
-    music_singer: string;
 }
 
 export interface UserGameHistory {
@@ -62,20 +50,14 @@ export interface UserGameMusicHistory {
     music_score_by_date: { music_score: number; music_score_created_at: Date };
 }
 
-export interface MusicList {
+export interface Music {
     music_name: string;
     music_image_url: string;
     music_singer: string;
-}
-
-export interface MusicInfo {
-    music_name: string;
-    music_image_url: string;
-    music_description: string;
-    music_singer: string;
-    music_likes: number;
-    music_played: number;
-    music_is_like: boolean;
+    music_description?: string;
+    music_likes?: number;
+    music_played?: number;
+    music_is_like?: boolean;
 }
 
 export interface MusicRank {
