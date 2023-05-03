@@ -26,7 +26,6 @@ const MusicListPage = () => {
         }
     }, [selectedFilter]);
 
-    console.log(musicList);
     return (
         <Wrapper>
             <Header></Header>

@@ -43,7 +43,7 @@ const Background = styled.div`
     height: 100%;
     background-color: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(5px);
-    animation: modal-bg-show 0.5s;
+    animation: modal-bg-show 0.3s;
     @keyframes modal-bg-show {
         from {
             opacity: 0;
@@ -57,10 +57,10 @@ const Background = styled.div`
 const ModalBlock = styled.div`
     position: absolute;
     top: 6.5rem;
-    border-radius: 10px;
+    border-radius: 30px;
     padding: 1.5rem;
-    background-color: white;
-    width: 40rem;
+    background-color: ${(props) => props.theme.green};
+    width: 50%;
     @media (max-width: 1120px) {
         width: 50rem;
     }
@@ -68,7 +68,7 @@ const ModalBlock = styled.div`
         width: 80%;
     }
     min-height: 35rem;
-    animation: modal-show 1s;
+    animation: modal-show 0.5s;
     @keyframes modal-show {
         from {
             opacity: 0;
@@ -92,8 +92,9 @@ const Close = styled.img.attrs({
 
 const Contents = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 550px;
 `;
 
 export default ModalFrame;

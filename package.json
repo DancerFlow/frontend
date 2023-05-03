@@ -14,8 +14,6 @@
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
         "@types/react-howler": "^5.2.0",
-        "@types/styled-components": "^5.1.26",
-        "axios": "^1.4.0",
         "@types/react-slick": "^0.23.10",
         "@types/styled-components": "^5.1.26",
         "axios": "^1.4.0",
