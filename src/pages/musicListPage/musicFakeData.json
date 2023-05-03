@@ -1,111 +1,93 @@
 [
     {
-        "id": 1,
-        "title": "Butter",
-        "artist": "BTS",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/902/5902422.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Butter",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/902/5902422.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 2,
-        "title": "Dynamite",
-        "artist": "BTS",
-        "img": "https://musicmeta-phinf.pstatic.net/album/004/820/4820425.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Dynamite",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/004/820/4820425.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 3,
-        "title": "Permission to Dance",
-        "artist": "BTS",
-        "img": "https://musicmeta-phinf.pstatic.net/album/006/162/6162038.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Permission to Dance",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/162/6162038.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 4,
-        "title": "Levitating",
-        "artist": "Dua Lipa",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/010/5010010.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Levitating",
+        "music_singer": "Dua Lipa",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/010/5010010.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 5,
-        "title": "Love Again",
-        "artist": "Dua Lipa",
-        "img": "https://musicmeta-phinf.pstatic.net/album/008/755/8755186.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Love Again",
+        "music_singer": "Dua Lipa",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/008/755/8755186.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 6,
-        "title": "Bad Habits",
-        "artist": "Ed Sheeran",
-        "img": "https://musicmeta-phinf.pstatic.net/album/006/083/6083894.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Bad Habits",
+        "music_singer": "Ed Sheeran",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/083/6083894.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 7,
-        "title": "Shape of You",
-        "artist": "Ed Sheeran",
-        "img": "https://musicmeta-phinf.pstatic.net/album/001/773/1773331.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Shape of You",
+        "music_singer": "Ed Sheeran",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/001/773/1773331.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 8,
-        "title": "Peaches",
-        "artist": "Justin Bieber",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/388/5388407.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Peaches",
+        "music_singer": "Justin Bieber",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/388/5388407.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 9,
-        "title": "Stay",
-        "artist": "Justin Bieber ft. The Kid LAROI",
-        "img": "https://musicmeta-phinf.pstatic.net/album/006/158/6158502.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Stay",
+        "music_singer": "Justin Bieber ft. The Kid LAROI",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/158/6158502.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 10,
-        "title": "Blinding Lights",
-        "artist": "The Weeknd",
-        "img": "https://musicmeta-phinf.pstatic.net/album/003/573/3573494.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Blinding Lights",
+        "music_singer": "The Weeknd",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/003/573/3573494.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 11,
-        "title": "Save Your Tears",
-        "artist": "The Weeknd ft. Ariana Grande",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/690/5690737.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Save Your Tears",
+        "music_singer": "The Weeknd ft. Ariana Grande",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/690/5690737.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 12,
-        "title": "Hello",
-        "artist": "Adele",
-        "img": "https://musicmeta-phinf.pstatic.net/album/000/592/592966.jpg?type=r480Fll&v=20230331122327"
+        "music_name": "Hello",
+        "music_singer": "Adele",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/000/592/592966.jpg?type=r480Fll&v=20230331122327"
     },
     {
-        "id": 13,
-        "title": "Rolling in the Deep",
-        "artist": "Adele",
-        "img": "https://musicmeta-phinf.pstatic.net/album/000/599/599714.jpg?type=r480Fll&v=20230307032952"
+        "music_name": "Rolling in the Deep",
+        "music_singer": "Adele",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/000/599/599714.jpg?type=r480Fll&v=20230307032952"
     },
     {
-        "id": 14,
-        "title": "Happier Than Ever",
-        "artist": "Billie Eilish",
-        "img": "https://musicmeta-phinf.pstatic.net/album/006/253/6253722.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Happier Than Ever",
+        "music_singer": "Billie Eilish",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/253/6253722.jpg?type=r360Fll&v=202305012311"
     },
 
     {
-        "id": 15,
-        "title": "Leave The Door Open",
-        "artist": "Silk Sonic",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/291/5291387.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Leave The Door Open",
+        "music_singer": "Silk Sonic",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/291/5291387.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 16,
-        "title": "drivers license",
-        "artist": "Olivia Rodrigo",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/902/5902299.jpg?type=r360Fll&v=202305012311"
+        "music_name": "drivers license",
+        "music_singer": "Olivia Rodrigo",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/902/5902299.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 17,
-        "title": "good 4 u",
-        "artist": "Olivia Rodrigo",
-        "img": "https://musicmeta-phinf.pstatic.net/album/005/838/5838849.jpg?type=r360Fll&v=202305012311"
+        "music_name": "good 4 u",
+        "music_singer": "Olivia Rodrigo",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/838/5838849.jpg?type=r360Fll&v=202305012311"
     },
     {
-        "id": 18,
-        "title": "Take My Breath",
-        "artist": "The Weeknd",
-        "img": "https://musicmeta-phinf.pstatic.net/album/006/285/6285863.jpg?type=r360Fll&v=202305012311"
+        "music_name": "Take My Breath",
+        "music_singer": "The Weeknd",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/285/6285863.jpg?type=r360Fll&v=202305012311"
     }
 ]

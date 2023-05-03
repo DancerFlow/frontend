@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import fakeData from '../../../pages/musicListPage/musicFakeData.json';
 import { motion } from 'framer-motion';
+import { Music } from '../../../interface';
 
 interface ISettings {
     dots: boolean;
@@ -43,9 +44,10 @@ const musicInfoVariants = {
 
 interface ModalFrameProps {
     handleModal: () => void;
+    musicList: Music[];
 }
 
-const ContentSlide = ({ handleModal }: ModalFrameProps) => {
+const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
     const settings: ISettings = {
         dots: true,
         className: 'center',
@@ -83,14 +85,14 @@ const ContentSlide = ({ handleModal }: ModalFrameProps) => {
                                 <MusicWrap>
                                     <Music
                                         onClick={handleModal}
-                                        img={data.img}
+                                        img={data.music_image_url}
                                         whileHover="hover"
                                         initial="normal"
                                         variants={musciVariants}
                                     >
                                         <MusicInfo variants={musicInfoVariants}>
-                                            <h1>{data.title}</h1>
-                                            <h4>{data.artist}</h4>
+                                            <h1>{data.music_name}</h1>
+                                            <h4>{data.music_singer}</h4>
                                         </MusicInfo>
                                     </Music>
                                 </MusicWrap>
