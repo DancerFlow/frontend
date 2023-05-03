@@ -7,7 +7,7 @@ import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { Music } from '../../interface';
 const MusicListPage = () => {
     const [musicList, setMusicList] = useState<Music[]>([]);
-    const [selectedFilter, setSelectedFilter] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState('popular');
 
     const handleClick = (item: string): void => {
         setSelectedFilter(item);

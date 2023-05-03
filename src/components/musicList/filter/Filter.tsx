@@ -99,7 +99,7 @@ const InputItem = styled.input`
     border-radius: 15px;
     padding: 0 40px 0 20px;
     transition: box-shadow 0.2s ease-in-out;
-    &:hover {
+    &:focus ,&:hover {
         box-shadow: 0px 0px 20px ${(props) => props.theme.pink};
     }
 `;

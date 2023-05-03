@@ -35,7 +35,7 @@ const musciVariants = {
 
 const musicInfoVariants = {
     hover: {
-        opacity: 0.7,
+        opacity: 0.8,
         transition: {
             type: 'tween'
         }
