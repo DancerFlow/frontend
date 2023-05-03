@@ -1,0 +1,47 @@
+[
+    {
+        "music_name": "Butter",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/902/5902422.jpg?type=r360Fll&v=202305012311",
+        "music_description": "test",
+        "music_likes": 1,
+        "music_played": 1,
+        "music_is_like": true
+    },
+    {
+        "music_name": "Dynamite",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/004/820/4820425.jpg?type=r360Fll&v=202305012311",
+        "music_description": "test",
+        "music_likes": 12,
+        "music_played": 2,
+        "music_is_like": true
+    },
+    {
+        "music_name": "Permission to Dance",
+        "music_singer": "BTS",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/006/162/6162038.jpg?type=r360Fll&v=202305012311",
+        "music_description": "test",
+        "music_likes": 13,
+        "music_played": 3,
+        "music_is_like": true
+    },
+    {
+        "music_name": "Save Your Tears",
+        "music_singer": "The Weeknd ft. Ariana Grande",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/005/690/5690737.jpg?type=r360Fll&v=202305012311",
+        "music_description": "test",
+        "music_likes": 231,
+        "music_played": 10,
+        "music_is_like": true
+    },
+    {
+        "music_name": "Hello",
+        "music_singer": "Adele",
+        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/000/592/592966.jpg?type=r480Fll&v=20230331122327",
+        "music_description": "test",
+        "music_likes": 0,
+        "music_played": 11,
+        "music_is_like": true
+    }
+]

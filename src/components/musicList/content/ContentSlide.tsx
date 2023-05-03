@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import fakeData from '../../../pages/musicListPage/musicFakeData.json';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
 
@@ -80,7 +79,7 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
             <MusicListWrap>
                 <SliderWrap>
                     <Slider {...settings}>
-                        {fakeData.map((data) => {
+                        {musicList.map((data) => {
                             return (
                                 <MusicWrap>
                                     <Music

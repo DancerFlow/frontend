@@ -3,7 +3,7 @@ import Header from '../../components/musicList/header/Header';
 import Filter from '../../components/musicList/filter/Filter';
 import Content from '../../components/musicList/content/';
 import { useEffect, useState } from 'react';
-import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
+import { useGetMusicLikesQuery, useGetMusicLatestQuery, useGetMusicIsLikeQuery } from '../../api/useGetMusicListQuery';
 import { Music } from '../../interface';
 const MusicListPage = () => {
     const [musicList, setMusicList] = useState<Music[]>([]);
@@ -12,10 +12,21 @@ const MusicListPage = () => {
     const handleClick = (item: string): void => {
         setSelectedFilter(item);
     };
-    const musicData = useGetMusicListQuery();
+    const musicLikes = useGetMusicLikesQuery();
+    const musicLatest = useGetMusicLatestQuery();
+    const musicIsLike = useGetMusicIsLikeQuery();
+
     useEffect(() => {
-        setMusicList(musicData);
-    }, []);
+        if (selectedFilter === 'popular') {
+            setMusicList(musicLikes);
+        } else if (selectedFilter === 'latest') {
+            setMusicList(musicLatest);
+        } else if (selectedFilter === 'favorite') {
+            setMusicList(musicIsLike);
+        }
+    }, [selectedFilter]);
+
+    console.log(musicList);
     return (
         <Wrapper>
             <Header></Header>
