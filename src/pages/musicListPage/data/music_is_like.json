@@ -34,14 +34,6 @@
         "music_likes": 231,
         "music_played": 10,
         "music_is_like": true
-    },
-    {
-        "music_name": "Hello",
-        "music_singer": "Adele",
-        "music_image_url": "https://musicmeta-phinf.pstatic.net/album/000/592/592966.jpg?type=r480Fll&v=20230331122327",
-        "music_description": "test",
-        "music_likes": 0,
-        "music_played": 11,
-        "music_is_like": true
     }
+
 ]

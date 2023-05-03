@@ -55,7 +55,7 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
         centerPadding: '60px',
         slidesToShow: 3,
         speed: 500,
-        rows: 2,
+        rows: musicList.length > 4 ? 2 : 1,
         slidesPerRow: 1,
         appendDots: (dots: any) => (
             <div
