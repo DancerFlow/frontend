@@ -1,20 +1,36 @@
 import styled from 'styled-components';
-import Header from './header/Header';
-import Filter from './filter/Filter';
-import Content from './content/Content';
-import { useState } from 'react';
-
+import Header from '../../components/musicList/header/Header';
+import Filter from '../../components/musicList/filter/Filter';
+import Content from '../../components/musicList/content/';
+import { useEffect, useState } from 'react';
+import { useGetMusicLikesQuery, useGetMusicLatestQuery, useGetMusicIsLikeQuery } from '../../api/useGetMusicListQuery';
+import { Music } from '../../interface';
 const MusicListPage = () => {
-    const [selectedFilter, setSelectedFilter] = useState('');
+    const [musicList, setMusicList] = useState<Music[]>([]);
+    const [selectedFilter, setSelectedFilter] = useState('popular');
 
     const handleClick = (item: string): void => {
         setSelectedFilter(item);
     };
+    const musicLikes = useGetMusicLikesQuery();
+    const musicLatest = useGetMusicLatestQuery();
+    const musicIsLike = useGetMusicIsLikeQuery();
+
+    useEffect(() => {
+        if (selectedFilter === 'popular') {
+            setMusicList(musicLikes);
+        } else if (selectedFilter === 'latest') {
+            setMusicList(musicLatest);
+        } else if (selectedFilter === 'favorite') {
+            setMusicList(musicIsLike);
+        }
+    }, [selectedFilter]);
+
     return (
         <Wrapper>
             <Header></Header>
             <Filter handleClick={handleClick} selected={selectedFilter} />
-            <Content />
+            <Content musicList={musicList} />
         </Wrapper>
     );
 };

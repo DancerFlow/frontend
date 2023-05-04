@@ -1,66 +1,69 @@
+export interface Status {
+    error?: object;
+    massage?: string;
+    status_code: number;
+}
+
 export interface User {
-    email: string;
-    password: string;
-    isAdmin: number;
-    createdAt: Date;
-    deletedAt: Date | null;
-    isDeleted: number;
+    Status: Status;
+    access_token: string;
 }
 
-export interface UserInfo {
-    nickname: string;
-    profile_image_url: string;
-    grade: number;
-    user_id: number;
-    frame_url: string;
-    Calendar: object;
+enum Tier {
+    Bronze,
+    Silver,
+    Gold,
+    Platinum,
+    Diamond
 }
 
-export interface Token {
-    refresh_token: string;
-    user_id: number;
-    expiredIn: Date | null;
+export interface Profile {
+    Status: Status;
+    user_nickname: string;
+    user_email: string;
+    user_profile_image_url?: string;
+    user_tier?: Tier;
+    user_xp?: number;
 }
 
-export interface Playlist {
-    score_id: number;
-    user_id: number;
-    music_list: object;
+export interface Calendar {
+    calendar_date: Date[];
 }
 
-export interface GameScore {
-    score: number;
-    user_id: number;
-    music_id: number;
-    createdAt: Date;
-    // isDeleted : number;
+export interface UserGameHistory {
+    music_name: string;
+    music_image_url: string;
+    music_singer: string;
+    user_music_best_score: number;
+    music_total_score: number;
 }
 
-export interface PracticeScore {
-    score_list: object;
-    user_id: number;
-    music_id: number;
-    createdAt: Date;
-    // isDeleted : number;
+export interface UserGameMusicHistory {
+    music_best_score_detail: {
+        score: number;
+        rank: number;
+        perfect: number;
+        good: number;
+        miss: number;
+    };
+    music_total_score: number;
+    music_score_by_date: { music_score: number; music_score_created_at: Date };
 }
 
 export interface Music {
-    music_id: number;
-    name: string;
-    singer: string;
-    img_url: string;
-    description: string;
-    likes: number;
-    played: number;
-    createdAt: Date;
-    deletedAt: Date;
-    isDeleted: number;
-    play_url: string;
-    answer_id: number;
+    music_name: string;
+    music_image_url: string;
+    music_singer: string;
+    music_description?: string;
+    music_likes?: number;
+    music_played?: number;
+    music_is_like?: boolean;
 }
 
-export interface Answer {
-    answer_id: number;
-    answer_sheet: object;
-    music_id: number;
+export interface MusicRank {
+    user_name: string;
+    user_score: number;
+    created_at: Date;
+    my_score: string;
+    my_rank: number;
 }
