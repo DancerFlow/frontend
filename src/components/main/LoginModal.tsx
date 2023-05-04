@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import DragDrop from '../../components/DragDrop';
+import DragDrop from '../common/DragDrop';
 
 interface Props {
     setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,21 +85,22 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                             />
                         </Fieldset>
 
-                        <LoginButton onClick={() => setRegisterStep(2)}>NEXT</LoginButton>
+                        <LoginButton>SIGNUP</LoginButton>
                         <p>{formValid}</p>
+                        <ReturnButton onClick={() => setRegisterStep(0)}>&larr;</ReturnButton>
                     </FieldContainer>
                 );
-            case 2:
-                return (
-                    <FieldContainer>
-                        <Fieldset>
-                            <DragDrop file={file} setFile={setFile}></DragDrop>
-                        </Fieldset>
+            // case 2:
+            //     return (
+            //         <FieldContainer>
+            //             <Fieldset>
+            //                 <DragDrop file={file} setFile={setFile}></DragDrop>
+            //             </Fieldset>
 
-                        <LoginButton onClick={handelSignup}>SIGNUP</LoginButton>
-                        <p>{formValid}</p>
-                    </FieldContainer>
-                );
+            //             <LoginButton onClick={handelSignup}>SIGNUP</LoginButton>
+            //             <p>{formValid}</p>
+            //         </FieldContainer>
+            //     );
         }
     };
 
@@ -203,6 +204,17 @@ const SelectContainer = styled.div`
         border-width: 0 0 1px 0;
         cursor: pointer;
     }
+`;
+
+const ReturnButton = styled.div`
+    color: #27fd1c;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 24px;
+    padding: 10px;
+    font-family: 'NanumSquareNeoBold';
+    cursor: pointer;
 `;
 
 export default LoginModal;
