@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface ModalFrameProps {
     modalOpen: boolean;
-    handleModal: () => void;
+    handleModal: (e: any) => void;
     children: React.ReactNode;
 }
 

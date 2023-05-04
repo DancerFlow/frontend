@@ -15,7 +15,7 @@ interface ISettings {
     speed: number;
     rows: number;
     slidesPerRow: number;
-    appendDots: (dots: any) => JSX.Element;
+    appendDots: (dots: string) => JSX.Element;
     dotsClass: string;
 }
 
@@ -42,7 +42,7 @@ const musicInfoVariants = {
 };
 
 interface ModalFrameProps {
-    handleModal: () => void;
+    handleModal: (e: any) => void;
     musicList: Music[];
 }
 
@@ -57,7 +57,7 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
         speed: 500,
         rows: musicList.length > 4 ? 2 : 1,
         slidesPerRow: 1,
-        appendDots: (dots: any) => (
+        appendDots: (dots: string) => (
             <div
                 style={{
                     width: '100%',
@@ -84,14 +84,19 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
                                 <MusicWrap>
                                     <Music
                                         onClick={handleModal}
+                                        id={data.music_name.toString()}
                                         img={data.music_image_url}
                                         whileHover="hover"
                                         initial="normal"
                                         variants={musciVariants}
                                     >
-                                        <MusicInfo variants={musicInfoVariants}>
-                                            <h1>{data.music_name}</h1>
-                                            <h4>{data.music_singer}</h4>
+                                        <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
+                                            <h1 onClick={handleModal} id={data.music_name.toString()}>
+                                                {data.music_name}
+                                            </h1>
+                                            <h4 onClick={handleModal} id={data.music_name.toString()}>
+                                                {data.music_singer}
+                                            </h4>
                                         </MusicInfo>
                                     </Music>
                                 </MusicWrap>
@@ -131,6 +136,7 @@ const Music = styled(motion.div)<{ img: string }>`
     background-size: cover;
     background-position: center center;
     position: relative;
+    cursor: pointer;
 `;
 
 const MusicInfo = styled(motion.div)`
@@ -143,6 +149,7 @@ const MusicInfo = styled(motion.div)`
     height: 15%;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    cursor: pointer;
 
     h1 {
         text-align: center;
