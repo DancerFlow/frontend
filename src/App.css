@@ -72,3 +72,11 @@
 .dots_custom li.slick-active button {
     background-color: #fe23ff;
 }
+
+/* 스크롤바 지우기 */
+body {
+    -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}

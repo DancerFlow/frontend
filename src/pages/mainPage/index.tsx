@@ -3,11 +3,12 @@ import styled, { keyframes } from 'styled-components';
 import Lottie from 'lottie-react';
 import ReactHowler from 'react-howler';
 
-import LoginModal from './LoginModal';
+import LoginModal from '../../components/main/LoginModal';
 
-import bgm from './source/rukunetsu.mp3';
-import bgVideo from './source/dancerflow.mp4';
-import bgmOnOff from './source/bgmOnOff.json';
+import bgm from '../../assets/rukunetsu.mp3';
+import bgVideo from '../../assets/dancerflow.mp4';
+import bgmOnOff from '../../assets/bgmOnOff.json';
+import LoadingView from '../../components/common/LoadingView';
 
 const MainPage = () => {
     const [isHover, setIsHover] = useState<boolean>(false);
@@ -15,6 +16,12 @@ const MainPage = () => {
     const [isSoundOn, setIsSoundOn] = useState<boolean>(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const lottieRef = useRef<any>(null);
+
+    const [loadingScreen, setLoadingScreen] = useState<boolean>(false);
+    useEffect(() => {
+        setLoadingScreen(true);
+        setTimeout(() => setLoadingScreen(false), 3000);
+    }, []);
 
     //버튼 호버시 배경동영상 재생 컨트롤
     useEffect(() => {
@@ -39,7 +46,7 @@ const MainPage = () => {
     }, [isHover, isClicked]);
 
     useEffect(() => {
-        isSoundOn ? lottieRef.current.playSegments([33, 67], true) : lottieRef.current.playSegments([1, 33], true);
+        isSoundOn ? lottieRef.current.playSegments([37, 67], true) : lottieRef.current.playSegments([5, 33], true);
     }, [isSoundOn]);
 
     const onTimeUpdate = () => {
@@ -59,6 +66,7 @@ const MainPage = () => {
 
     return (
         <div>
+            <LoadingView loadingScreen={loadingScreen}></LoadingView>
             <BackgroundContainer>
                 <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
                     <span>신나는 브금이랑 함께 하실래요?</span>
@@ -74,7 +82,7 @@ const MainPage = () => {
                             setIsSoundOn(false);
                         }}
                     >
-                        즐~
+                        아뇨
                     </div>
                 </ConfirmSoundPlay>
                 <VideoS
@@ -87,9 +95,6 @@ const MainPage = () => {
                 >
                     <source src={bgVideo} type="video/mp4"></source>
                 </VideoS>
-                {/* <ButtonS onMouseOver={() => setIsHover(true)} onMouseOut={() => setIsHover(false)} onClick={handleOnClick}>
-                    GAME START
-                </ButtonS> */}
                 {isClicked && <LoginModal setIsClicked={setIsClicked} setIsHover={setIsHover} />}
             </BackgroundContainer>
 
@@ -107,6 +112,11 @@ const BackgroundContainer = styled.div`
     height: 100vh;
     background-color: black;
     overflow: hidden;
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 `;
 
 const ConfirmKeyframes = keyframes`
@@ -153,7 +163,12 @@ const ConfirmSoundPlay = styled.div`
         line-height: 60px;
         margin-left: 30px;
         border-radius: 40px;
+        transition: transform 0.5s;
         cursor: pointer;
+    }
+    div:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
     }
     &.clear {
         visibility: hidden;
@@ -165,18 +180,6 @@ const VideoS = styled.video`
     margin-top: 100px;
     width: 1200px;
     cursor: pointer;
-`;
-
-const ButtonS = styled.button`
-    width: 200px;
-    height: 80px;
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    font-family: 'NanumSquareNeoExtraBold';
-    background-color: #0223ff;
-    color: white;
-    transform: translate(-50%, -50%);
 `;
 
 const BgmController = styled.div`
