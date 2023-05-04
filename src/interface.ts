@@ -9,7 +9,7 @@ export interface User {
     access_token: string;
 }
 
-enum Tier {
+export enum Tier {
     Bronze,
     Silver,
     Gold,
@@ -18,12 +18,15 @@ enum Tier {
 }
 
 export interface Profile {
-    Status: Status;
+    Status?: Status;
     user_nickname: string;
     user_email: string;
     user_profile_image_url?: string;
-    user_tier?: Tier;
-    user_xp?: number;
+}
+
+export interface UserRank {
+    user_tier: Tier;
+    user_xp: number;
 }
 
 export interface Calendar {
