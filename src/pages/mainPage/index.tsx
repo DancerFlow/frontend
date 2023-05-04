@@ -20,7 +20,7 @@ const MainPage = () => {
     const [loadingScreen, setLoadingScreen] = useState<boolean>(false);
     useEffect(() => {
         setLoadingScreen(true);
-        // setTimeout(() => setLoadingScreen(false), 3000);
+        setTimeout(() => setLoadingScreen(false), 3000);
     }, []);
 
     //버튼 호버시 배경동영상 재생 컨트롤
