@@ -36,11 +36,11 @@ const musicInfoVariants = {
     hover: {
         opacity: 0.8,
         transition: {
+            delay: 0,
             type: 'tween'
         }
     }
 };
-
 interface ModalFrameProps {
     handleModal: (e: any) => void;
     musicList: Music[];
@@ -50,13 +50,14 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
     const settings: ISettings = {
         dots: true,
         className: 'center',
-        centerMode: true,
-        infinite: true,
+        centerMode: false,
+        infinite: musicList.length > 5 ? true : false,
         centerPadding: '60px',
-        slidesToShow: 3,
+        slidesToShow: 5,
         speed: 500,
         rows: musicList.length > 4 ? 2 : 1,
         slidesPerRow: 1,
+
         appendDots: (dots: string) => (
             <div
                 style={{
@@ -77,51 +78,47 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
     return (
         <>
             <MusicListWrap>
-                <SliderWrap>
-                    <Slider {...settings}>
-                        {musicList.map((data) => {
-                            return (
-                                <MusicWrap>
-                                    <Music
-                                        onClick={handleModal}
-                                        id={data.music_name.toString()}
-                                        img={data.music_image_url}
-                                        whileHover="hover"
-                                        initial="normal"
-                                        variants={musciVariants}
-                                    >
-                                        <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
-                                            <h1 onClick={handleModal} id={data.music_name.toString()}>
-                                                {data.music_name}
-                                            </h1>
-                                            <h4 onClick={handleModal} id={data.music_name.toString()}>
-                                                {data.music_singer}
-                                            </h4>
-                                        </MusicInfo>
-                                    </Music>
-                                </MusicWrap>
-                            );
-                        })}
-                    </Slider>
-                </SliderWrap>
+                <Slider {...settings}>
+                    {musicList.map((data) => {
+                        return (
+                            <MusicWrap>
+                                <Music
+                                    onClick={handleModal}
+                                    id={data.music_name.toString()}
+                                    img={data.music_image_url}
+                                    whileHover="hover"
+                                    initial="normal"
+                                    variants={musciVariants}
+                                >
+                                    <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
+                                        <h1 onClick={handleModal} id={data.music_name.toString()}>
+                                            {data.music_name}
+                                        </h1>
+                                        <h4 onClick={handleModal} id={data.music_name.toString()}>
+                                            {data.music_singer}
+                                        </h4>
+                                    </MusicInfo>
+                                </Music>
+                            </MusicWrap>
+                        );
+                    })}
+                </Slider>
             </MusicListWrap>
         </>
     );
 };
 
 const MusicListWrap = styled.div`
-    width: 51%;
+    width: 71%;
     height: 100%;
     margin-top: 20px;
 `;
 
-const SliderWrap = styled.div`
-    height: 100%;
-`;
 const MusicWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 `;
 
 const Music = styled(motion.div)<{ img: string }>`
@@ -136,13 +133,17 @@ const Music = styled(motion.div)<{ img: string }>`
     background-size: cover;
     background-position: center center;
     position: relative;
+
     cursor: pointer;
+    &:hover {
+        box-shadow: ${(props) => props.theme.pink} 0px 5px 15px;
+    }
 `;
 
 const MusicInfo = styled(motion.div)`
     padding: 20px;
     background-color: ${(props) => props.theme.pink};
-    opacity: 0.3;
+    opacity: 0;
     position: absolute;
     bottom: 0;
     width: inherit;
@@ -153,9 +154,9 @@ const MusicInfo = styled(motion.div)`
 
     h1 {
         text-align: center;
-        font-size: 20px;
+        font-size: 15px;
         color: ${(props) => props.theme.yellow};
-        font-weight: 900;
+        font-weight: 700;
         z-index: 99;
         margin-bottom: 5px;
         @media screen and (max-width: 1500px) {
@@ -165,7 +166,7 @@ const MusicInfo = styled(motion.div)`
 
     h4 {
         text-align: center;
-        font-size: 15px;
+        font-size: 13px;
         color: ${(props) => props.theme.blue};
         font-weight: 700;
         @media screen and (max-width: 1500px) {
