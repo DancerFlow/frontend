@@ -1,11 +1,23 @@
 import styled, { keyframes } from 'styled-components';
 import Calendar from 'react-calendar';
+import Bronze from '../../../assets/ranks/bronze.png';
+import Silver from '../../../assets/ranks/silver.png';
+import Gold from '../../../assets/ranks/gold.png';
+import Platinum from '../../../assets/ranks/platinum.png';
+import Diamond from '../../../assets/ranks/diamond.png';
+import { UserRank, Tier } from '../../../interface';
 
 export default function Sidebar() {
+    const data: UserRank = {
+        user_tier: Tier.Platinum,
+        user_xp: 1890
+    };
+
+    console.log(getTierName(data.user_tier));
     return (
         <Container>
             <RankImgWrapper>
-                <img src="../../../public/ranks/platinum.png" alt="Rank" />
+                <img src={getTierName(data.user_tier)} alt="Rank" />
             </RankImgWrapper>
             <RankContainer>
                 <div>Rank: Platinum</div>
@@ -13,12 +25,46 @@ export default function Sidebar() {
                     <StyledProgressBar progress={60}>
                         <div></div>
                     </StyledProgressBar>
-                    <NextRankImg src="../../../public/ranks/diamond.png" alt="nextRank" />
+                    <NextRankImg src={getNextTierName(data.user_tier)} alt="nextRank" />
                 </div>
             </RankContainer>
             <StyledCalendar calendarType="US" formatDay={(locale, date) => date.toLocaleString('en', { day: 'numeric' })}></StyledCalendar>
         </Container>
     );
+}
+
+function getTierName(tier: Tier): string {
+    switch (tier) {
+        case Tier.Bronze:
+            return Bronze;
+        case Tier.Silver:
+            return Silver;
+        case Tier.Gold:
+            return 'Gold';
+        case Tier.Platinum:
+            return Platinum;
+        case Tier.Diamond:
+            return Diamond;
+        default:
+            return '';
+    }
+}
+
+function getNextTierName(tier: Tier): string {
+    switch (tier) {
+        case Tier.Bronze:
+            return Silver;
+        case Tier.Silver:
+            return Gold;
+        case Tier.Gold:
+            return Platinum;
+        case Tier.Platinum:
+            return Diamond;
+        case Tier.Diamond:
+            return Diamond;
+        default:
+            return '';
+    }
 }
 
 const Container = styled.aside`

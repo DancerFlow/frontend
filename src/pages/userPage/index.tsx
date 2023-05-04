@@ -17,7 +17,7 @@ const UserPage = () => {
 
 export default UserPage;
 
-const Container = styled.div`
+const Container = styled.body`
     box-sizing: border-box;
     height: 100vh;
     background-color: #000;
