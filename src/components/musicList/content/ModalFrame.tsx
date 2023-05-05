@@ -2,19 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface ModalFrameProps {
-    modalOpen: boolean;
-    handleModal: (e: any) => void;
+    isOpenModal: boolean;
+    onClickModalClose: (e: any) => void;
     children: React.ReactNode;
 }
 
-const ModalFrame = ({ handleModal, children, modalOpen, ...rest }: ModalFrameProps) => {
+const ModalFrame = ({ onClickModalClose, children, isOpenModal, ...rest }: ModalFrameProps) => {
     return (
         <>
-            {modalOpen && (
+            {isOpenModal && (
                 <Container>
-                    <Background onClick={handleModal} />
+                    <Background onClick={onClickModalClose} />
                     <ModalBlock {...rest}>
-                        <Close onClick={handleModal} />
+                        <Close onClick={onClickModalClose} />
                         <Contents>{children}</Contents>
                     </ModalBlock>
                 </Container>

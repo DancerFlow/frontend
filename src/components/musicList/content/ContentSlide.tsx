@@ -29,11 +29,12 @@ const musicInfoVariants = {
     }
 };
 interface ModalFrameProps {
-    handleModal: (e: any) => void;
+    onClickMusic: (e: any) => void;
     musicList: Music[];
+    onKeyModalClose: (e: any) => void;
 }
 
-const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps) => {
+const ContentSlide = ({ onClickMusic, musicList, onKeyModalClose }: ModalFrameProps) => {
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -47,13 +48,11 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
         slidesToScroll: 5,
         slidesPerRow: 1,
         touchThreshold: 200,
-        beforeChange: (value) => {
-            console.log(value, 'before');
+        beforeChange: () => {
             setIsDragged(true);
         },
-        afterChange: (value) => {
+        afterChange: () => {
             setIsDragged(false);
-            console.log(value, 'after');
         },
 
         appendDots: (dots: string) => (
@@ -74,32 +73,32 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
         dotsClass: 'dots_custom'
     };
 
-    useKeyEscClose(() => {
-        setModalOpen(false);
+    useKeyEscClose((e: any) => {
+        onKeyModalClose(e);
     });
 
     return (
         <MusicListWrap>
             <Slider {...settings}>
-                {musicList.map((data) => {
+                {musicList.map((data: Music, idx) => {
                     return (
                         <MusicWrap>
                             <Music
+                                key={idx}
                                 onClick={(e) => {
                                     if (!isDragged) {
                                         e.preventDefault();
-                                        handleModal(e);
+                                        onClickMusic(e, data);
                                     }
                                 }}
-                                id={data.music_name.toString()}
                                 img={data.music_image_url}
                                 whileHover="hover"
                                 initial="normal"
                                 variants={musciVariants}
                             >
-                                <MusicInfo id={data.music_name.toString()} variants={musicInfoVariants}>
-                                    <h1 id={data.music_name.toString()}>{data.music_name}</h1>
-                                    <h4 id={data.music_name.toString()}>{data.music_singer}</h4>
+                                <MusicInfo variants={musicInfoVariants}>
+                                    <h1>{data.music_name}</h1>
+                                    <h4>{data.music_singer}</h4>
                                 </MusicInfo>
                             </Music>
                         </MusicWrap>

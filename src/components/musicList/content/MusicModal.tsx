@@ -2,14 +2,14 @@ import { Music } from '../../../interface';
 import ModalFrame from './ModalFrame';
 import styled from 'styled-components';
 interface ModalFrameProps {
-    modalOpen: boolean;
-    handleModal: (e: any) => void;
+    isOpenModal: boolean;
+    onClickModalClose: (e: any) => void;
     musicDetailInfo: Music;
 }
 
-const MusicModal = ({ handleModal, modalOpen, musicDetailInfo }: ModalFrameProps) => {
+const MusicModal = ({ onClickModalClose, isOpenModal, musicDetailInfo }: ModalFrameProps) => {
     return (
-        <ModalFrame handleModal={handleModal} modalOpen={modalOpen}>
+        <ModalFrame onClickModalClose={onClickModalClose} isOpenModal={isOpenModal}>
             <MusicModalInfo>
                 <MusicModalInfoHeader img={musicDetailInfo.music_image_url} />
                 <MusicModalInfoContent>
