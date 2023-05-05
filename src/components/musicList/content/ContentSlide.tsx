@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
+import { useKeyEscClose } from '../../common/useKeyEscClose';
 
 interface ISettings {
     dots: boolean;
@@ -15,6 +16,7 @@ interface ISettings {
     speed: number;
     rows: number;
     slidesPerRow: number;
+    slidesToScroll: number;
     appendDots: (dots: string) => JSX.Element;
     dotsClass: string;
 }
@@ -46,7 +48,7 @@ interface ModalFrameProps {
     musicList: Music[];
 }
 
-const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
+const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps) => {
     const settings: ISettings = {
         dots: true,
         className: 'center',
@@ -54,14 +56,16 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
         infinite: musicList.length > 5 ? true : false,
         centerPadding: '60px',
         slidesToShow: 5,
-        speed: 500,
-        rows: musicList.length > 4 ? 2 : 1,
+        speed: 800,
+        rows: musicList.length > 4 ? 3 : 1,
+        slidesToScroll: 5,
         slidesPerRow: 1,
 
         appendDots: (dots: string) => (
             <div
                 style={{
                     width: '100%',
+
                     position: 'absolute',
                     bottom: '-15px',
                     display: 'flex',
@@ -75,49 +79,53 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
         dotsClass: 'dots_custom'
     };
 
+    useKeyEscClose(() => {
+        setModalOpen(false);
+    });
+
     return (
-        <>
-            <MusicListWrap>
-                <Slider {...settings}>
-                    {musicList.map((data) => {
-                        return (
-                            <MusicWrap>
-                                <Music
-                                    onClick={handleModal}
-                                    id={data.music_name.toString()}
-                                    img={data.music_image_url}
-                                    whileHover="hover"
-                                    initial="normal"
-                                    variants={musciVariants}
-                                >
-                                    <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
-                                        <h1 onClick={handleModal} id={data.music_name.toString()}>
-                                            {data.music_name}
-                                        </h1>
-                                        <h4 onClick={handleModal} id={data.music_name.toString()}>
-                                            {data.music_singer}
-                                        </h4>
-                                    </MusicInfo>
-                                </Music>
-                            </MusicWrap>
-                        );
-                    })}
-                </Slider>
-            </MusicListWrap>
-        </>
+        <MusicListWrap>
+            <Slider {...settings}>
+                {musicList.map((data) => {
+                    return (
+                        <MusicWrap>
+                            <Music
+                                onClick={handleModal}
+                                id={data.music_name.toString()}
+                                img={data.music_image_url}
+                                whileHover="hover"
+                                initial="normal"
+                                variants={musciVariants}
+                            >
+                                <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
+                                    <h1 onClick={handleModal} id={data.music_name.toString()}>
+                                        {data.music_name}
+                                    </h1>
+                                    <h4 onClick={handleModal} id={data.music_name.toString()}>
+                                        {data.music_singer}
+                                    </h4>
+                                </MusicInfo>
+                            </Music>
+                        </MusicWrap>
+                    );
+                })}
+            </Slider>
+        </MusicListWrap>
     );
 };
 
 const MusicListWrap = styled.div`
     width: 71%;
     height: 100%;
-    margin-top: 20px;
+
+    /* margin-top: 20px; */
 `;
 
 const MusicWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
     height: 100%;
 `;
 
