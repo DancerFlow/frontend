@@ -16,6 +16,7 @@ const Content = ({ musicList }: ContentProps) => {
         setModalId(e.target.id);
         setModalOpen(!modalOpen);
     };
+
     const musicDetail = useGetMusicInfo();
     console.log(modalId);
     useEffect(() => {
@@ -30,14 +31,14 @@ const Content = ({ musicList }: ContentProps) => {
 
     return (
         <Wrapper>
-            <ContentSlide handleModal={handleModal} musicList={musicList} />
+            <ContentSlide handleModal={handleModal} musicList={musicList} setModalOpen={setModalOpen} />
             <MusicModal handleModal={handleModal} modalOpen={modalOpen} musicDetailInfo={musicDetailInfo} />
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    height: 55%;
+    height: 90%;
     width: 100%;
     display: flex;
     justify-content: center;
