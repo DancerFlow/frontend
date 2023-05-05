@@ -27,6 +27,7 @@ export default function Player({ playerPosition, destinationPoint, playerAnimati
 
     useEffect(() => {
         if (!destinationPoint) return;
+        setPlayerAnimation(1);
         gltf.scene.children[0].lookAt(new THREE.Vector3(destinationPoint[0], -0.4, destinationPoint[2]));
     }, [destinationPoint]);
 

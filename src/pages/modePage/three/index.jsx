@@ -13,11 +13,6 @@ const Three = () => {
     const [playerAnimation, setPlayerAnimation] = useState(0);
     const [angle, setAngle] = useState(0);
 
-    useEffect(() => {
-        if (!destinationPoint) return;
-        setPlayerAnimation(1);
-    }, [destinationPoint]);
-
     return (
         <Canvas
             orthographic={true}

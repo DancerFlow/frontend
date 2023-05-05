@@ -9,6 +9,7 @@ import bgm from '../../assets/rukunetsu.mp3';
 import bgVideo from '../../assets/dancerflow.mp4';
 import bgmOnOff from '../../assets/bgmOnOff.json';
 import LoadingView from '../../components/common/LoadingView';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
     const [isHover, setIsHover] = useState<boolean>(false);
