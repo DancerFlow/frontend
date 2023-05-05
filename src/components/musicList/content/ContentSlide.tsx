@@ -1,26 +1,11 @@
 import styled from 'styled-components';
-import Slider from 'react-slick';
+import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
 import { useKeyEscClose } from '../../common/useKeyEscClose';
-
-interface ISettings {
-    dots: boolean;
-    className: string;
-    centerMode: boolean;
-    infinite: boolean;
-    centerPadding: string;
-    slidesToShow: number;
-    speed: number;
-    rows: number;
-    slidesPerRow: number;
-    slidesToScroll: number;
-    appendDots: (dots: string) => JSX.Element;
-    dotsClass: string;
-}
-
+import { useState } from 'react';
 const musciVariants = {
     normal: {
         scale: 1
@@ -49,7 +34,8 @@ interface ModalFrameProps {
 }
 
 const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps) => {
-    const settings: ISettings = {
+    const [isDragged, setIsDragged] = useState(false);
+    const settings: Settings = {
         dots: true,
         className: 'center',
         centerMode: false,
@@ -60,6 +46,15 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
         rows: musicList.length > 4 ? 3 : 1,
         slidesToScroll: 5,
         slidesPerRow: 1,
+        touchThreshold: 200,
+        beforeChange: (value) => {
+            console.log(value, 'before');
+            setIsDragged(true);
+        },
+        afterChange: (value) => {
+            setIsDragged(false);
+            console.log(value, 'after');
+        },
 
         appendDots: (dots: string) => (
             <div
@@ -90,20 +85,21 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
                     return (
                         <MusicWrap>
                             <Music
-                                onClick={handleModal}
+                                onClick={(e) => {
+                                    if (!isDragged) {
+                                        e.preventDefault();
+                                        handleModal(e);
+                                    }
+                                }}
                                 id={data.music_name.toString()}
                                 img={data.music_image_url}
                                 whileHover="hover"
                                 initial="normal"
                                 variants={musciVariants}
                             >
-                                <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
-                                    <h1 onClick={handleModal} id={data.music_name.toString()}>
-                                        {data.music_name}
-                                    </h1>
-                                    <h4 onClick={handleModal} id={data.music_name.toString()}>
-                                        {data.music_singer}
-                                    </h4>
+                                <MusicInfo id={data.music_name.toString()} variants={musicInfoVariants}>
+                                    <h1 id={data.music_name.toString()}>{data.music_name}</h1>
+                                    <h4 id={data.music_name.toString()}>{data.music_singer}</h4>
                                 </MusicInfo>
                             </Music>
                         </MusicWrap>
