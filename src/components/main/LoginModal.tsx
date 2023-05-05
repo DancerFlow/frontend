@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import DragDrop from '../common/DragDrop';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,8 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
     const [formValid, setFormValid] = useState<string>('');
     const [file, setFile] = useState<FileList | undefined>();
     const [registerStep, setRegisterStep] = useState(0);
+
+    const navigate = useNavigate();
 
     const handleModalClick = () => {
         setIsClicked(false);
@@ -55,7 +58,7 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
                         </FieldContainer>
                         <SelectContainer>
                             <a onClick={() => setRegisterStep(1)}>sign up</a>
-                            <a>join as a guest</a>
+                            <a onClick={() => navigate('/musiclist')}>join as a guest</a>
                         </SelectContainer>
                     </>
                 );

@@ -13,6 +13,8 @@
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
+        "@react-three/drei": "^9.66.3",
+        "@react-three/fiber": "^8.13.0",
         "@tensorflow-models/pose-detection": "^2.1.0",
         "@tensorflow/tfjs-backend-webgl": "^4.4.0",
         "@tensorflow/tfjs-converter": "^4.4.0",
@@ -38,7 +40,8 @@
         "react-transition-group": "^4.4.5",
         "recharts": "^2.5.0",
         "slick-carousel": "^1.8.1",
-        "styled-components": "^5.3.10"
+        "styled-components": "^5.3.10",
+        "three": "^0.152.2"
     },
     "devDependencies": {
         "@types/react": "^18.0.28",
