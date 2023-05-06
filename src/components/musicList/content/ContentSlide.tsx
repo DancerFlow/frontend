@@ -1,26 +1,11 @@
 import styled from 'styled-components';
-import Slider from 'react-slick';
+import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
 import { useKeyEscClose } from '../../common/useKeyEscClose';
-
-interface ISettings {
-    dots: boolean;
-    className: string;
-    centerMode: boolean;
-    infinite: boolean;
-    centerPadding: string;
-    slidesToShow: number;
-    speed: number;
-    rows: number;
-    slidesPerRow: number;
-    slidesToScroll: number;
-    appendDots: (dots: string) => JSX.Element;
-    dotsClass: string;
-}
-
+import { useState } from 'react';
 const musciVariants = {
     normal: {
         scale: 1
@@ -44,12 +29,14 @@ const musicInfoVariants = {
     }
 };
 interface ModalFrameProps {
-    handleModal: (e: any) => void;
+    onClickMusic: (e: any) => void;
     musicList: Music[];
+    onKeyModalClose: (e: any) => void;
 }
 
-const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps) => {
-    const settings: ISettings = {
+const ContentSlide = ({ onClickMusic, musicList, onKeyModalClose }: ModalFrameProps) => {
+    const [isDragged, setIsDragged] = useState(false);
+    const settings: Settings = {
         dots: true,
         className: 'center',
         centerMode: false,
@@ -60,6 +47,13 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
         rows: musicList.length > 4 ? 3 : 1,
         slidesToScroll: 5,
         slidesPerRow: 1,
+        touchThreshold: 200,
+        beforeChange: () => {
+            setIsDragged(true);
+        },
+        afterChange: () => {
+            setIsDragged(false);
+        },
 
         appendDots: (dots: string) => (
             <div
@@ -79,31 +73,32 @@ const ContentSlide = ({ handleModal, musicList, setModalOpen }: ModalFrameProps)
         dotsClass: 'dots_custom'
     };
 
-    useKeyEscClose(() => {
-        setModalOpen(false);
+    useKeyEscClose((e: any) => {
+        onKeyModalClose(e);
     });
 
     return (
         <MusicListWrap>
             <Slider {...settings}>
-                {musicList.map((data) => {
+                {musicList.map((data: Music, idx) => {
                     return (
                         <MusicWrap>
                             <Music
-                                onClick={handleModal}
-                                id={data.music_name.toString()}
+                                key={idx}
+                                onClick={(e) => {
+                                    if (!isDragged) {
+                                        e.preventDefault();
+                                        onClickMusic(e, data);
+                                    }
+                                }}
                                 img={data.music_image_url}
                                 whileHover="hover"
                                 initial="normal"
                                 variants={musciVariants}
                             >
-                                <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
-                                    <h1 onClick={handleModal} id={data.music_name.toString()}>
-                                        {data.music_name}
-                                    </h1>
-                                    <h4 onClick={handleModal} id={data.music_name.toString()}>
-                                        {data.music_singer}
-                                    </h4>
+                                <MusicInfo variants={musicInfoVariants}>
+                                    <h1>{data.music_name}</h1>
+                                    <h4>{data.music_singer}</h4>
                                 </MusicInfo>
                             </Music>
                         </MusicWrap>
