@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -7,9 +7,27 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
+    const navRef = useRef(null);
+    const toggleButtonRef = useRef(null);
+
     const handleToggle = () => {
         setOpen(!open);
     };
+
+    // toggle button 아니거나, SideNavbar 바깥 영역 클릭 했을 때, SideNavbar 닫기
+    const handleDocumentClick = (e) => {
+        if (navRef.current && !navRef.current.contains(e.target) && e.target !== toggleButtonRef.current) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleDocumentClick);
+
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
 
     const navLinks = [
         { to: 'challenge', text: 'login' },
@@ -24,14 +42,14 @@ export default function NavBar() {
     return (
         <>
             <Nav>
-                <Button onClick={handleToggle}>
+                <Button ref={toggleButtonRef} onClick={handleToggle}>
                     <FontAwesomeIcon icon={faBars} style={{ color: '#ffffff' }} />
                 </Button>
             </Nav>
             <TransitionGroup>
                 {open && (
                     <CSSTransition in={open} classNames="sidenav" timeout={200} unmountOnExit={true}>
-                        <SideNav>
+                        <SideNav ref={navRef}>
                             <IconWrapper>
                                 <CloseFontAwesomeIcon icon={faXmark} size="2xl" onClick={handleToggle} />
                             </IconWrapper>
