@@ -22,6 +22,8 @@ export interface Profile {
     user_nickname: string;
     user_email: string;
     user_profile_image_url?: string;
+    user_tier?: Tier;
+    user_xp?: number;
 }
 
 export interface UserRank {

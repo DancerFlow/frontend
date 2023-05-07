@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Header from '../../components/user/header';
-import Sidebar from '../../components/user/sidebar';
+import Header from '../../components/user/Header';
+import Sidebar from '../../components/user/Sidebar';
 import Main from '../../components/user/main';
-import Bottom from '../../components/user/bottom';
+import Bottom from '../../components/user/Bottom';
 
 const UserPage = () => {
     return (
