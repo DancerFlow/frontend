@@ -47,7 +47,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
 };
 
 const Wrapper = styled.div`
-    height: 5%;
+    height: 10%;
     width: 100%;
     display: flex;
     align-items: center;

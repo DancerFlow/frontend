@@ -28,7 +28,7 @@ const MusicListPage = () => {
 
     return (
         <Wrapper>
-            <Header></Header>
+            {/* <Header></Header> */}
             <Filter handleClick={handleClick} selected={selectedFilter} />
             <Content musicList={musicList} />
         </Wrapper>
@@ -38,8 +38,14 @@ const MusicListPage = () => {
 const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
+<<<<<<< HEAD
     /* background: #2a1e57; */
     background: #000;
+=======
+
+
+    background: #2a1e57;
+>>>>>>> upstream/dev
 `;
 
 export default MusicListPage;
