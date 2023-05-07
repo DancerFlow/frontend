@@ -90,13 +90,9 @@ const ContentSlide = ({ handleModal, musicList }: ModalFrameProps) => {
                                     initial="normal"
                                     variants={musciVariants}
                                 >
-                                    <MusicInfo onClick={handleModal} id={data.music_name.toString()} variants={musicInfoVariants}>
-                                        <h1 onClick={handleModal} id={data.music_name.toString()}>
-                                            {data.music_name}
-                                        </h1>
-                                        <h4 onClick={handleModal} id={data.music_name.toString()}>
-                                            {data.music_singer}
-                                        </h4>
+                                    <MusicInfo id={data.music_name.toString()} variants={musicInfoVariants}>
+                                        <h1 id={data.music_name.toString()}>{data.music_name}</h1>
+                                        <h4 id={data.music_name.toString()}>{data.music_singer}</h4>
                                     </MusicInfo>
                                 </Music>
                             </MusicWrap>

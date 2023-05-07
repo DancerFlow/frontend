@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { Profile, Tier } from '../../../interface';
+import { Profile, Tier } from '../../interface';
 
 export default function Header() {
     return (
@@ -56,5 +56,5 @@ const Avatar = styled.img`
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
-    margin-left: 1.5rem;
+    margin-left: 4rem;
 `;

@@ -1,11 +1,11 @@
 import styled, { keyframes } from 'styled-components';
 import Calendar from 'react-calendar';
-import Bronze from '../../../assets/ranks/bronze.png';
-import Silver from '../../../assets/ranks/silver.png';
-import Gold from '../../../assets/ranks/gold.png';
-import Platinum from '../../../assets/ranks/platinum.png';
-import Diamond from '../../../assets/ranks/diamond.png';
-import { UserRank, Tier } from '../../../interface';
+import Bronze from '../../assets/ranks/bronze.png';
+import Silver from '../../assets/ranks/silver.png';
+import Gold from '../../assets/ranks/gold.png';
+import Platinum from '../../assets/ranks/platinum.png';
+import Diamond from '../../assets/ranks/diamond.png';
+import { UserRank, Tier } from '../../interface';
 
 export default function Sidebar() {
     const data: UserRank = {
@@ -13,7 +13,6 @@ export default function Sidebar() {
         user_xp: 1890
     };
 
-    console.log(getTierName(data.user_tier));
     return (
         <Container>
             <RankImgWrapper>
