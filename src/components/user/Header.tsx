@@ -10,7 +10,7 @@ export default function Header() {
             <UserInfo>
                 <Title>Hello, {data.user_nickname}</Title>
                 <div>
-                    <p>Edit Profile</p> <FontAwesomeIcon icon={faPen} style={{ display: 'inline' }} />
+                    <EditProfile>Edit Profile</EditProfile> <FontAwesomeIcon icon={faPen} style={{ display: 'inline' }} />
                 </div>
             </UserInfo>
         </Container>
@@ -57,4 +57,8 @@ const Avatar = styled.img`
     height: 6rem;
     border-radius: 50%;
     margin-left: 4rem;
+`;
+
+const EditProfile = styled.p`
+    padding-top: 0.5rem;
 `;

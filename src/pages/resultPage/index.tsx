@@ -12,20 +12,27 @@ export default function ResultPage() {
             <Body>
                 <Main>
                     <RankInfo></RankInfo>
-                    <Section>
+                    <ScoreInfo>
                         <Star src={star} alt="star" />
-                    </Section>
-                    <Section>
-                        <h2>Perfect</h2>
-                        <h2>Good</h2>
-                        <h2>Bad</h2>
-                    </Section>
+                        <Score>233점</Score>
+                    </ScoreInfo>
+                    <ScoreDetail>
+                        <Combo>
+                            <p>Perfect</p> <p>5</p>
+                        </Combo>
+                        <Combo>
+                            <p>Good</p> <p>21</p>
+                        </Combo>
+                        <Combo>
+                            <p>Bad</p> <p>7</p>
+                        </Combo>
+                    </ScoreDetail>
                 </Main>
             </Body>
             <Bottom>
                 <Button>Back to music selection</Button>
                 <Button>Retry</Button>
-                <Button>Home</Button>
+                <Button>Back to Home</Button>
             </Bottom>
         </Container>
     );
@@ -39,6 +46,7 @@ const Container = styled.div`
     color: #fff;
     padding: 1rem;
     gap: 1rem;
+    box-sizing: border-box;
 `;
 
 const Header = styled.header`
@@ -54,31 +62,44 @@ const Header = styled.header`
 const Body = styled.div`
     display: grid;
     grid-template-rows: 1fr;
-    height: 100%;
 `;
 
-const Main = styled.main`
+const Main = styled.section`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-
     section {
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
-        padding: 1rem;
+        padding: 2rem;
         display: flex;
         flex-direction: column;
-        align-items: center;
+    }
+    overflow-y: auto;
+`;
+
+const ScoreInfo = styled.section`
+    align-items: center;
+`;
+
+const Score = styled.div`
+    font-size: 3rem;
+    margin-top: 1rem;
+`;
+
+const ScoreDetail = styled.section`
+    align-items: center;
+    font-size: 2rem;
+    div {
+        margin-bottom: 1rem;
     }
 `;
 
-const Section = styled.section`
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 1rem;
+const Combo = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    p {
+        margin-right: 1rem;
+    }
 `;
 
 const Img = styled.img`
@@ -95,13 +116,20 @@ const Bottom = styled.footer`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
     display: flex;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: ${(props) => props.theme.pink};
+    border-radius: 10px;
+    border: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 1.5rem;
+    &:hover {
+        background-color: ${(props) => props.theme.green};
+    }
 `;

@@ -3,9 +3,9 @@ import { Music } from '../../interface';
 
 export default function RankInfo() {
     return (
-        <section>
+        <Section>
             <Img src={data.music_image_url}></Img>
-        </section>
+        </Section>
     );
 }
 
@@ -18,6 +18,10 @@ const RankingList = ({ rankers }) => {
         </ul>
     );
 };
+
+const Section = styled.section`
+    align-items: center;
+`;
 
 const data: Music = {
     music_name: 'bad boy',

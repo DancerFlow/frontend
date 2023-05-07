@@ -17,7 +17,8 @@ export default function NavBar() {
         { to: 'mode', text: 'select mode' },
         { to: 'musiclist', text: 'music list' },
         { to: 'user', text: 'my page' },
-        { to: 'admin', text: 'admin' }
+        { to: 'admin', text: 'admin' },
+        { to: 'result', text: 'result' }
     ];
 
     return (
@@ -84,12 +85,11 @@ const SideNav = styled.aside`
     }
 
     ul {
-        padding: 1rem 0 0 1rem;
         list-style: none;
         text-align: start;
 
         li {
-            margin: 1rem;
+            margin: 1.5rem;
         }
     }
 
@@ -121,11 +121,10 @@ const SideNav = styled.aside`
 `;
 
 const IconWrapper = styled.div`
-    text-align: end;
-    margin: 1rem 1rem 0 0;
+    text-align: start;
+    margin: 1rem 1.5rem;
 `;
 const CloseFontAwesomeIcon = styled(FontAwesomeIcon)`
     color: #ffffff;
     cursor: pointer;
-    margin-left: auto;
 `;
