@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-import Slider, { Settings } from 'react-slick';
+import Slider, { Settings, CustomArrowProps } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
 import { useKeyEscClose } from '../../../hooks/useKeyEscClose';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 const musicVariants = {
     normal: {
         scale: 1,
@@ -37,6 +39,17 @@ interface ModalFrameProps {
     onModalClose: (e: any) => void;
 }
 
+const PrevArrow = (props: CustomArrowProps) => (
+    <CustomArrow className="prev" onClick={props.onClick}>
+        <FontAwesomeIcon icon={faChevronLeft} />
+    </CustomArrow>
+);
+
+const NextArrow = (props: CustomArrowProps) => (
+    <CustomArrow className="next" onClick={props.onClick}>
+        <FontAwesomeIcon icon={faChevronRight} />
+    </CustomArrow>
+);
 const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
@@ -57,14 +70,13 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
         afterChange: () => {
             setIsDragged(false);
         },
-
+        prevArrow: <PrevArrow />,
+        nextArrow: <NextArrow />,
         appendDots: (dots: string) => (
             <div
                 style={{
                     width: '100%',
-
-                    position: 'absolute',
-                    bottom: '-15px',
+                    height: '4vh',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -86,7 +98,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                 {musicList.map((data: Music, idx) => {
                     return (
                         <MusicWrap key={`${idx}-${data.music_name}`}>
-                            <Music
+                            <MusicCard
                                 onClick={(e) => {
                                     if (!isDragged) {
                                         e.preventDefault();
@@ -102,7 +114,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                                     <h1>{data.music_name}</h1>
                                     <h4>{data.music_singer}</h4>
                                 </MusicInfo>
-                            </Music>
+                            </MusicCard>
                         </MusicWrap>
                     );
                 })}
@@ -118,15 +130,36 @@ const MusicListWrap = styled.div`
     /* margin-top: 20px; */
 `;
 
-const MusicWrap = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    height: 100%;
+const CustomArrow = styled.div`
+    font-size: 50px;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    z-index: 11100;
+    transform: translateY(-50%);
+
+    &.prev {
+        left: -40px;
+    }
+
+    &.next {
+        right: -40px;
+    }
+
+    &:hover {
+        color: ${(props) => props.theme.pink};
+        filter: drop-shadow(0px 0px 20px ${(props) => props.theme.pink});
+        border-radius: 50%;
+    }
 `;
 
-const Music = styled(motion.div)<{ img: string }>`
+const MusicWrap = styled.div`
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
+const MusicCard = styled(motion.div)<{ img: string }>`
     width: calc(100% - 40px);
     height: 25vh;
     max-width: 250px;

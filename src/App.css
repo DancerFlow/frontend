@@ -43,7 +43,6 @@
 /* slick.css */
 
 .dots_custom {
-    display: inline-block;
     vertical-align: middle;
     margin: auto 0;
     padding: 0;
@@ -63,10 +62,9 @@
     color: transparent;
     cursor: pointer;
     display: block;
-    height: 8px;
-    width: 8px;
+    height: 12px;
+    width: 12px;
     border-radius: 100%;
-    padding: 0;
 }
 
 .dots_custom li.slick-active button {
