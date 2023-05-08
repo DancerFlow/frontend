@@ -2,12 +2,16 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
 
-type IFilterProps = {
-    handleClick: (type: string) => void;
-    selected: string;
-};
-
-const Filter = ({ handleClick, selected }: IFilterProps) => {
+enum FilterType {
+    Popular = 'popular',
+    Latest = 'latest',
+    Favorite = 'favorite'
+}
+interface FilterProps {
+    handleClick: (type: FilterType) => void;
+    selected: FilterType;
+}
+const Filter = ({ handleClick, selected }: FilterProps) => {
     return (
         <Wrapper>
             <FilterWrapper>
@@ -17,7 +21,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => handleClick('popular')}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Favorite)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faFire} />
                     </BtnIconWrapper>
@@ -25,7 +29,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <H1>인기순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick('latest')}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Latest)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faMusic} />
                     </BtnIconWrapper>
@@ -33,7 +37,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <H1>최신순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick('favorite')}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Favorite)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faHeart} />
                     </BtnIconWrapper>

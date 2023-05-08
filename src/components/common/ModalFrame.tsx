@@ -2,19 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface ModalFrameProps {
-    modalOpen: boolean;
-    handleModal: () => void;
+    isOpened: boolean;
+    onClose: () => void;
     children: React.ReactNode;
 }
 
-const ModalFrame = ({ handleModal, children, modalOpen, ...rest }: ModalFrameProps) => {
+const ModalFrame = ({ onClose, children, isOpened, ...rest }: ModalFrameProps) => {
     return (
         <>
-            {modalOpen && (
+            {isOpened && (
                 <Container>
-                    <Background onClick={handleModal} />
+                    <Background onClick={onClose} />
                     <ModalBlock {...rest}>
-                        <Close onClick={handleModal} />
+                        <Close onClick={onClose} />
                         <Contents>{children}</Contents>
                     </ModalBlock>
                 </Container>
@@ -92,8 +92,9 @@ const Close = styled.img.attrs({
 
 const Contents = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 600px;
 `;
 
 export default ModalFrame;

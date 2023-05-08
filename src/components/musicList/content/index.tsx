@@ -11,7 +11,7 @@ const Content = ({ musicList }: ContentProps) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [musicDetailInfo, setMusicDetailInfo] = useState<Music>({} as Music);
 
-    const onSetModal = (e: any, data?: Music) => {
+    const handleModalToggle = (data?: Music) => {
         setIsOpenModal(!isOpenModal);
         if (data) {
             setMusicDetailInfo(data);
@@ -20,8 +20,8 @@ const Content = ({ musicList }: ContentProps) => {
 
     return (
         <Wrapper>
-            <ContentSlide onClickMusic={onSetModal} musicList={musicList} onKeyModalClose={setIsOpenModal} />
-            <MusicModal onClickModalClose={onSetModal} isOpenModal={isOpenModal} musicDetailInfo={musicDetailInfo} />
+            <ContentSlide onMusicClick={handleModalToggle} musicList={musicList} onModalClose={setIsOpenModal} />
+            <MusicModal onModalClose={handleModalToggle} onModalOpen={isOpenModal} musicDetailInfo={musicDetailInfo} />
         </Wrapper>
     );
 };

@@ -4,9 +4,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
 import { Music } from '../../../interface';
-import { useKeyEscClose } from '../../common/useKeyEscClose';
+import { useKeyEscClose } from '../../../hooks/useKeyEscClose';
 import { useState } from 'react';
-const musciVariants = {
+const musicVariants = {
     normal: {
         scale: 1
     },
@@ -29,12 +29,12 @@ const musicInfoVariants = {
     }
 };
 interface ModalFrameProps {
-    onClickMusic: (e: any) => void;
+    onMusicClick: (music: Music) => void;
     musicList: Music[];
-    onKeyModalClose: (e: any) => void;
+    onModalClose: (e: any) => void;
 }
 
-const ContentSlide = ({ onClickMusic, musicList, onKeyModalClose }: ModalFrameProps) => {
+const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -74,7 +74,7 @@ const ContentSlide = ({ onClickMusic, musicList, onKeyModalClose }: ModalFramePr
     };
 
     useKeyEscClose((e: any) => {
-        onKeyModalClose(e);
+        onModalClose(e);
     });
 
     return (
@@ -84,17 +84,17 @@ const ContentSlide = ({ onClickMusic, musicList, onKeyModalClose }: ModalFramePr
                     return (
                         <MusicWrap>
                             <Music
-                                key={idx}
+                                key={`${idx}-${data.music_name}`}
                                 onClick={(e) => {
                                     if (!isDragged) {
                                         e.preventDefault();
-                                        onClickMusic(e, data);
+                                        onMusicClick(data);
                                     }
                                 }}
                                 img={data.music_image_url}
                                 whileHover="hover"
                                 initial="normal"
-                                variants={musciVariants}
+                                variants={musicVariants}
                             >
                                 <MusicInfo variants={musicInfoVariants}>
                                     <h1>{data.music_name}</h1>
