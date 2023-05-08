@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
 
-enum FilterType {
+export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
     Favorite = 'favorite'
@@ -21,7 +21,7 @@ const Filter = ({ handleClick, selected }: FilterProps) => {
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Favorite)}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Popular)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faFire} />
                     </BtnIconWrapper>

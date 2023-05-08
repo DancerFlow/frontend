@@ -8,12 +8,15 @@ import { useKeyEscClose } from '../../../hooks/useKeyEscClose';
 import { useState } from 'react';
 const musicVariants = {
     normal: {
-        scale: 1
+        scale: 1,
+        transition: {
+            delay: 2,
+            type: 'tween'
+        }
     },
     hover: {
         scale: 1.1,
-        transistion: {
-            delay: 2,
+        transition: {
             type: 'tween'
         }
     }
@@ -82,9 +85,8 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
             <Slider {...settings}>
                 {musicList.map((data: Music, idx) => {
                     return (
-                        <MusicWrap>
+                        <MusicWrap key={`${idx}-${data.music_name}`}>
                             <Music
-                                key={`${idx}-${data.music_name}`}
                                 onClick={(e) => {
                                     if (!isDragged) {
                                         e.preventDefault();

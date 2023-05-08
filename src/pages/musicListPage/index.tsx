@@ -1,15 +1,20 @@
 import styled from 'styled-components';
-import Header from '../../components/musicList/header/Header';
-import Filter from '../../components/musicList/filter/Filter';
+import Filter from '../../components/musicList/Filter';
 import Content from '../../components/musicList/content/';
 import { useEffect, useState } from 'react';
 import { useGetMusicLikesQuery, useGetMusicLatestQuery, useGetMusicIsLikeQuery } from '../../api/useGetMusicListQuery';
 import { Music } from '../../interface';
+
+export enum FilterType {
+    Popular = 'popular',
+    Latest = 'latest',
+    Favorite = 'favorite'
+}
 const MusicListPage = () => {
     const [musicList, setMusicList] = useState<Music[]>([]);
-    const [selectedFilter, setSelectedFilter] = useState('popular');
+    const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
 
-    const handleClick = (item: string): void => {
+    const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
     };
     const musicLikes = useGetMusicLikesQuery();
@@ -17,11 +22,11 @@ const MusicListPage = () => {
     const musicIsLike = useGetMusicIsLikeQuery();
 
     useEffect(() => {
-        if (selectedFilter === 'popular') {
+        if (selectedFilter === FilterType.Popular) {
             setMusicList(musicLikes);
-        } else if (selectedFilter === 'latest') {
+        } else if (selectedFilter === FilterType.Latest) {
             setMusicList(musicLatest);
-        } else if (selectedFilter === 'favorite') {
+        } else if (selectedFilter === FilterType.Favorite) {
             setMusicList(musicIsLike);
         }
     }, [selectedFilter]);
@@ -38,14 +43,7 @@ const MusicListPage = () => {
 const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
-<<<<<<< HEAD
-    /* background: #2a1e57; */
-    background: #000;
-=======
-
-
     background: #2a1e57;
->>>>>>> upstream/dev
 `;
 
 export default MusicListPage;
