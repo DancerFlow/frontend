@@ -7,16 +7,19 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
-    const navRef = useRef(null);
+    const navRef = useRef<HTMLDivElement>(null);
     const toggleButtonRef = useRef(null);
 
+    // 토글보다 handleDocumentClick이 먼저 실행되서 바로 닫히는 오류 떄문에 setTimeout 넣어줌.
     const handleToggle = () => {
-        setOpen(!open);
+        setTimeout(() => {
+            setOpen(!open);
+        }, 0);
     };
 
     // toggle button 아니거나, SideNavbar 바깥 영역 클릭 했을 때, SideNavbar 닫기
-    const handleDocumentClick = (e) => {
-        if (navRef.current && !navRef.current.contains(e.target) && e.target !== toggleButtonRef.current) {
+    const handleDocumentClick = (e: MouseEvent) => {
+        if (navRef.current && !navRef.current.contains(e.target as Node) && e.target !== toggleButtonRef.current) {
             setOpen(false);
         }
     };
@@ -105,18 +108,17 @@ const SideNav = styled.aside`
     ul {
         list-style: none;
         text-align: start;
-
-        li {
-            margin: 1.5rem;
-        }
     }
 
     a {
+        display: block;
         text-decoration: none;
+        padding: 1rem 1.5rem;
     }
 
     a.active {
-        text-decoration: underline;
+        /* background-color: rgba(255, 255, 255, 0.5); */
+        background-color: ${(props) => props.theme.green};
     }
 
     &.sidenav-enter {

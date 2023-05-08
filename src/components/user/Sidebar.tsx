@@ -6,6 +6,7 @@ import Gold from '../../assets/ranks/gold.png';
 import Platinum from '../../assets/ranks/platinum.png';
 import Diamond from '../../assets/ranks/diamond.png';
 import { UserRank, Tier } from '../../interface';
+import ProgressBar from '../common/ProgressBar';
 
 export default function Sidebar() {
     const data: UserRank = {
@@ -21,9 +22,7 @@ export default function Sidebar() {
             <RankContainer>
                 <div>Rank: Platinum</div>
                 <div>
-                    <StyledProgressBar progress={60}>
-                        <div></div>
-                    </StyledProgressBar>
+                    <ProgressBar progress={60} height={20}></ProgressBar>
                     <NextRankImg src={getNextTierName(data.user_tier)} alt="nextRank" />
                 </div>
             </RankContainer>
@@ -110,28 +109,6 @@ const RankContainer = styled.div`
         display: flex;
         align-items: center;
         margin: 1rem;
-    }
-`;
-
-const StyledProgressBar = styled.div<{ progress: number }>`
-    height: 20px;
-    width: 100%;
-    background-color: rgba(254, 35, 255, 0.5);
-    border: 1px solid #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-    margin: 2px 0;
-    div {
-        height: 100%;
-        width: ${(props) => props.progress}%;
-        background-color: #fe23ff;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-right: none;
-        border-radius: 10px;
-        text-align: start;
-        padding-left: 1rem;
     }
 `;
 

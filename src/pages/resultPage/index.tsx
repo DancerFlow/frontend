@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { Music } from '../../interface';
-import star from '../../assets/star.png';
 import RankInfo from './RankInfo';
+import Lottie from 'lottie-react';
+import animationData from '../../assets/star.json';
+import ProgressBar from '../../components/common/ProgressBar';
 
 export default function ResultPage() {
     return (
@@ -13,7 +14,7 @@ export default function ResultPage() {
                 <Main>
                     <RankInfo></RankInfo>
                     <ScoreInfo>
-                        <Star src={star} alt="star" />
+                        <Lottie animationData={animationData} loop={true} />
                         <Score>233점</Score>
                     </ScoreInfo>
                     <ScoreDetail>
@@ -26,6 +27,11 @@ export default function ResultPage() {
                         <Combo>
                             <p>Bad</p> <p>7</p>
                         </Combo>
+                        <XpContainer>
+                            <p>Xp: </p>
+                            <ProgressBar progress={60} height={50}></ProgressBar>
+                            <p>+5</p>
+                        </XpContainer>
                     </ScoreDetail>
                 </Main>
             </Body>
@@ -90,26 +96,28 @@ const Score = styled.div`
 const ScoreDetail = styled.section`
     align-items: center;
     font-size: 2rem;
-    div {
-        margin-bottom: 1rem;
+    & > :first-child {
+        margin-top: 3rem;
     }
 `;
 
 const Combo = styled.div`
     display: flex;
+    margin-bottom: 3rem;
+
     p {
         margin-right: 1rem;
     }
 `;
 
-const Img = styled.img`
-    width: 6rem;
-    height: auto;
-`;
+const XpContainer = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
 
-const Star = styled.img`
-    width: 8rem;
-    height: auto;
+    & > * {
+        margin-right: 1rem;
+    }
 `;
 
 const Bottom = styled.footer`
