@@ -1,8 +1,15 @@
 import styled from 'styled-components';
 import Filter from '../../components/musicList/Filter';
 import Content from '../../components/musicList/content/';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useGetMusicLikesQuery, useGetMusicLatestQuery, useGetMusicIsLikeQuery } from '../../api/useGetMusicListQuery';
+import {
+    useGetMusicLikesQuery,
+    useGetMusicLatestQuery,
+    useGetMusicIsLikeQuery,
+    useGetMusicListQuery
+} from '../../api/useGetMusicListQuery';
+
 import { Music } from '../../interface';
 
 export enum FilterType {
@@ -11,31 +18,27 @@ export enum FilterType {
     Favorite = 'favorite'
 }
 const MusicListPage = () => {
+    const { isLoading, error, data } = useGetMusicListQuery({
+        onSuccess: (data: Music[]) => {
+            setMusicList(data);
+        },
+        onError: (error: string) => {
+            console.log(error);
+        }
+    });
     const [musicList, setMusicList] = useState<Music[]>([]);
     const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
 
     const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
     };
-    const musicLikes = useGetMusicLikesQuery();
-    const musicLatest = useGetMusicLatestQuery();
-    const musicIsLike = useGetMusicIsLikeQuery();
-
-    useEffect(() => {
-        if (selectedFilter === FilterType.Popular) {
-            setMusicList(musicLikes);
-        } else if (selectedFilter === FilterType.Latest) {
-            setMusicList(musicLatest);
-        } else if (selectedFilter === FilterType.Favorite) {
-            setMusicList(musicIsLike);
-        }
-    }, [selectedFilter]);
 
     return (
         <Wrapper>
-            {/* <Header></Header> */}
             <Filter handleClick={handleClick} selected={selectedFilter} />
-            <Content musicList={musicList} />
+            {isLoading && <div>Loading...</div>}
+            {error && <div>Error: {error.message}</div>}
+            {!isLoading && !error && <Content musicList={musicList} />}
         </Wrapper>
     );
 };

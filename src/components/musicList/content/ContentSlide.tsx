@@ -97,22 +97,22 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
             <Slider {...settings}>
                 {musicList.map((data: Music, idx) => {
                     return (
-                        <MusicWrap key={`${idx}-${data.music_name}`}>
+                        <MusicWrap key={`${data.id}-${data.name}`}>
                             <MusicCard
                                 onClick={(e) => {
                                     if (!isDragged) {
                                         e.preventDefault();
-                                        onMusicClick(data);
+                                        onMusicClick(data.id);
                                     }
                                 }}
-                                img={data.music_image_url}
+                                img={data.album_image_url}
                                 whileHover="hover"
                                 initial="normal"
                                 variants={musicVariants}
                             >
                                 <MusicInfo variants={musicInfoVariants}>
-                                    <h1>{data.music_name}</h1>
-                                    <h4>{data.music_singer}</h4>
+                                    <h1>{data.name}</h1>
+                                    <h4>{data.music_singer.name}</h4>
                                 </MusicInfo>
                             </MusicCard>
                         </MusicWrap>

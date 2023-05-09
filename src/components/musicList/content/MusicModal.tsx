@@ -8,21 +8,22 @@ interface ModalFrameProps {
 }
 
 const MusicModal = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFrameProps) => {
+    console.log(musicDetailInfo[0]);
     return (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
-                <MusicModalInfoHeader img={musicDetailInfo.music_image_url} />
+                <MusicModalInfoHeader img={musicDetailInfo[0].album_image_url} />
                 <MusicModalInfoContent>
                     <div className="header">
                         <div className="title">
-                            <h1>{musicDetailInfo.music_name}</h1>
+                            <h1>{musicDetailInfo[0].name}</h1>{' '}
                         </div>
                         <div className="artist">
-                            <h2>{musicDetailInfo.music_singer}</h2>
+                            <h2>{musicDetailInfo[0].music_singer.name}</h2>
                         </div>
                     </div>
                     <div className="description">
-                        <h1>{musicDetailInfo.music_description}</h1>
+                        <h1>{musicDetailInfo[0].description}</h1>
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
