@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ContentSlide from './ContentSlide';
-import MusicModal from './MusicModal';
 import { Music } from '../../../interface';
-import { useGetMusicDetailQuery } from '../../../api/useGetMusicDetailQuery';
+import MusicModal from './MusicModal';
 
 export interface ContentProps {
     musicList: Music[];
@@ -11,33 +10,21 @@ export interface ContentProps {
 
 const Content = ({ musicList }: ContentProps) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [musicDetailInfo, setMusicDetailInfo] = useState<Music | null>(null);
-    const [musicId, setMusicId] = useState<number>(1);
+    const [musicId, setMusicId] = useState<number | undefined>();
 
-    const { data: musicDetail } = useGetMusicDetailQuery(musicId);
-
-    useEffect(() => {
-        if (musicDetail) {
-            setMusicDetailInfo(musicDetail);
-        }
-    }, [musicDetail]);
-
-    const handleModalToggle = async (musicId: number) => {
+    const handleModalOpen = async (musicId: number) => {
         setIsOpenModal(!isOpenModal);
-        if (musicId) {
-            setMusicId(musicId);
-        }
+        await setMusicId(musicId);
     };
 
     const handleModalClose = () => {
+        setMusicId(undefined);
         setIsOpenModal(false);
     };
     return (
         <Wrapper>
-            <ContentSlide onMusicClick={handleModalToggle} musicList={musicList} onModalClose={setIsOpenModal} />
-            {musicDetailInfo ? (
-                <MusicModal onModalClose={handleModalClose} onModalOpen={isOpenModal} musicDetailInfo={musicDetailInfo} />
-            ) : null}
+            <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
+            <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} />
         </Wrapper>
     );
 };

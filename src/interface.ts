@@ -63,9 +63,13 @@ interface MusicSinger {
 export interface Music {
     id: number;
     name: string;
-    music_genre: string | null;
+    _genre: string | null;
     music_singer: MusicSinger;
     album_image_url: string;
+    likes?: number;
+    music_genre?: string;
+    palyed?: number;
+    description?: string;
 }
 
 export interface MusicRank {
