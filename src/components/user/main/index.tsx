@@ -6,7 +6,7 @@ import BestScoreInfo from './BestScoreInfo';
 export default function Main() {
     return (
         <Container>
-            <SectionTitle>My History</SectionTitle>
+            <SectionTitle>Play History</SectionTitle>
             <MainContent>
                 <MusicList></MusicList>
                 <LineGraph></LineGraph>
