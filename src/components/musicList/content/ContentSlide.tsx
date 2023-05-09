@@ -34,7 +34,7 @@ const musicInfoVariants = {
     }
 };
 interface ModalFrameProps {
-    onMusicClick: (music: Music) => void;
+    onMusicClick: (musicId: number) => void;
     musicList: Music[];
     onModalClose: (e: any) => void;
 }
