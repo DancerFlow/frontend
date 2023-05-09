@@ -1,41 +1,52 @@
 import { Music } from '../../../interface';
-import ModalFrame from './ModalFrame';
+import ModalFrame from '../../common/ModalFrame';
 import styled from 'styled-components';
+import StartBtn from './StartBtn';
+import Tropy from './Tropy';
+import TopRankingUI from './TopRanking';
+
 interface ModalFrameProps {
-    isOpenModal: boolean;
-    onClickModalClose: (e: any) => void;
+    onModalOpen: boolean;
+    onModalClose: () => void;
     musicDetailInfo: Music;
 }
 
-const MusicModal = ({ onClickModalClose, isOpenModal, musicDetailInfo }: ModalFrameProps) => {
+const MusicModal = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFrameProps) => {
+    console.log(musicDetailInfo[0]);
     return (
-        <ModalFrame onClickModalClose={onClickModalClose} isOpenModal={isOpenModal}>
+        <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
-                <MusicModalInfoHeader img={musicDetailInfo.music_image_url} />
+                <MusicModalInfoHeader img={musicDetailInfo[0].album_image_url} />
                 <MusicModalInfoContent>
                     <div className="header">
                         <div className="title">
-                            <h1>{musicDetailInfo.music_name}</h1>
+                            <h1>{musicDetailInfo[0].name}</h1>{' '}
                         </div>
                         <div className="artist">
-                            <h2>{musicDetailInfo.music_singer}</h2>
+                            <h2>{musicDetailInfo[0].music_singer.name}</h2>
                         </div>
                     </div>
                     <div className="description">
-                        <h1>{musicDetailInfo.music_description}</h1>
+                        <h1>{musicDetailInfo[0].description}</h1>
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <div className="footer">
-                        <div className="playBtn">
-                            <h1>Play</h1>
-                        </div>
+                    <div className="startBtn">
+                        <StartBtn key={musicDetailInfo[0].id} />
                     </div>
                 </MusicModalFooter>
             </MusicModalInfo>
             <MusicModalRank>
-                <MusicModalRankHeader />
-                <MusicModalRankContent />
+                <MusicModalRankHeader>
+                    <div className="Tropy">
+                        <Tropy />
+                    </div>
+                </MusicModalRankHeader>
+                <MusicModalRankContent>
+                    <div className="rankList">
+                        <TopRankingUI />
+                    </div>
+                </MusicModalRankContent>
             </MusicModalRank>
         </ModalFrame>
     );
@@ -44,7 +55,9 @@ const MusicModal = ({ onClickModalClose, isOpenModal, musicDetailInfo }: ModalFr
 const MusicModalInfo = styled.div`
     width: 50%;
     height: 100%;
-    border: 1px solid black;
+    background-color: #81607b;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 `;
 
 interface MusicModalInfoHeaderProps {
@@ -53,7 +66,7 @@ interface MusicModalInfoHeaderProps {
 
 const MusicModalInfoHeader = styled.div<MusicModalInfoHeaderProps>`
     width: 100%;
-    height: 55%;
+    height: 50%;
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
@@ -67,25 +80,54 @@ const MusicModalInfoContent = styled.div`
 const MusicModalFooter = styled.div`
     width: 100%;
     height: 10%;
-    background-color: yellow;
+
+    .startBtn {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
 `;
 
 const MusicModalRank = styled.div`
     width: 50%;
     height: 100%;
-    border: 1px solid red;
+    background-color: #81607b;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 `;
 
 const MusicModalRankHeader = styled.div`
     width: 100%;
     height: 20%;
-    background-color: red;
+
+    .Tropy {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 const MusicModalRankContent = styled.div`
     width: 100%;
     height: 80%;
-    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .rankList {
+        width: 90%;
+        height: 90%;
+        background-color: #906f8c;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 `;
 
 export default MusicModal;

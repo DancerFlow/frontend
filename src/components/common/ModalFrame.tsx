@@ -1,20 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 interface ModalFrameProps {
-    modalOpen: boolean;
-    handleModal: () => void;
+    isOpened: boolean;
+    onClose: () => void;
     children: React.ReactNode;
 }
 
-const ModalFrame = ({ handleModal, children, modalOpen, ...rest }: ModalFrameProps) => {
+const ModalFrame = ({ onClose, children, isOpened, ...rest }: ModalFrameProps) => {
     return (
         <>
-            {modalOpen && (
+            {isOpened && (
                 <Container>
-                    <Background onClick={handleModal} />
+                    <Background onClick={onClose} />
                     <ModalBlock {...rest}>
-                        <Close onClick={handleModal} />
+                        <Close>
+                            <FontAwesomeIcon icon={faXmark} size='xl' onClick={onClose} />
+                        </Close>
                         <Contents>{children}</Contents>
                     </ModalBlock>
                 </Container>
@@ -59,7 +62,7 @@ const ModalBlock = styled.div`
     top: 6.5rem;
     border-radius: 10px;
     padding: 1.5rem;
-    background-color: white;
+    background-color: #5b3850;
     width: 40rem;
     @media (max-width: 1120px) {
         width: 50rem;
@@ -81,19 +84,18 @@ const ModalBlock = styled.div`
     }
 `;
 
-const Close = styled.img.attrs({
-    src: '#'
-})`
+const Close = styled.div`
     position: absolute;
-    right: 1.5rem;
-    top: 1.5rem;
+    right: 0.5rem;
+    top: 0.2rem;
     cursor: pointer;
 `;
 
 const Contents = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 600px;
 `;
 
 export default ModalFrame;

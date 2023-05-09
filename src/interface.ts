@@ -56,14 +56,16 @@ export interface UserGameMusicHistory {
     music_score_by_date: { music_score: number; music_score_created_at: Date };
 }
 
+interface MusicSinger {
+    id: number;
+    name: string;
+}
 export interface Music {
-    music_name: string;
-    music_image_url: string;
-    music_singer: string;
-    music_description?: string;
-    music_likes?: number;
-    music_played?: number;
-    music_is_like?: boolean;
+    id: number;
+    name: string;
+    music_genre: string | null;
+    music_singer: MusicSinger;
+    album_image_url: string;
 }
 
 export interface MusicRank {
