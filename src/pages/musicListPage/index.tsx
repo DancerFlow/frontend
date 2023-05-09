@@ -3,12 +3,7 @@ import Filter from '../../components/musicList/Filter';
 import Content from '../../components/musicList/content/';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {
-    useGetMusicLikesQuery,
-    useGetMusicLatestQuery,
-    useGetMusicIsLikeQuery,
-    useGetMusicListQuery
-} from '../../api/useGetMusicListQuery';
+import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 
 import { Music } from '../../interface';
 import LaserAnimation from '../../hooks/LazerAnimation';

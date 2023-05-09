@@ -5,26 +5,22 @@ import Silver from '../../assets/ranks/silver.png';
 import Gold from '../../assets/ranks/gold.png';
 import Platinum from '../../assets/ranks/platinum.png';
 import Diamond from '../../assets/ranks/diamond.png';
-import { UserRank, Tier } from '../../interface';
+import { Tier, Profile } from '../../interface';
+import ProgressBar from '../common/ProgressBar';
 
-export default function Sidebar() {
-    const data: UserRank = {
-        user_tier: Tier.Platinum,
-        user_xp: 1890
-    };
+export default function Sidebar({ profile }: { profile: Profile }) {
+    const rank: string[] = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
 
     return (
         <Container>
             <RankImgWrapper>
-                <img src={getTierName(data.user_tier)} alt="Rank" />
+                <img src={getTierImage(profile.user_tier)} alt="Rank" />
             </RankImgWrapper>
             <RankContainer>
-                <div>Rank: Platinum</div>
+                <div>Rank: {rank[profile.user_tier]}</div>
                 <div>
-                    <StyledProgressBar progress={60}>
-                        <div></div>
-                    </StyledProgressBar>
-                    <NextRankImg src={getNextTierName(data.user_tier)} alt="nextRank" />
+                    <ProgressBar progress={60} height={20}></ProgressBar>
+                    <NextRankImg src={getNextTierImage(profile.user_tier)} alt="nextRank" />
                 </div>
             </RankContainer>
             <StyledCalendar calendarType="US" formatDay={(locale, date) => date.toLocaleString('en', { day: 'numeric' })}></StyledCalendar>
@@ -32,7 +28,7 @@ export default function Sidebar() {
     );
 }
 
-function getTierName(tier: Tier): string {
+function getTierImage(tier: Tier): string {
     switch (tier) {
         case Tier.Bronze:
             return Bronze;
@@ -49,7 +45,7 @@ function getTierName(tier: Tier): string {
     }
 }
 
-function getNextTierName(tier: Tier): string {
+function getNextTierImage(tier: Tier): string {
     switch (tier) {
         case Tier.Bronze:
             return Silver;
@@ -110,28 +106,6 @@ const RankContainer = styled.div`
         display: flex;
         align-items: center;
         margin: 1rem;
-    }
-`;
-
-const StyledProgressBar = styled.div<{ progress: number }>`
-    height: 20px;
-    width: 100%;
-    background-color: rgba(254, 35, 255, 0.5);
-    border: 1px solid #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-    margin: 2px 0;
-    div {
-        height: 100%;
-        width: ${(props) => props.progress}%;
-        background-color: #fe23ff;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-right: none;
-        border-radius: 10px;
-        text-align: start;
-        padding-left: 1rem;
     }
 `;
 
