@@ -1,6 +1,10 @@
 import { Music } from '../../../interface';
 import ModalFrame from '../../common/ModalFrame';
 import styled from 'styled-components';
+import StartBtn from './StartBtn';
+import Tropy from './Tropy';
+import TopRankingUI from './TopRanking';
+
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
@@ -27,16 +31,22 @@ const MusicModal = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFramePr
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <div className="footer">
-                        <div className="playBtn">
-                            <h1>Play</h1>
-                        </div>
+                    <div className="startBtn">
+                        <StartBtn key={musicDetailInfo[0].id} />
                     </div>
                 </MusicModalFooter>
             </MusicModalInfo>
             <MusicModalRank>
-                <MusicModalRankHeader />
-                <MusicModalRankContent />
+                <MusicModalRankHeader>
+                    <div className="Tropy">
+                        <Tropy />
+                    </div>
+                </MusicModalRankHeader>
+                <MusicModalRankContent>
+                    <div className="rankList">
+                        <TopRankingUI />
+                    </div>
+                </MusicModalRankContent>
             </MusicModalRank>
         </ModalFrame>
     );
@@ -45,7 +55,9 @@ const MusicModal = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFramePr
 const MusicModalInfo = styled.div`
     width: 50%;
     height: 100%;
-    border: 1px solid black;
+    background-color: #81607b;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 `;
 
 interface MusicModalInfoHeaderProps {
@@ -54,7 +66,7 @@ interface MusicModalInfoHeaderProps {
 
 const MusicModalInfoHeader = styled.div<MusicModalInfoHeaderProps>`
     width: 100%;
-    height: 55%;
+    height: 50%;
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
@@ -68,25 +80,54 @@ const MusicModalInfoContent = styled.div`
 const MusicModalFooter = styled.div`
     width: 100%;
     height: 10%;
-    background-color: yellow;
+
+    .startBtn {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
 `;
 
 const MusicModalRank = styled.div`
     width: 50%;
     height: 100%;
-    border: 1px solid red;
+    background-color: #81607b;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 `;
 
 const MusicModalRankHeader = styled.div`
     width: 100%;
     height: 20%;
-    background-color: red;
+
+    .Tropy {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 const MusicModalRankContent = styled.div`
     width: 100%;
     height: 80%;
-    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .rankList {
+        width: 90%;
+        height: 90%;
+        background-color: #906f8c;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 `;
 
 export default MusicModal;
