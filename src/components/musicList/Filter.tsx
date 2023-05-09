@@ -4,8 +4,7 @@ import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-s
 
 export enum FilterType {
     Popular = 'popular',
-    Latest = 'latest',
-    Favorite = 'favorite'
+    Latest = 'latest'
 }
 interface FilterProps {
     handleClick: (type: FilterType) => void;
@@ -37,11 +36,11 @@ const Filter = ({ handleClick, selected }: FilterProps) => {
                         <H1>최신순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Favorite)}>
+                <ItemWrapper>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faHeart} />
                     </BtnIconWrapper>
-                    <Item id="favorite" selected={selected}>
+                    <Item id="favorite">
                         <H1>찜한 목록</H1>
                     </Item>
                 </ItemWrapper>
