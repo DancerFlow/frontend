@@ -1,12 +1,11 @@
-import './App.css'
-
+import './App.css';
+import { ReactQueryDevtools } from 'react-query/devtools';
 function App() {
-
-  return (
-    <>
-      <div></div>
-    </>
-  )
+    return (
+        <>
+            <ReactQueryDevtools initialIsOpen={true} />
+        </>
+    );
 }
 
-export default App
+export default App;
