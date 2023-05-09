@@ -11,7 +11,7 @@ import {
 } from '../../api/useGetMusicListQuery';
 
 import { Music } from '../../interface';
-
+import LaserAnimation from '../../hooks/LazerAnimation';
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
@@ -35,10 +35,9 @@ const MusicListPage = () => {
 
     return (
         <Wrapper>
+            <LaserAnimation />
             <Filter handleClick={handleClick} selected={selectedFilter} />
-            {isLoading && <div>Loading...</div>}
-            {error && <div>Error: {error.message}</div>}
-            {!isLoading && !error && <Content musicList={musicList} />}
+            <Content musicList={musicList} />
         </Wrapper>
     );
 };
@@ -47,6 +46,7 @@ const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
     background: #2a1e57;
+    position: relative;
 `;
 
 export default MusicListPage;
