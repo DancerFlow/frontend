@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { Profile, Tier } from '../../interface';
 
-export default function Header() {
+export default function Header({ profile }: { profile: Profile }) {
     return (
         <Container>
-            <Avatar src={data.user_profile_image_url}></Avatar>
+            <Avatar src={profile.user_profile_image_url}></Avatar>
             <UserInfo>
-                <Title>Hello, {data.user_nickname}</Title>
+                <Title>Hello, {profile.user_nickname}</Title>
                 <div>
                     <EditProfile>Edit Profile</EditProfile> <FontAwesomeIcon icon={faPen} style={{ display: 'inline' }} />
                 </div>
@@ -17,20 +17,10 @@ export default function Header() {
     );
 }
 
-const data: Profile = {
-    user_nickname: 'anna',
-    user_email: 'anna@gmail.com',
-    user_profile_image_url:
-        'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-    user_tier: Tier.Platinum,
-    user_xp: 555
-};
-
 const Container = styled.header`
     grid-area: header;
     display: flex;
     align-items: center;
-    /* margin: 1rem 1rem 1rem 0; */
 `;
 
 const UserInfo = styled.div`

@@ -39,7 +39,7 @@ const fillAnimation = (progress: number) => keyframes`
 const Fill = styled.div<{ progress: number }>`
     height: 100%;
     width: ${(props) => props.progress}%;
-    background-color: #fe23ff;
+    background-color: ${(props) => props.theme.pink};
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-right: none;

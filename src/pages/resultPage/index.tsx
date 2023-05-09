@@ -13,10 +13,11 @@ export default function ResultPage() {
             <Body>
                 <Main>
                     <RankInfo></RankInfo>
-                    <ScoreInfo>
+                    <ResultInfo>
                         <Lottie animationData={animationData} loop={true} />
-                        <Score>233점</Score>
-                    </ScoreInfo>
+                        <Score>233 points</Score>
+                        <MyRank>My Ranking: 19th</MyRank>
+                    </ResultInfo>
                     <ScoreDetail>
                         <Combo>
                             <p>Perfect</p> <p>5</p>
@@ -84,7 +85,7 @@ const Main = styled.section`
     overflow-y: auto;
 `;
 
-const ScoreInfo = styled.section`
+const ResultInfo = styled.section`
     align-items: center;
 `;
 
@@ -93,6 +94,10 @@ const Score = styled.div`
     margin-top: 1rem;
 `;
 
+const MyRank = styled.div`
+    font-size: 2.5rem;
+    margin-top: 2rem;
+`;
 const ScoreDetail = styled.section`
     align-items: center;
     font-size: 2rem;

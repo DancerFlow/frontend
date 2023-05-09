@@ -5,25 +5,22 @@ import Silver from '../../assets/ranks/silver.png';
 import Gold from '../../assets/ranks/gold.png';
 import Platinum from '../../assets/ranks/platinum.png';
 import Diamond from '../../assets/ranks/diamond.png';
-import { UserRank, Tier } from '../../interface';
+import { Tier, Profile } from '../../interface';
 import ProgressBar from '../common/ProgressBar';
 
-export default function Sidebar() {
-    const data: UserRank = {
-        user_tier: Tier.Platinum,
-        user_xp: 1890
-    };
+export default function Sidebar({ profile }: { profile: Profile }) {
+    const rank: string[] = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
 
     return (
         <Container>
             <RankImgWrapper>
-                <img src={getTierName(data.user_tier)} alt="Rank" />
+                <img src={getTierImage(profile.user_tier)} alt="Rank" />
             </RankImgWrapper>
             <RankContainer>
-                <div>Rank: Platinum</div>
+                <div>Rank: {rank[profile.user_tier]}</div>
                 <div>
                     <ProgressBar progress={60} height={20}></ProgressBar>
-                    <NextRankImg src={getNextTierName(data.user_tier)} alt="nextRank" />
+                    <NextRankImg src={getNextTierImage(profile.user_tier)} alt="nextRank" />
                 </div>
             </RankContainer>
             <StyledCalendar calendarType="US" formatDay={(locale, date) => date.toLocaleString('en', { day: 'numeric' })}></StyledCalendar>
@@ -31,7 +28,7 @@ export default function Sidebar() {
     );
 }
 
-function getTierName(tier: Tier): string {
+function getTierImage(tier: Tier): string {
     switch (tier) {
         case Tier.Bronze:
             return Bronze;
@@ -48,7 +45,7 @@ function getTierName(tier: Tier): string {
     }
 }
 
-function getNextTierName(tier: Tier): string {
+function getNextTierImage(tier: Tier): string {
     switch (tier) {
         case Tier.Bronze:
             return Silver;
