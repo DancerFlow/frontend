@@ -62,7 +62,7 @@ const ModalBlock = styled.div`
     top: 3.5rem;
     border-radius: 10px;
     padding: 1.5rem;
-    background-color: #5b3850;
+    background-color: ${(props) => props.theme.modal.background};
     width: 55rem;
     @media (max-width: 1120px) {
         width: 50rem;

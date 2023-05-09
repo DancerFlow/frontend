@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.tsx';
-import { theme } from './theme.ts';
+import { theme} from './theme.ts';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Rootlayout from './layouts/Rootlayout.tsx';
 

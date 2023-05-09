@@ -40,7 +40,7 @@ const TopRankingUI = () => {
         { rank: 6, musicName: 'car은우', userAvatar: avatar5, score: 200 },
         { rank: 7, musicName: 'car은우', userAvatar: avatar5, score: 200 },
         { rank: 8, musicName: 'car은우', userAvatar: avatar5, score: 200 },
-        { rank: 9, musicName: 'car은우', userAvatar: avatar5, score: 200 },
+        { rank: 9, musicName: 'car은우', userAvatar: avatar5, score: 200 }
     ];
 
     return (
@@ -157,7 +157,6 @@ const MusicModalRankContent = styled.div`
     .rankList {
         width: 90%;
         height: 90%;
-        background-color: #906f8c;
         border-radius: 10px;
         padding: 1rem;
         display: flex;

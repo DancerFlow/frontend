@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import Lottie from 'lottie-web';
 import animationData from '../../../assets/tropy.json';
-
+import styled from 'styled-components';
 const Tropy = () => {
     const lottieRef = useRef(null);
 
@@ -23,7 +23,12 @@ const Tropy = () => {
             animation.destroy();
         };
     }, []);
-    return <div ref={lottieRef} style={{ background: '#906f8c', borderRadius: '10px', marginLeft:'20px' }} />;
+    return <Container ref={lottieRef} />;
 };
+const Container = styled.div`
+    background-color: ${(props) => props.theme.modal.content};
+    border-radius: 10px;
+    margin-left: 20px;
+`;
 
 export default Tropy;
