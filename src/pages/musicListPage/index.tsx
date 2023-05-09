@@ -27,7 +27,6 @@ const MusicListPage = () => {
         setSelectedFilter(item);
     };
 
-    console.log(selectedFilter);
     return (
         <Wrapper>
             <LaserAnimation />

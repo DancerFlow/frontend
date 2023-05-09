@@ -37,9 +37,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
             </MusicModalInfo>
             <MusicModalRank>
                 <MusicModalRankHeader>
-                    <div className="Tropy">
-                        <Tropy />
-                    </div>
+                    <Tropy />
                 </MusicModalRankHeader>
                 <MusicModalRankContent>
                     <div className="rankList">
@@ -101,14 +99,9 @@ const MusicModalRank = styled.div`
 const MusicModalRankHeader = styled.div`
     width: 100%;
     height: 20%;
-
-    .Tropy {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const MusicModalRankContent = styled.div`
