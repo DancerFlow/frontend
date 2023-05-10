@@ -1,51 +1,45 @@
 import styled from 'styled-components';
-import Header from '../../components/musicList/header/Header';
-import Filter from '../../components/musicList/filter/Filter';
+import Filter from '../../components/musicList/Filter';
 import Content from '../../components/musicList/content/';
-import { useEffect, useState } from 'react';
-import { useGetMusicLikesQuery, useGetMusicLatestQuery, useGetMusicIsLikeQuery } from '../../api/useGetMusicListQuery';
-import { Music } from '../../interface';
-const MusicListPage = () => {
-    const [musicList, setMusicList] = useState<Music[]>([]);
-    const [selectedFilter, setSelectedFilter] = useState('popular');
+import { useState } from 'react';
+import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 
-    const handleClick = (item: string): void => {
+import { Music } from '../../interface';
+import LaserAnimation from '../../hooks/LazerAnimation';
+export enum FilterType {
+    Popular = 'popular',
+    Latest = 'latest',
+    Favorite = 'favorite'
+}
+const MusicListPage = () => {
+    const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
+
+    const { isLoading, error, data } = useGetMusicListQuery(selectedFilter, {
+        onSuccess: (data: Music[]) => {
+            console.log(data);
+        },
+        onError: (error: string) => {
+            console.log(error);
+        }
+    });
+
+    const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
     };
-    const musicLikes = useGetMusicLikesQuery();
-    const musicLatest = useGetMusicLatestQuery();
-    const musicIsLike = useGetMusicIsLikeQuery();
-
-    useEffect(() => {
-        if (selectedFilter === 'popular') {
-            setMusicList(musicLikes);
-        } else if (selectedFilter === 'latest') {
-            setMusicList(musicLatest);
-        } else if (selectedFilter === 'favorite') {
-            setMusicList(musicIsLike);
-        }
-    }, [selectedFilter]);
 
     return (
         <Wrapper>
-            {/* <Header></Header> */}
+            <LaserAnimation />
             <Filter handleClick={handleClick} selected={selectedFilter} />
-            <Content musicList={musicList} />
+            {isLoading ? <div>Loading...</div> : error ? <div>Error: {error}</div> : <Content musicList={data} />}
         </Wrapper>
     );
 };
-
 const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
-<<<<<<< HEAD
-    /* background: #2a1e57; */
-    background: #000;
-=======
-
-
     background: #2a1e57;
->>>>>>> upstream/dev
+    position: relative;
 `;
 
 export default MusicListPage;

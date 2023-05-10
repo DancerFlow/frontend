@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -7,9 +7,30 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
+    const navRef = useRef<HTMLDivElement>(null);
+    const toggleButtonRef = useRef(null);
+
+    // 토글보다 handleDocumentClick이 먼저 실행되서 바로 닫히는 오류 떄문에 setTimeout 넣어줌.
     const handleToggle = () => {
-        setOpen(!open);
+        setTimeout(() => {
+            setOpen(!open);
+        }, 0);
     };
+
+    // toggle button 아니거나, SideNavbar 바깥 영역 클릭 했을 때, SideNavbar 닫기
+    const handleDocumentClick = (e: MouseEvent) => {
+        if (navRef.current && !navRef.current.contains(e.target as Node) && e.target !== toggleButtonRef.current) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleDocumentClick);
+
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
 
     const navLinks = [
         { to: 'challenge', text: 'login' },
@@ -17,20 +38,21 @@ export default function NavBar() {
         { to: 'mode', text: 'select mode' },
         { to: 'musiclist', text: 'music list' },
         { to: 'user', text: 'my page' },
-        { to: 'admin', text: 'admin' }
+        { to: 'admin', text: 'admin' },
+        { to: 'result', text: 'result' }
     ];
 
     return (
         <>
             <Nav>
-                <Button onClick={handleToggle}>
+                <Button ref={toggleButtonRef} onClick={handleToggle}>
                     <FontAwesomeIcon icon={faBars} style={{ color: '#ffffff' }} />
                 </Button>
             </Nav>
             <TransitionGroup>
                 {open && (
                     <CSSTransition in={open} classNames="sidenav" timeout={200} unmountOnExit={true}>
-                        <SideNav>
+                        <SideNav ref={navRef}>
                             <IconWrapper>
                                 <CloseFontAwesomeIcon icon={faXmark} size="2xl" onClick={handleToggle} />
                             </IconWrapper>
@@ -84,21 +106,19 @@ const SideNav = styled.aside`
     }
 
     ul {
-        padding: 1rem 0 0 1rem;
         list-style: none;
         text-align: start;
-
-        li {
-            margin: 1rem;
-        }
     }
 
     a {
+        display: block;
         text-decoration: none;
+        padding: 1rem 1.5rem;
     }
 
     a.active {
-        text-decoration: underline;
+        /* background-color: rgba(255, 255, 255, 0.5); */
+        background-color: ${(props) => props.theme.green};
     }
 
     &.sidenav-enter {
@@ -121,11 +141,10 @@ const SideNav = styled.aside`
 `;
 
 const IconWrapper = styled.div`
-    text-align: end;
-    margin: 1rem 1rem 0 0;
+    text-align: start;
+    margin: 1rem 1.5rem;
 `;
 const CloseFontAwesomeIcon = styled(FontAwesomeIcon)`
     color: #ffffff;
     cursor: pointer;
-    margin-left: auto;
 `;

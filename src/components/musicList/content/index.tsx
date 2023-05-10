@@ -1,28 +1,35 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ContentSlide from './ContentSlide';
-import MusicModal from './MusicModal';
 import { Music } from '../../../interface';
+import MusicModal from './MusicModal';
+
 export interface ContentProps {
     musicList: Music[];
 }
 
 const Content = ({ musicList }: ContentProps) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [musicDetailInfo, setMusicDetailInfo] = useState<Music>({} as Music);
+    const [musicId, setMusicId] = useState<number | undefined>();
 
-    const onSetModal = (e: any, data?: Music) => {
+    const handleModalOpen = async (musicId: number) => {
         setIsOpenModal(!isOpenModal);
-        if (data) {
-            setMusicDetailInfo(data);
-        }
+        await setMusicId(musicId);
     };
 
+    const handleModalClose = () => {
+        setMusicId(undefined);
+        setIsOpenModal(false);
+    };
     return (
-        <Wrapper>
-            <ContentSlide onClickMusic={onSetModal} musicList={musicList} onKeyModalClose={setIsOpenModal} />
-            <MusicModal onClickModalClose={onSetModal} isOpenModal={isOpenModal} musicDetailInfo={musicDetailInfo} />
-        </Wrapper>
+        <>
+            {musicList?.length ? (
+                <Wrapper>
+                    <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
+                    <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} />
+                </Wrapper>
+            ) : null}
+        </>
     );
 };
 

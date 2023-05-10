@@ -2,12 +2,15 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
 
-type IFilterProps = {
-    handleClick: (type: string) => void;
-    selected: string;
-};
-
-const Filter = ({ handleClick, selected }: IFilterProps) => {
+export enum FilterType {
+    Popular = 'popular',
+    Latest = 'latest'
+}
+interface FilterProps {
+    handleClick: (type: FilterType) => void;
+    selected: FilterType;
+}
+const Filter = ({ handleClick, selected }: FilterProps) => {
     return (
         <Wrapper>
             <FilterWrapper>
@@ -17,7 +20,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => handleClick('popular')}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Popular)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faFire} />
                     </BtnIconWrapper>
@@ -25,7 +28,7 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <H1>인기순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick('latest')}>
+                <ItemWrapper onClick={() => handleClick(FilterType.Latest)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faMusic} />
                     </BtnIconWrapper>
@@ -33,11 +36,11 @@ const Filter = ({ handleClick, selected }: IFilterProps) => {
                         <H1>최신순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick('favorite')}>
+                <ItemWrapper>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faHeart} />
                     </BtnIconWrapper>
-                    <Item id="favorite" selected={selected}>
+                    <Item id="favorite">
                         <H1>찜한 목록</H1>
                     </Item>
                 </ItemWrapper>

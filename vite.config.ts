@@ -8,6 +8,7 @@ export default defineConfig({
         watch: {
             usePolling: true
         },
+
         open: true, // 브라우저 자동 실행 여부
         hmr: {
             // 브라우저 자동 새로고침 여부

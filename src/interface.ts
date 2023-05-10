@@ -29,8 +29,8 @@ export interface Profile {
     user_nickname: string;
     user_email: string;
     user_profile_image_url?: string;
-    user_tier?: Tier;
-    user_xp?: number;
+    user_tier: Tier;
+    user_xp: number;
 }
 
 export interface UserRank {
@@ -43,6 +43,7 @@ export interface Calendar {
 }
 
 export interface UserGameHistory {
+    music_id: string;
     music_name: string;
     music_image_url: string;
     music_singer: string;
@@ -62,14 +63,20 @@ export interface UserGameMusicHistory {
     music_score_by_date: { music_score: number; music_score_created_at: Date };
 }
 
+interface MusicSinger {
+    id: number;
+    name: string;
+}
 export interface Music {
-    music_name: string;
-    music_image_url: string;
-    music_singer: string;
-    music_description?: string;
-    music_likes?: number;
-    music_played?: number;
-    music_is_like?: boolean;
+    id: number;
+    name: string;
+    _genre: string | null;
+    music_singer: MusicSinger;
+    album_image_url: string;
+    likes?: number;
+    music_genre?: string;
+    palyed?: number;
+    description?: string;
 }
 
 export interface MusicRank {

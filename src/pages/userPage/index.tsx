@@ -3,12 +3,15 @@ import Header from '../../components/user/Header';
 import Sidebar from '../../components/user/Sidebar';
 import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
+import { useGetMyProfile } from '../../api/useGetMyProfile';
 
 const UserPage = () => {
+    const profile = useGetMyProfile('user/profile');
+
     return (
         <Container>
-            <Header></Header>
-            <Sidebar></Sidebar>
+            <Header profile={profile}></Header>
+            <Sidebar profile={profile}></Sidebar>
             <Main></Main>
             <Bottom></Bottom>
         </Container>
