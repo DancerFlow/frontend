@@ -12,7 +12,7 @@ interface ModalFrameProps {
 }
 
 const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFrameProps) => {
-    return (
+    return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
                 <MusicModalInfoHeader>
@@ -47,6 +47,8 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                 </MusicModalRankContent>
             </MusicModalRank>
         </ModalFrame>
+    ) : (
+        <div>Loading...</div>
     );
 };
 

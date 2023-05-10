@@ -1,5 +1,6 @@
 import MusicModalContent from './MusicModalContent';
 import { useGetMusicDetailQuery } from '../../../api/useGetMusicDetailQuery';
+import { useGetMusicRankingQuery } from '../../../api/useGetMusicRankingQuery';
 
 interface ModalInfoProps {
     opened: boolean;
@@ -8,14 +9,25 @@ interface ModalInfoProps {
 }
 
 const MusicModal = ({ opened, selected_music_id, onClose }: ModalInfoProps) => {
-    const { data: musicDetail } = useGetMusicDetailQuery(selected_music_id, {
+    const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(selected_music_id, {
         enabled: Boolean(selected_music_id)
     });
-    if (!musicDetail || musicDetail?.length === 0) {
-        return null;
-    }
 
-    return <MusicModalContent onModalClose={onClose} onModalOpen={opened} musicDetailInfo={musicDetail} />;
+    const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(selected_music_id, {
+        enabled: Boolean(selected_music_id)
+    });
+
+    const loading = detailLoading || rankLoading;
+
+    return (
+        <>
+            {loading ? (
+                <div>loading...</div>
+            ) : (
+                <MusicModalContent onModalClose={onClose} onModalOpen={opened} musicDetailInfo={musicDetail} musicRankInfo={musicRank} />
+            )}
+        </>
+    );
 };
 
 export default MusicModal;
