@@ -4,9 +4,16 @@ export interface Status {
     status_code: number;
 }
 
-export interface User {
+export interface UserRespose {
     Status: Status;
-    access_token: string;
+    access_token?: string;
+}
+
+export interface UserForm {
+    email: string;
+    password: string;
+    passwordConfirm?: string;
+    nickname?: string;
 }
 
 export enum Tier {
