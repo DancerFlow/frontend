@@ -5,6 +5,7 @@ import StartBtn from './StartBtn';
 import Tropy from './Tropy';
 import TopRanking from './TopRanking';
 import LikeBtn from './LikeBtn';
+// import LikeBtnTest from './LikeBtnTest';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
@@ -32,10 +33,9 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
+                    {/* <LikeBtnTest  isOpened={onModalOpen} /> */}
                     <LikeBtn />
-                    <div className="startBtn">
-                        <StartBtn key={musicDetailInfo.id} />
-                    </div>
+                    <StartBtn key={musicDetailInfo.id} />
                 </MusicModalFooter>
             </MusicModalInfo>
             <MusicModalRank>
@@ -154,16 +154,11 @@ const MusicModalInfoContent = styled.div`
 
 const MusicModalFooter = styled.div`
     width: 100%;
-    height: 7%;
+    height: 10%;
     display: flex;
-    .startBtn {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-    }
+    align-items: center;
+    justify-content: center;
+    position: relative;
 `;
 
 const MusicModalRank = styled.div`

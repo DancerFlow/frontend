@@ -12,7 +12,6 @@ interface RankProps {
     score: number;
 }
 
-console.log(avatar1);
 const Rank = ({ rank, musicName, userAvatar, score }: RankProps) => {
     return (
         <RankContainer>

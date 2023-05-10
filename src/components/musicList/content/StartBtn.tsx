@@ -24,7 +24,7 @@ const StartBtn = () => {
         };
     }, []);
 
-    return <div ref={lottieRef} />;
+    return <div ref={lottieRef} style={{ cursor: 'pointer'}} />;
 };
 
 export default StartBtn;
