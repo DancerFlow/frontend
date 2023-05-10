@@ -50,7 +50,7 @@ const NextArrow = (props: CustomArrowProps) => (
         <FontAwesomeIcon icon={faChevronRight} />
     </CustomArrow>
 );
-const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
+const ContentSlide = ({ onMusicClick, musicList, onModalClose, musicSearchList }: ModalFrameProps) => {
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -91,11 +91,12 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
     useKeyEscClose((e: any) => {
         onModalClose(e);
     });
-
+    console.log(musicList, 'musicList');
+    console.log(musicSearchList, 'musicSearchList');
     return (
         <MusicListWrap>
             <Slider {...settings}>
-                {musicList.map((data: Music, idx) => {
+                {(musicSearchList && musicSearchList.length > 0 ? musicSearchList : musicList).map((data: Music, idx) => {
                     return (
                         <MusicWrap key={`${data.id}-${data.name}`}>
                             <MusicCard

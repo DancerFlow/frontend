@@ -1,26 +1,28 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
-
+import { useState } from 'react';
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest'
 }
 interface FilterProps {
-    handleClick: (type: FilterType) => void;
+    onFilter: (type: FilterType) => void;
     selected: FilterType;
+    onSearch: (input: string) => void;
 }
-const Filter = ({ handleClick, selected }: FilterProps) => {
+const Filter = ({ onFilter, selected, onSearch }: FilterProps) => {
+    const [inputValue, setInputValue] = useState('');
     return (
         <Wrapper>
             <FilterWrapper>
                 <InputWrapper>
-                    <InputItem placeholder="Search" />
-                    <InputIconWrapper>
+                    <InputItem placeholder="Search" onChange={(e) => setInputValue(e.target.value)} id="search-input" />
+                    <InputIconWrapper onClick={() => onSearch(inputValue)}>
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Popular)}>
+                <ItemWrapper onClick={() => onFilter(FilterType.Popular)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faFire} />
                     </BtnIconWrapper>
@@ -28,7 +30,7 @@ const Filter = ({ handleClick, selected }: FilterProps) => {
                         <H1>인기순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Latest)}>
+                <ItemWrapper onClick={() => onFilter(FilterType.Latest)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faMusic} />
                     </BtnIconWrapper>
