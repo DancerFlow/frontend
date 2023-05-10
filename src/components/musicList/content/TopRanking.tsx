@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fa1, fa2, fa3, fa4, fa5 } from '@fortawesome/free-solid-svg-icons';
 import avatar1 from '../../../assets/avatarImg/avatar1.png';
 import avatar2 from '../../../assets/avatarImg/avatar2.png';
 import avatar3 from '../../../assets/avatarImg/avatar3.png';
@@ -80,7 +78,7 @@ const Header = styled.div`
         h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #fff;
+            color: ${(props) => props.theme.modal.fontColorTwo};
             margin-left: 2rem;
         }
         position: absolute;
@@ -102,14 +100,13 @@ const RankContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid #ffc905;
+    border-bottom: 1px solid ${(props) => props.theme.modal.fontColorOne};
     padding: 0.5rem 0;
-    margin: 2rem 0;
 `;
 
 const RankNumber = styled.span`
     font-size: 1.5rem;
-    color: #ffc905;
+    color: ${(props) => props.theme.modal.fontColorOne};
 `;
 
 const RankUserInfo = styled.div`
@@ -137,14 +134,14 @@ const RankUserName = styled.div`
     font-size: 0.5rem;
     margin-top: 0.2rem;
     width: 5rem;
-    color: #fff;
+    color: ${(props) => props.theme.modal.fontColorTwo};
 `;
 
 const RankScore = styled.span`
     font-size: 1rem;
     margin-left: auto;
     margin-right: 0.2rem;
-    color: #ffc905;
+    color: ${(props) => props.theme.modal.fontColorOne};
 `;
 
 const MusicModalRankContent = styled.div`

@@ -4,6 +4,9 @@ interface ModalTheme {
     background: string;
     container: string;
     content: string;
+    fontColorOne: string;
+    fontColorTwo: string;
+    fontColorThree: string;
 }
 declare module 'styled-components' {
     export interface DefaultTheme {

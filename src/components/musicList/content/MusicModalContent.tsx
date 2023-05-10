@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import StartBtn from './StartBtn';
 import Tropy from './Tropy';
 import TopRanking from './TopRanking';
-
+import LikeBtn from './LikeBtn';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
@@ -28,10 +28,11 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                         </div>
                     </div>
                     <div className="description">
-                        <h1>{musicDetailInfo.description}</h1>
+                        <div className="description-content">{musicDetailInfo.description}</div>
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
+                    <LikeBtn />
                     <div className="startBtn">
                         <StartBtn key={musicDetailInfo.id} />
                     </div>
@@ -89,7 +90,7 @@ const MusicModalInfoContent = styled.div`
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-
+    color: ${(props) => props.theme.modal.fontColorTwo};
     .header {
         width: 100%;
         height: 40%;
@@ -118,6 +119,7 @@ const MusicModalInfoContent = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
+            color: ${(props) => props.theme.modal.fontColorThree};
 
             h2 {
                 font-size: 20px;
@@ -130,24 +132,33 @@ const MusicModalInfoContent = styled.div`
         width: 100%;
         height: 60%;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
 
-        h1 {
-            font-size: 18px;
-            margin: 0;
-            text-align: center;
+        .description-content {
+            width: 80%;
+            height: 80%;
+            font-size: 1rem;
+            overflow: auto;
+            position: absolute;
+            top: 10%;
+            left: 0;
+            right: 0;
+            margin: auto;
+            border: 1px solid ${(props) => props.theme.modal.container};
+            border-radius: 10px;
         }
     }
 `;
 
 const MusicModalFooter = styled.div`
     width: 100%;
-    height: 10%;
-
+    height: 7%;
+    display: flex;
     .startBtn {
         width: 100%;
-        height: 100%;
+        height: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
