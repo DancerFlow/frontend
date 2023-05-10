@@ -51,7 +51,8 @@ export interface UserGameHistory {
     music_total_score: number;
 }
 
-export interface UserGameMusicHistory {
+export interface UserGameHistoryDetail {
+    music_id: number;
     music_best_score_detail: {
         score: number;
         rank: number;
@@ -60,7 +61,7 @@ export interface UserGameMusicHistory {
         miss: number;
     };
     music_total_score: number;
-    music_score_by_date: { music_score: number; music_score_created_at: Date };
+    music_score_by_date: { music_score: number; music_score_created_at: Date }[];
 }
 
 interface MusicSinger {
@@ -85,4 +86,12 @@ export interface MusicRank {
     created_at: Date;
     my_score: string;
     my_rank: number;
+}
+
+export interface UserLikes {
+    id: number;
+    user_id: number;
+    music_id: number;
+    created_at: Date;
+    music: Music;
 }

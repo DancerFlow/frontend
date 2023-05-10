@@ -4,13 +4,15 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 import { UserGameHistory } from '../../../interface';
 import { useGetGameHistory } from '../../../api/useGetGameHistory';
+import { useGetGameHistoryDetail } from '../../../api/useGetGameHistoryDetail';
 import { useState } from 'react';
-import LineGraph from './LineGraph';
-import BestScoreInfo from './BestScoreInfo';
+import ScoreInfo from './ScoreInfo';
 
 export default function GameHistory() {
-    const gamehistory = useGetGameHistory('user/game/history');
     const [selected, setSelected] = useState(0);
+    const gamehistory = useGetGameHistory('user/game/history');
+    const gamehistoryDetail = useGetGameHistoryDetail(selected);
+
     const handleClick = (music_id: number) => {
         setSelected(music_id);
     };
@@ -40,10 +42,7 @@ export default function GameHistory() {
                     </MusicCard>
                 ))}
             </CardContainer>
-            <ScoreInfo>
-                <LineGraph />
-                <BestScoreInfo />
-            </ScoreInfo>
+            <ScoreInfo gamehistoryDates={gamehistoryDetail.music_score_by_date}></ScoreInfo>
         </Section>
     );
 }
@@ -109,7 +108,7 @@ interface MusicCardProps {
 const MusicCard = styled.div<MusicCardProps>`
     display: flex;
     border-radius: 10px;
-    max-height: 40px;
+    max-height: 15%;
     background-color: ${(props) => (props.selected ? props.theme.pink : 'rgba(254, 35, 255, 0.3)')};
     padding: 0.5rem;
     margin-bottom: 0.5rem;
@@ -138,7 +137,7 @@ const AlbumCover = styled.img`
 const MusicInfo = styled.div`
     text-align: start;
     p {
-        font-size: 0.8rem;
+        font-size: 0.6rem;
     }
 `;
 
@@ -149,12 +148,4 @@ const MusicTitle = styled.p`
 const Right = styled.div`
     display: flex;
     align-items: center;
-`;
-
-const ScoreInfo = styled.div`
-    display: flex;
-    flex: 1.8;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    border: solid 2px ${(props) => props.theme.pink};
 `;
