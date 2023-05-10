@@ -9,10 +9,10 @@ export default function BestScoreInfo() {
 }
 
 const Container = styled.div`
-    background-color: rgba(255, 255, 255, 0.1);
-    flex: 2;
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: center;
     padding: 1rem 2rem;
 `;

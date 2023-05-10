@@ -36,7 +36,7 @@ export interface Calendar {
 }
 
 export interface UserGameHistory {
-    music_id: string;
+    music_id: number;
     music_name: string;
     music_image_url: string;
     music_singer: string;
