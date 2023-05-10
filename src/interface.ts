@@ -80,9 +80,9 @@ export interface Music {
 }
 
 export interface MusicRank {
-    user_name: string;
-    user_score: number;
-    created_at: Date;
-    my_score: string;
-    my_rank: number;
+    id: number;
+    nickname: string;
+    profile_image_url: string;
+    score: number;
+    rank: number;
 }

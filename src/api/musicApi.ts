@@ -23,3 +23,9 @@ export const fetchMusicDetail = async (musicId: number) => {
     const json = response.data;
     return json;
 };
+
+export const fetchMusicRank = async (musicId: number) => {
+    const response = await axios.get(`${BASE_URL}/game/ranking/${musicId}`);
+    const json = response.data;
+    return json;
+};
