@@ -19,9 +19,8 @@ export default function LineGraph() {
 }
 
 const Container = styled.div`
-    background-color: rgba(255, 255, 255, 0.1);
-    flex: 3;
     display: flex;
+    flex: 1.2;
     justify-content: center;
     align-items: center;
     margin-right: 1rem;
