@@ -13,6 +13,7 @@ import { SkeletonUtils } from 'three-stdlib';
 
 export default function Model({ pose, ...props }) {
     // Fetch model and a separate texture
+    const gltf = useGLTF('/models/stacy.glb');
     const { scene, animations } = useGLTF('/models/stacy.glb');
     const texture = useTexture('/models/stacy.jpg');
 

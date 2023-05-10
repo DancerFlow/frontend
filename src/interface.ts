@@ -4,9 +4,16 @@ export interface Status {
     status_code: number;
 }
 
-export interface User {
+export interface UserRespose {
     Status: Status;
-    access_token: string;
+    access_token?: string;
+}
+
+export interface UserForm {
+    email: string;
+    password: string;
+    passwordConfirm?: string;
+    nickname?: string;
 }
 
 export enum Tier {
@@ -36,7 +43,7 @@ export interface Calendar {
 }
 
 export interface UserGameHistory {
-    music_id: string;
+    music_id: number;
     music_name: string;
     music_image_url: string;
     music_singer: string;

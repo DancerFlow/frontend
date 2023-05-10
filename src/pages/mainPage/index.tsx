@@ -1,22 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import Lottie from 'lottie-react';
-import ReactHowler from 'react-howler';
+import { useNavigate } from 'react-router-dom';
 
 import LoginModal from '../../components/main/LoginModal';
-
-import bgm from '../../assets/rukunetsu.mp3';
-import bgVideo from '../../assets/dancerflow.mp4';
-import bgmOnOff from '../../assets/bgmOnOff.json';
 import LoadingView from '../../components/common/LoadingView';
-import { useNavigate } from 'react-router-dom';
+
+import bgVideo from '../../assets/dancerflow.mp4';
 
 const MainPage = () => {
     const [isHover, setIsHover] = useState<boolean>(false);
     const [isClicked, setIsClicked] = useState<boolean>(false);
     const [isSoundOn, setIsSoundOn] = useState<boolean>(false);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const lottieRef = useRef<any>(null);
 
     const [loadingScreen, setLoadingScreen] = useState<boolean>(false);
     useEffect(() => {
@@ -46,10 +41,6 @@ const MainPage = () => {
         }, 40);
     }, [isHover, isClicked]);
 
-    useEffect(() => {
-        isSoundOn ? lottieRef.current.playSegments([37, 67], true) : lottieRef.current.playSegments([5, 33], true);
-    }, [isSoundOn]);
-
     const onTimeUpdate = () => {
         if (!isClicked && videoRef.current?.currentTime >= 0.2) {
             videoRef.current?.pause();
@@ -61,13 +52,9 @@ const MainPage = () => {
         videoRef.current?.play();
     };
 
-    const handleSound = () => {
-        setIsSoundOn((cur) => !cur);
-    };
-
     return (
         <div>
-            <LoadingView loadingScreen={loadingScreen}></LoadingView>
+            {/* <LoadingView loadingScreen={loadingScreen}></LoadingView> */}
             <BackgroundContainer>
                 <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
                     <span>신나는 브금이랑 함께 하실래요?</span>
@@ -86,6 +73,7 @@ const MainPage = () => {
                         아뇨
                     </div>
                 </ConfirmSoundPlay>
+
                 <VideoS
                     ref={videoRef}
                     onTimeUpdate={onTimeUpdate}
@@ -96,29 +84,26 @@ const MainPage = () => {
                 >
                     <source src={bgVideo} type="video/mp4"></source>
                 </VideoS>
+
+                {/* <MenuContainer>
+                    <ul>
+                        <li>
+                            <span>LOGIN</span>
+                        </li>
+                        <li>
+                            <span>SIGN UP</span>
+                        </li>
+                        <li>
+                            <span>join as guest</span>
+                        </li>
+                    </ul>
+                </MenuContainer> */}
+
                 {isClicked && <LoginModal setIsClicked={setIsClicked} setIsHover={setIsHover} />}
             </BackgroundContainer>
-
-            <ReactHowler src={[bgm]} playing={isSoundOn} volume={0.2} loop={true} />
-
-            <BgmController onClick={handleSound}>
-                <Lottie lottieRef={lottieRef} animationData={bgmOnOff} loop={false} autoPlay={false}></Lottie>
-            </BgmController>
         </div>
     );
 };
-
-const BackgroundContainer = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    overflow: hidden;
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-`;
 
 const ConfirmKeyframes = keyframes`
     0%{
@@ -145,7 +130,7 @@ const ConfirmSoundPlay = styled.div`
     position: absolute;
     width: 680px;
     height: 120px;
-    background-color: #27fd1c;
+    background-color: ${(props) => props.theme.green};
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-5deg);
@@ -177,21 +162,34 @@ const ConfirmSoundPlay = styled.div`
     }
 `;
 
-const VideoS = styled.video`
-    margin-top: 100px;
-    width: 1200px;
-    cursor: pointer;
+const BackgroundContainer = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 `;
 
-const BgmController = styled.div`
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 100px;
-    background-color: #27fd1c;
-    cursor: pointer;
+const VideoS = styled.video`
+    width: 900px;
+    margin: 50px;
+`;
+
+const MenuContainer = styled.div`
+    width: 600px;
+    height: 300px;
+    color: ${(props) => props.theme.pink};
+    text-align: end;
+    span {
+        margin-top: 20px;
+        font-size: 72px;
+        font-family: 'Franxurter Totally', sans-serif !important;
+        font-weight: 800;
+        letter-spacing: 5px;
+    }
 `;
 
 export default MainPage;
