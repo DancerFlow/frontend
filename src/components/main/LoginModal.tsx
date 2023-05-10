@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import DragDrop from '../common/DragDrop';
 import { useNavigate } from 'react-router-dom';
+import SignUpForm from './SignUpForm';
+import LoginForm from './LoginForm';
+import { UserForm } from '../../interface';
 
 interface Props {
     setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,109 +12,32 @@ interface Props {
 }
 
 const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
-    const emailRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const passwordConfirmRef = useRef<HTMLInputElement>(null);
-    const nicknameRef = useRef<HTMLInputElement>(null);
-    const [formValid, setFormValid] = useState<string>('');
-    const [file, setFile] = useState<FileList | undefined>();
-    const [registerStep, setRegisterStep] = useState(0);
+    const [isSignUp, setIsSignUp] = useState<boolean>(false);
+    const [formData, setFormData] = useState<UserForm>();
 
     const navigate = useNavigate();
 
     const handleModalClick = () => {
         setIsClicked(false);
         setIsHover(false);
-        setRegisterStep(0);
+        setIsSignUp(false);
     };
 
-    const handleLogin = () => {
-        console.log(emailRef.current?.value, passwordRef.current?.value);
-    };
-    const handelSignup = () => {
-        console.log();
-    };
-
-    const renderRegisterStep = () => {
-        switch (registerStep) {
-            case 0:
-                return (
-                    <>
-                        <FieldContainer>
-                            <Fieldset>
-                                <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
-                            </Fieldset>
-
-                            <Fieldset>
-                                <input
-                                    required
-                                    ref={passwordRef}
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    placeholder="enter password"
-                                />
-                            </Fieldset>
-
-                            <LoginButton onClick={handleLogin}>LOGIN</LoginButton>
-                            <p>{formValid}</p>
-                        </FieldContainer>
-                        <SelectContainer>
-                            <a onClick={() => setRegisterStep(1)}>sign up</a>
-                            <a onClick={() => navigate('/musiclist')}>join as a guest</a>
-                        </SelectContainer>
-                    </>
-                );
-            case 1:
-                return (
-                    <FieldContainer>
-                        <Fieldset>
-                            <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
-                        </Fieldset>
-
-                        <Fieldset>
-                            <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
-                        </Fieldset>
-
-                        <Fieldset>
-                            <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
-                        </Fieldset>
-
-                        <Fieldset>
-                            <input
-                                required
-                                ref={passwordConfirmRef}
-                                id="passwordConfirm"
-                                type="password"
-                                name="password"
-                                placeholder="confirm password"
-                            />
-                        </Fieldset>
-
-                        <LoginButton>SIGNUP</LoginButton>
-                        <p>{formValid}</p>
-                        <ReturnButton onClick={() => setRegisterStep(0)}>&larr;</ReturnButton>
-                    </FieldContainer>
-                );
-            // case 2:
-            //     return (
-            //         <FieldContainer>
-            //             <Fieldset>
-            //                 <DragDrop file={file} setFile={setFile}></DragDrop>
-            //             </Fieldset>
-
-            //             <LoginButton onClick={handelSignup}>SIGNUP</LoginButton>
-            //             <p>{formValid}</p>
-            //         </FieldContainer>
-            //     );
-        }
-    };
+    useEffect(() => {
+        console.log(formData);
+    }, [formData]);
 
     return (
         <>
             <ModalBackground onClick={() => handleModalClick()}> </ModalBackground>
             <FormS>
-                <FormContainer>{renderRegisterStep()}</FormContainer>
+                <FormContainer>
+                    {isSignUp ? (
+                        <SignUpForm setFormData={setFormData} setIsSignUp={setIsSignUp} />
+                    ) : (
+                        <LoginForm setFormData={setFormData} setIsSignUp={setIsSignUp} />
+                    )}
+                </FormContainer>
             </FormS>
         </>
     );

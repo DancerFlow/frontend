@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import Filter from '../../components/musicList/Filter';
 import Content from '../../components/musicList/content/';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 
 import { Music } from '../../interface';
@@ -13,16 +12,16 @@ export enum FilterType {
     Favorite = 'favorite'
 }
 const MusicListPage = () => {
-    const { isLoading, error, data } = useGetMusicListQuery({
+    const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
+
+    const { isLoading, error, data } = useGetMusicListQuery(selectedFilter, {
         onSuccess: (data: Music[]) => {
-            setMusicList(data);
+            console.log(data);
         },
         onError: (error: string) => {
             console.log(error);
         }
     });
-    const [musicList, setMusicList] = useState<Music[]>([]);
-    const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
 
     const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
@@ -32,11 +31,10 @@ const MusicListPage = () => {
         <Wrapper>
             <LaserAnimation />
             <Filter handleClick={handleClick} selected={selectedFilter} />
-            <Content musicList={musicList} />
+            {isLoading ? <div>Loading...</div> : error ? <div>Error: {error}</div> : <Content musicList={data} />}
         </Wrapper>
     );
 };
-
 const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
