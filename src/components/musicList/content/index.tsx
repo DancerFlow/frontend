@@ -22,10 +22,14 @@ const Content = ({ musicList }: ContentProps) => {
         setIsOpenModal(false);
     };
     return (
-        <Wrapper>
-            <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
-            <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} />
-        </Wrapper>
+        <>
+            {musicList?.length ? (
+                <Wrapper>
+                    <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
+                    <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} />
+                </Wrapper>
+            ) : null}
+        </>
     );
 };
 

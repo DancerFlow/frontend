@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import Lottie from 'lottie-web';
-import animationData from '../../../assets/tropy.json';
-import styled from 'styled-components';
-const Tropy = () => {
+import animationData from '../../../assets/rankingBanner.json';
+
+const RankingBanner = () => {
     const lottieRef = useRef(null);
 
     useEffect(() => {
@@ -15,20 +15,15 @@ const Tropy = () => {
             rendererSettings: {
                 preserveAspectRatio: 'xMidYMid slice',
                 // SVG의 크기를 조정할 width와 height 값 추가
-                width: 100,
-                height: 100
+                width: 60,
+                height: 10
             }
         });
         return () => {
             animation.destroy();
         };
     }, []);
-    return <Container ref={lottieRef} />;
+    return <div ref={lottieRef} />;
 };
-const Container = styled.div`
-    background-color: ${(props) => props.theme.modal.content};
-    border-radius: 10px;
-    margin-left: 20px;
-`;
 
-export default Tropy;
+export default RankingBanner;
