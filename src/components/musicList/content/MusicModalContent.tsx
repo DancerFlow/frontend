@@ -11,7 +11,7 @@ interface ModalFrameProps {
     musicDetailInfo: Music;
 }
 
-const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFrameProps) => {
+const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo }: ModalFrameProps) => {
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
@@ -42,7 +42,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                 </MusicModalRankHeader>
                 <MusicModalRankContent>
                     <div className="rankList">
-                        <TopRanking />
+                        <TopRanking rankingList= {musicRankInfo} />
                     </div>
                 </MusicModalRankContent>
             </MusicModalRank>
