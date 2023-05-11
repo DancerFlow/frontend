@@ -18,6 +18,7 @@ export enum FilterType {
 
 const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
+    const [inputValue, setInputValue] = useState('');
     const [searchMusic, setSearchMusic] = useState<Music>();
 
     // 전체 리스트 (좋아요, 최신순)
@@ -38,7 +39,7 @@ const MusicListPage = () => {
     // 찜한 목록 리스트
     const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikes(12, 1);
 
-    const handleClick = (item: FilterType): void => {
+    const handleSort = (item: FilterType): void => {
         setSelectedFilter(item);
         setSearchMusic(undefined);
     };
@@ -74,20 +75,26 @@ const MusicListPage = () => {
         case FilterType.Like:
             dataToShow = musicListForm(userLikesList);
             break;
+
+        case inputValue:
+            dataToShow = musicSearchList;
+            break;
         default:
-            dataToShow = userLikesList;
+            dataToShow = [];
             break;
     }
-    console.log(userLikesList);
+
     return (
         <Wrapper>
             <LaserAnimation />
-            <Filter onFilter={handleClick} selected={selectedFilter} onSearch={handleSearch} />
-            {musicSearchLoading || isLoading ? null : error ? (
-                <div>Error: {error}</div>
-            ) : (
-                <Content musicList={dataToShow} musicSearchList={musicSearchList} />
-            )}
+            <Filter
+                onFilter={handleSort}
+                selected={selectedFilter}
+                onSearch={handleSearch}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+            />
+            {musicSearchLoading || isLoading ? null : error ? <div>Error: {error}</div> : <Content musicList={dataToShow} />}
         </Wrapper>
     );
 };

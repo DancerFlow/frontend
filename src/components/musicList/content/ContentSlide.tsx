@@ -50,7 +50,7 @@ const NextArrow = (props: CustomArrowProps) => (
         <FontAwesomeIcon icon={faChevronRight} />
     </CustomArrow>
 );
-const ContentSlide = ({ onMusicClick, musicList, onModalClose, musicSearchList }: ModalFrameProps) => {
+const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -95,29 +95,31 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose, musicSearchList }
     return (
         <MusicListWrap>
             <Slider {...settings}>
-                {(musicSearchList && musicSearchList.length > 0 ? musicSearchList : musicList).map((data: Music, idx) => {
-                    return (
-                        <MusicWrap key={`${data.id}-${data.name}`}>
-                            <MusicCard
-                                onClick={(e) => {
-                                    if (!isDragged) {
-                                        e.preventDefault();
-                                        onMusicClick(data.id);
-                                    }
-                                }}
-                                img={data.album_image_url}
-                                whileHover="hover"
-                                initial="normal"
-                                variants={musicVariants}
-                            >
-                                <MusicInfo variants={musicInfoVariants}>
-                                    <h1>{data.name}</h1>
-                                    <h4>{data.music_singer.name}</h4>
-                                </MusicInfo>
-                            </MusicCard>
-                        </MusicWrap>
-                    );
-                })}
+                {musicList &&
+                    musicList.length > 0 &&
+                    musicList.map((data: Music, idx) => {
+                        return (
+                            <MusicWrap key={`${data.id}-${data.name}`}>
+                                <MusicCard
+                                    onClick={(e) => {
+                                        if (!isDragged) {
+                                            e.preventDefault();
+                                            onMusicClick(data.id);
+                                        }
+                                    }}
+                                    img={data.album_image_url}
+                                    whileHover="hover"
+                                    initial="normal"
+                                    variants={musicVariants}
+                                >
+                                    <MusicInfo variants={musicInfoVariants}>
+                                        <h1>{data.name}</h1>
+                                        <h4>{data.music_singer.name}</h4>
+                                    </MusicInfo>
+                                </MusicCard>
+                            </MusicWrap>
+                        );
+                    })}
             </Slider>
         </MusicListWrap>
     );

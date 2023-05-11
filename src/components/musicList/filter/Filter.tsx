@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
@@ -12,14 +11,29 @@ interface FilterProps {
     selected: FilterType;
     onSearch: (input: string) => void;
 }
-const Filter = ({ onFilter, selected, onSearch }: FilterProps) => {
-    const [inputValue, setInputValue] = useState('');
+const Filter = ({ onFilter, selected, onSearch, inputValue, setInputValue }: FilterProps) => {
     return (
         <Wrapper>
             <FilterWrapper>
                 <InputWrapper>
-                    <InputItem placeholder="Search" onChange={(e) => setInputValue(e.target.value)} id="search-input" />
-                    <InputIconWrapper onClick={() => onSearch(inputValue)}>
+                    <InputItem
+                        placeholder="Search"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                onSearch(inputValue);
+                                setInputValue('');
+                            }
+                        }}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        id="search-input"
+                    />
+                    <InputIconWrapper
+                        onClick={() => {
+                            onSearch(inputValue);
+                            setInputValue('');
+                        }}
+                    >
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>

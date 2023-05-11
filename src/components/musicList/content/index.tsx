@@ -8,7 +8,7 @@ export interface ContentProps {
     musicList: Music[];
 }
 
-const Content = ({ musicList, musicSearchList }: ContentProps) => {
+const Content = ({ musicList }: ContentProps) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [musicId, setMusicId] = useState<number | undefined>();
 
@@ -25,12 +25,7 @@ const Content = ({ musicList, musicSearchList }: ContentProps) => {
         <>
             {musicList?.length ? (
                 <Wrapper>
-                    <ContentSlide
-                        onMusicClick={handleModalOpen}
-                        musicList={musicList}
-                        musicSearchList={musicSearchList}
-                        onModalClose={setIsOpenModal}
-                    />
+                    <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
                     <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} />
                 </Wrapper>
             ) : null}
