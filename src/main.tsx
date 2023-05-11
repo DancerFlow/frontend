@@ -26,7 +26,7 @@ const router = createBrowserRouter([
                 element: <AdminPage />
             },
             {
-                path: '/challenge',
+                path: '/challenge/:musicId',
                 element: <ChallengePage />
             },
             {

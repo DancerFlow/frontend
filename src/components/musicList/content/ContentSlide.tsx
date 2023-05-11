@@ -95,29 +95,31 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
     return (
         <MusicListWrap>
             <Slider {...settings}>
-                {musicList.map((data: Music, idx) => {
-                    return (
-                        <MusicWrap key={`${data.id}-${data.name}`}>
-                            <MusicCard
-                                onClick={(e) => {
-                                    if (!isDragged) {
-                                        e.preventDefault();
-                                        onMusicClick(data.id);
-                                    }
-                                }}
-                                img={data.album_image_url}
-                                whileHover="hover"
-                                initial="normal"
-                                variants={musicVariants}
-                            >
-                                <MusicInfo variants={musicInfoVariants}>
-                                    <h1>{data.name}</h1>
-                                    <h4>{data.music_singer.name}</h4>
-                                </MusicInfo>
-                            </MusicCard>
-                        </MusicWrap>
-                    );
-                })}
+                {musicList &&
+                    musicList.length > 0 &&
+                    musicList.map((data: Music, idx) => {
+                        return (
+                            <MusicWrap key={`${data.id}-${data.name}`}>
+                                <MusicCard
+                                    onClick={(e) => {
+                                        if (!isDragged) {
+                                            e.preventDefault();
+                                            onMusicClick(data.id);
+                                        }
+                                    }}
+                                    img={data.album_image_url}
+                                    whileHover="hover"
+                                    initial="normal"
+                                    variants={musicVariants}
+                                >
+                                    <MusicInfo variants={musicInfoVariants}>
+                                        <h1>{data.name}</h1>
+                                        <h4>{data.music_singer.name}</h4>
+                                    </MusicInfo>
+                                </MusicCard>
+                            </MusicWrap>
+                        );
+                    })}
             </Slider>
         </MusicListWrap>
     );
