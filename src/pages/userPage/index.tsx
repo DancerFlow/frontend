@@ -32,8 +32,8 @@ const Container = styled.body`
         'sidebar main  '
         'sidebar bottom ';
     padding: 1rem;
-    grid-auto-rows: minmax(100px, auto);
-    grid-auto-columns: minmax(100px, auto);
+    grid-auto-rows: minmax(80px, auto);
+    grid-auto-columns: minmax(60px, auto);
     color: #fff;
     & > * {
         padding: 10px;

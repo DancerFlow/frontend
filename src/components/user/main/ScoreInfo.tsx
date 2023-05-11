@@ -1,18 +1,21 @@
-import styled from 'styled-components';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import styled from 'styled-components';
 
-export default function ScoreInfo() {
+export default function ScoreInfo({ gamehistoryDates }: ScoreInfoProps) {
     return (
         <Container>
             <GraphContainer>
-                <ResponsiveContainer width="100%" height="90%">
-                    <LineChart data={historyData}>
+                <ResponsiveContainer width="90%" height="80%">
+                    <LineChart data={gamehistoryDates}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
+                        <XAxis
+                            dataKey="music_score_created_at"
+                            tickFormatter={(value) => new Intl.DateTimeFormat('en-US', { day: '2-digit' }).format(new Date(value))}
+                        />
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" dataKey="value" stroke="#ff69b4" activeDot={{ r: 8 }} />
+                        <Line type="monotone" dataKey="music_score" name="Score" stroke="#ff69b4" activeDot={{ r: 8 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </GraphContainer>
@@ -21,6 +24,13 @@ export default function ScoreInfo() {
             </BestScoreContainer>
         </Container>
     );
+}
+
+interface ScoreInfoProps {
+    gamehistoryDates: {
+        music_score: number;
+        music_score_created_at: Date;
+    }[];
 }
 
 const Container = styled.div`
@@ -33,31 +43,17 @@ const Container = styled.div`
 
 const GraphContainer = styled.div`
     display: flex;
+    flex: 1.3;
     justify-content: center;
     align-items: center;
     margin-right: 1rem;
     padding-right: 1.2rem;
 `;
 
-const historyData = [
-    { name: 'Jan', value: 150 },
-    { name: 'Feb', value: 300 },
-    { name: 'Mar', value: 200 }
-    // { name: 'Apr', value: 400 },
-    // { name: 'May', value: 250 },
-    // { name: 'Jun', value: 500 },
-    // { name: 'Jul', value: 350 },
-    // { name: 'Aug', value: 450 },
-    // { name: 'Sep', value: 300 },
-    // { name: 'Oct', value: 550 },
-    // { name: 'Nov', value: 400 },
-    // { name: 'Dec', value: 600 }
-];
-
 const BestScoreContainer = styled.div`
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
     padding: 1rem 2rem;
 `;

@@ -1,5 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
+import { UserGameHistoryDetail } from '../../../interface';
 
 export default function LineGraph() {
     return (
