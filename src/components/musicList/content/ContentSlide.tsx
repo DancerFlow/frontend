@@ -91,8 +91,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose, musicSearchList }
     useKeyEscClose((e: any) => {
         onModalClose(e);
     });
-    console.log(musicList, 'musicList');
-    console.log(musicSearchList, 'musicSearchList');
+
     return (
         <MusicListWrap>
             <Slider {...settings}>

@@ -22,7 +22,7 @@ const MusicModal = ({ opened, selected_music_id, onClose }: ModalInfoProps) => {
     return (
         <>
             {loading ? (
-                <div>loading...</div>
+                null
             ) : (
                 <MusicModalContent onModalClose={onClose} onModalOpen={opened} musicDetailInfo={musicDetail} musicRankInfo={musicRank} />
             )}

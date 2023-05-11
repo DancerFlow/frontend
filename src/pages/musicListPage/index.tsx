@@ -33,10 +33,12 @@ const MusicListPage = () => {
 
     const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
+        setSearchMusic(undefined);
     };
 
     const handleSearch = (keyword: string): void => {
         setSearchMusic(keyword);
+        setSelectedFilter('');
     };
 
     return (
@@ -44,7 +46,7 @@ const MusicListPage = () => {
             <LaserAnimation />
             <Filter onFilter={handleClick} selected={selectedFilter} onSearch={handleSearch} />
             {musicSearchLoading || isLoading ? (
-                <div>Loading...</div>
+                null
             ) : error ? (
                 <div>Error: {error}</div>
             ) : (
