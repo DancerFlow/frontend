@@ -4,10 +4,7 @@ import { UserForm, UserRespose } from '../interface';
 const BASE_URL = 'http://localhost:8000';
 
 export const authApi = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('currentUser') || '').token}`
-    }
+    baseURL: BASE_URL
 });
 
 export const signUpAxios = async (userData: UserForm) => {
