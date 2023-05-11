@@ -1,31 +1,57 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import DragDrop from '../common/DragDrop';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+
+import { GlobalContext } from '../../context/Context';
+import DragDrop from '../common/DragDrop';
 import SignUpForm from './SignUpForm';
 import LoginForm from './LoginForm';
-import { UserForm } from '../../interface';
+import { useSignUpMutation } from '../../api/useSignUpMutation';
+import { useLoginMutation } from '../../api/useLoginMutation';
+import { LoginRespose } from '../../interface';
 
 interface Props {
     setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsHover: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
+const LoginModal = ({ setIsClicked }: Props) => {
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
-    const [formData, setFormData] = useState<UserForm>();
-
+    const { logIn, state } = useContext(GlobalContext);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (state.userState.login) navigate('/mode');
+    }, []);
 
     const handleModalClick = () => {
         setIsClicked(false);
-        setIsHover(false);
         setIsSignUp(false);
     };
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
+    const joinAsGuest = () => {
+        navigate('/mode');
+    };
+
+    const { mutate: signUpMutate } = useSignUpMutation({
+        onSuccess: () => {
+            window.alert('회원가입에 성공하였습니다.');
+            setIsSignUp(false);
+        },
+        onError: (error: string) => {
+            window.alert(`오류가 발생했습니다: ${error}`);
+        }
+    });
+
+    const { mutate: LoginMutate } = useLoginMutation({
+        onSuccess: (data: LoginRespose) => {
+            logIn({ login: true, admin: false, token: data.accessToken });
+            navigate('/mode');
+        },
+        onError: (error: string) => {
+            window.alert(`오류가 발생했습니다: ${error}`);
+        }
+    });
 
     return (
         <>
@@ -33,9 +59,9 @@ const LoginModal = ({ setIsClicked, setIsHover }: Props) => {
             <FormS>
                 <FormContainer>
                     {isSignUp ? (
-                        <SignUpForm setFormData={setFormData} setIsSignUp={setIsSignUp} />
+                        <SignUpForm setIsSignUp={setIsSignUp} onSubmit={signUpMutate} />
                     ) : (
-                        <LoginForm setFormData={setFormData} setIsSignUp={setIsSignUp} />
+                        <LoginForm setIsSignUp={setIsSignUp} onSubmit={LoginMutate} joinAsGuest={joinAsGuest} />
                     )}
                 </FormContainer>
             </FormS>

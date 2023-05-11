@@ -1,16 +1,43 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { UserForm } from '../../interface';
+import { validateEmail } from '../../utils/validateEmail';
 
 interface Props {
-    setFormData: React.Dispatch<React.SetStateAction<UserForm | undefined>>;
+    onSubmit: (variables: UserForm) => void;
     setIsSignUp: React.Dispatch<React.SetStateAction<boolean>>;
+    joinAsGuest: () => void;
 }
 
-const LoginForm = ({ setFormData, setIsSignUp }: Props) => {
+const LoginForm = ({ setIsSignUp, onSubmit, joinAsGuest }: Props) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const [formValid, setFormValid] = useState<string>('');
+
+    const onClickLogin = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        setFormValid('');
+
+        const email = emailRef.current?.value;
+        const password = passwordRef.current?.value;
+
+        if (!(email && password)) {
+            setFormValid('이메일, 비밀번호를 입력해 주세요');
+            return;
+        }
+
+        //validation check
+        if (!validateEmail(email)) {
+            setFormValid('이메일 형식이 올바르지 않습니다');
+            return;
+        }
+
+        if (email.length === 0 || password.length === 0) {
+            setFormValid('이메일, 비밀번호를 입력해 주세요');
+            return;
+        }
+        onSubmit({ email, password });
+    };
 
     return (
         <>
@@ -23,12 +50,12 @@ const LoginForm = ({ setFormData, setIsSignUp }: Props) => {
                     <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
                 </Fieldset>
 
-                <LoginButton>LOGIN</LoginButton>
+                <LoginButton onClick={onClickLogin}>LOGIN</LoginButton>
                 <p>{formValid}</p>
             </FieldContainer>
             <SelectContainer>
                 <a onClick={() => setIsSignUp(true)}>sign up</a>
-                <a onClick={() => console.log('t')}>join as a guest</a>
+                <a onClick={joinAsGuest}>join as a guest</a>
             </SelectContainer>
         </>
     );

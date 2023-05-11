@@ -8,6 +8,7 @@ import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePa
 import { theme } from './theme.ts';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Rootlayout from './layouts/Rootlayout.tsx';
+import { GlobalContextProvider } from './context/Context.tsx';
 
 const queryClient = new QueryClient();
 
@@ -56,8 +57,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={theme}>
-                <RouterProvider router={router} />
-                <App />
+                <GlobalContextProvider>
+                    <RouterProvider router={router} />
+                    <App />
+                </GlobalContextProvider>
             </ThemeProvider>
         </QueryClientProvider>
     </React.StrictMode>

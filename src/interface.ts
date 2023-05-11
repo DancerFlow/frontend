@@ -1,12 +1,16 @@
 export interface Status {
     error?: object;
     massage?: string;
-    status_code: number;
+    status_code?: number;
 }
 
 export interface UserRespose {
-    Status: Status;
-    access_token?: string;
+    Status?: Status;
+}
+
+export interface LoginRespose {
+    Status?: Status;
+    accessToken: string;
 }
 
 export interface UserForm {

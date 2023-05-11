@@ -11,7 +11,7 @@ import Logo from './Logo';
 import Background from './Background';
 import Practice from './Practice';
 import Challenge from './Challenge';
-import House2 from './house2';
+import House2 from './House2';
 
 const Three = () => {
     const [playerPosition, setPlayerPosition] = useState([0, -1.05, 0]);
