@@ -23,6 +23,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
                     <NextRankImg src={getNextTierImage(profile.user_tier)} alt="nextRank" />
                 </div>
             </RankContainer>
+            <div>Attendance Check</div>
             <StyledCalendar calendarType="US" formatDay={(locale, date) => date.toLocaleString('en', { day: 'numeric' })}></StyledCalendar>
         </Container>
     );
@@ -117,19 +118,19 @@ const NextRankImg = styled.img`
 
 const StyledCalendar = styled(Calendar)`
     border-radius: 20px;
-    padding: 10px 20px;
+    padding: 1rem 1.5rem;
 
     .react-calendar__tile--active {
         background-color: 27fd1c;
     }
 
-    .react-calendar__navigation {
+    /* .react-calendar__navigation {
         margin: 1rem 0;
-    }
+    } */
 
-    .react-calendar__tile--now {
+    /* .react-calendar__tile--now {
         background-color: #fe23ff;
-    }
+    } */
 
     .react-calendar__tile--weekend {
         color: #000 !important;
