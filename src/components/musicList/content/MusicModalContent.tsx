@@ -5,15 +5,21 @@ import StartBtn from './StartBtn';
 import Tropy from './Tropy';
 import TopRanking from './TopRanking';
 import LikeBtn from './LikeBtn';
-// import LikeBtnTest from './LikeBtnTest';
+import { useNavigate } from 'react-router-dom';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
     musicDetailInfo: Music;
 }
 
-const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: ModalFrameProps) => {
-    return (
+const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo }: ModalFrameProps) => {
+    const navigate = useNavigate();
+
+    const onStartClick = () => {
+        navigate(`/challenge/${musicDetailInfo.id}`);
+    };
+
+    return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
                 <MusicModalInfoHeader>
@@ -33,9 +39,10 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    {/* <LikeBtnTest  isOpened={onModalOpen} /> */}
                     <LikeBtn />
-                    <StartBtn key={musicDetailInfo.id} />
+                    <div onClick={onStartClick}>
+                        <StartBtn key={musicDetailInfo.id} />
+                    </div>
                 </MusicModalFooter>
             </MusicModalInfo>
             <MusicModalRank>
@@ -44,11 +51,13 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo }: Modal
                 </MusicModalRankHeader>
                 <MusicModalRankContent>
                     <div className="rankList">
-                        <TopRanking />
+                        <TopRanking rankingList={musicRankInfo} />
                     </div>
                 </MusicModalRankContent>
             </MusicModalRank>
         </ModalFrame>
+    ) : (
+        null
     );
 };
 

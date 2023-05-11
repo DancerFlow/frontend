@@ -1,26 +1,43 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
-
 export enum FilterType {
     Popular = 'popular',
-    Latest = 'latest'
+    Latest = 'latest',
+    Like = 'isLiked'
 }
 interface FilterProps {
-    handleClick: (type: FilterType) => void;
+    onFilter: (type: FilterType) => void;
     selected: FilterType;
+    onSearch: (input: string) => void;
 }
-const Filter = ({ handleClick, selected }: FilterProps) => {
+const Filter = ({ onFilter, selected, onSearch, inputValue, setInputValue }: FilterProps) => {
     return (
         <Wrapper>
             <FilterWrapper>
                 <InputWrapper>
-                    <InputItem placeholder="Search" />
-                    <InputIconWrapper>
+                    <InputItem
+                        placeholder="Search"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                onSearch(inputValue);
+                                setInputValue('');
+                            }
+                        }}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        id="search-input"
+                    />
+                    <InputIconWrapper
+                        onClick={() => {
+                            onSearch(inputValue);
+                            setInputValue('');
+                        }}
+                    >
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Popular)}>
+                <ItemWrapper onClick={() => onFilter(FilterType.Popular)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faFire} />
                     </BtnIconWrapper>
@@ -28,7 +45,7 @@ const Filter = ({ handleClick, selected }: FilterProps) => {
                         <H1>인기순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper onClick={() => handleClick(FilterType.Latest)}>
+                <ItemWrapper onClick={() => onFilter(FilterType.Latest)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faMusic} />
                     </BtnIconWrapper>
@@ -36,11 +53,11 @@ const Filter = ({ handleClick, selected }: FilterProps) => {
                         <H1>최신순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper>
+                <ItemWrapper onClick={() => onFilter(FilterType.Like)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faHeart} />
                     </BtnIconWrapper>
-                    <Item id="favorite">
+                    <Item id="isLiked" selected={selected}>
                         <H1>찜한 목록</H1>
                     </Item>
                 </ItemWrapper>

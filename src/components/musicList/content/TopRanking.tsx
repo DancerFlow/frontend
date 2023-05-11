@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import avatar1 from '../../../assets/avatarImg/avatar1.png';
-import avatar2 from '../../../assets/avatarImg/avatar2.png';
-import avatar3 from '../../../assets/avatarImg/avatar3.png';
-import avatar4 from '../../../assets/avatarImg/avatar4.png';
-import avatar5 from '../../../assets/avatarImg/avatar5.png';
+
 import RankingBanner from './RankingBanner';
 interface RankProps {
     rank: number;
@@ -27,19 +23,7 @@ const Rank = ({ rank, musicName, userAvatar, score }: RankProps) => {
     );
 };
 
-const TopRankingUI = () => {
-    const rankings = [
-        { rank: 1, musicName: '양갈래', userAvatar: avatar1, score: 1000 },
-        { rank: 2, musicName: '댄스마스터', userAvatar: avatar2, score: 800 },
-        { rank: 3, musicName: '초롱이', userAvatar: avatar3, score: 600 },
-        { rank: 4, musicName: '나이쁨', userAvatar: avatar4, score: 400 },
-        { rank: 5, musicName: 'car은우', userAvatar: avatar5, score: 200 },
-        { rank: 6, musicName: 'car은우', userAvatar: avatar5, score: 200 },
-        { rank: 7, musicName: 'car은우', userAvatar: avatar5, score: 200 },
-        { rank: 8, musicName: 'car은우', userAvatar: avatar5, score: 200 },
-        { rank: 9, musicName: 'car은우', userAvatar: avatar5, score: 200 }
-    ];
-
+const TopRankingUI = ({ rankingList }) => {
     return (
         <MusicModalRankContent>
             <div className="rankList">
@@ -50,8 +34,14 @@ const TopRankingUI = () => {
                     </div>
                 </Header>
                 <RankList>
-                    {rankings.map((rank) => (
-                        <Rank key={rank.rank} rank={rank.rank} musicName={rank.musicName} userAvatar={rank.userAvatar} score={rank.score} />
+                    {rankingList.map((rank) => (
+                        <Rank
+                            key={rank.id}
+                            rank={rank.rank}
+                            musicName={rank.nickname}
+                            userAvatar={rank.profile_image_url}
+                            score={rank.score}
+                        />
                     ))}
                 </RankList>
             </div>
