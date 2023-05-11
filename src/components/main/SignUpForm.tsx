@@ -2,13 +2,14 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { UserForm } from '../../interface';
 import { validateEmail } from '../../utils/validateEmail';
+import { useSignUpMutation } from '../../api/useSignUpMutation';
 
 interface Props {
-    setFormData: React.Dispatch<React.SetStateAction<UserForm | undefined>>;
+    onSubmit: (variables: UserForm) => void;
     setIsSignUp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SignUpForm = ({ setFormData, setIsSignUp }: Props) => {
+const SignUpForm = ({ setIsSignUp, onSubmit }: Props) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const passwordConfirmRef = useRef<HTMLInputElement>(null);
@@ -42,8 +43,7 @@ const SignUpForm = ({ setFormData, setIsSignUp }: Props) => {
             setFormValid('이름, 이메일, 비밀번호를 입력해 주세요');
             return;
         }
-
-        setFormData({ nickname, email, password, passwordConfirm });
+        onSubmit({ nickname, email, password });
     };
 
     return (

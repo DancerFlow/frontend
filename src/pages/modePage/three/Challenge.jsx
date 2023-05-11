@@ -30,7 +30,7 @@ export default function Challenge() {
             <primitive
                 ref={ref}
                 object={gltf.scene}
-                scale={1.2}
+                scale={1.1}
                 rotation={[0, 0.2 * Math.PI, 0]}
                 castShadow
                 receiveShadow

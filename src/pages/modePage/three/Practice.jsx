@@ -31,7 +31,7 @@ export default function Practice() {
                 ref={ref}
                 object={gltf.scene}
                 scale={1.4}
-                rotation={[0, 0, 0]}
+                rotation={[0, 0.05 * Math.PI, 0]}
                 castShadow
                 receiveShadow
                 position={[8, -0.94, -11]}
