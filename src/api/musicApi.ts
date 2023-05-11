@@ -1,11 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000';
-
-export const musicApi = axios.create({
-    baseURL: BASE_URL
-});
-
+const BASE_URL = 'http://localhost:8000'
 export const fetchMusicList = async (sort?) => {
     if (sort) {
         const response = await axios.get(`${BASE_URL}/music?sort=${sort}`);

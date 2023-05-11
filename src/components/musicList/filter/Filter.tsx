@@ -4,7 +4,8 @@ import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-s
 import { useState } from 'react';
 export enum FilterType {
     Popular = 'popular',
-    Latest = 'latest'
+    Latest = 'latest',
+    Like = 'isLiked'
 }
 interface FilterProps {
     onFilter: (type: FilterType) => void;
@@ -38,11 +39,11 @@ const Filter = ({ onFilter, selected, onSearch }: FilterProps) => {
                         <H1>최신순</H1>
                     </Item>
                 </ItemWrapper>
-                <ItemWrapper>
+                <ItemWrapper onClick={() => onFilter(FilterType.Like)}>
                     <BtnIconWrapper>
                         <FontAwesomeIcon icon={faHeart} />
                     </BtnIconWrapper>
-                    <Item id="favorite">
+                    <Item id="isLiked" selected={selected}>
                         <H1>찜한 목록</H1>
                     </Item>
                 </ItemWrapper>

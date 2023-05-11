@@ -3,23 +3,24 @@ import Filter from '../../components/musicList/filter/Filter';
 import Content from '../../components/musicList/content/';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
+import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
+import { useGetUserLikes } from '../../api/useGetUserLikes';
 
 import { Music } from '../../interface';
+import { UserLikes } from '../../interface';
 import LaserAnimation from '../../hooks/LazerAnimation';
-import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
 
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
-    Favorite = 'favorite'
+    Like = 'isLiked'
 }
 
 const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
     const [searchMusic, setSearchMusic] = useState<Music>();
 
-    const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicSearchQuery(searchMusic);
-
+    // 전체 리스트 (좋아요, 최신순)
     const {
         isLoading,
         error,
@@ -31,6 +32,12 @@ const MusicListPage = () => {
         }
     });
 
+    // 이름 검색 리스트
+    const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicSearchQuery(searchMusic);
+
+    // 찜한 목록 리스트
+    const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikes(12, 1);
+
     const handleClick = (item: FilterType): void => {
         setSelectedFilter(item);
         setSearchMusic(undefined);
@@ -41,16 +48,45 @@ const MusicListPage = () => {
         setSelectedFilter('');
     };
 
+    // 찜한 목록 리스트를 musicList 형태로 변환
+    const musicListForm = (data: UserLikes[]) => {
+        return data.map((userLike) => {
+            return {
+                ...userLike.music,
+                id: userLike.music.id,
+                music_genre: userLike.music.music_genre,
+                music_singer: {
+                    id: userLike.music.music_singer.id,
+                    name: userLike.music.music_singer.name
+                },
+                album_image_url: userLike.music.album_image_url
+            };
+        });
+    };
+
+    // 선택된 필터에 따라서 적절한 데이터를 가져옴
+    let dataToShow;
+    switch (selectedFilter) {
+        case FilterType.Popular:
+        case FilterType.Latest:
+            dataToShow = musicList;
+            break;
+        case FilterType.Like:
+            dataToShow = musicListForm(userLikesList);
+            break;
+        default:
+            dataToShow = userLikesList;
+            break;
+    }
+    console.log(userLikesList);
     return (
         <Wrapper>
             <LaserAnimation />
             <Filter onFilter={handleClick} selected={selectedFilter} onSearch={handleSearch} />
-            {musicSearchLoading || isLoading ? (
-                null
-            ) : error ? (
+            {musicSearchLoading || isLoading ? null : error ? (
                 <div>Error: {error}</div>
             ) : (
-                <Content musicList={musicList} musicSearchList={musicSearchList} />
+                <Content musicList={dataToShow} musicSearchList={musicSearchList} />
             )}
         </Wrapper>
     );
