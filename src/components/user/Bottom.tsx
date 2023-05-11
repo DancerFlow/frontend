@@ -10,7 +10,7 @@ export default function Bottom() {
     const { data, isLoading, isError, error } = useGetUserLikes(12, pageNo);
     console.log('fetchedLikedData', data);
 
-    const handleRightClick = () => {};
+    const handleRightClick = () => {}; // 전체 페이지 수도 알아야하지 않음? pageNo=2로 요청했는데, 안먹게 해야되나
 
     if (isLoading) {
         return <>loading...</>;
