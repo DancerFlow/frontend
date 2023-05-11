@@ -44,7 +44,7 @@ const LikedItems = ({ data }: { data: UserLikes[] | undefined }) => {
                     </LikedItem>
                 ))
             ) : (
-                <div>No liked playlists found.</div>
+                <div>No liked playlists</div>
             )}
         </LikedList>
     );
