@@ -18,7 +18,6 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
     const onStartClick = () => {
         navigate(`/challenge/${musicDetailInfo.id}`);
     };
-
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
@@ -39,7 +38,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <LikeBtn isLiked={isLiked} />
+                    <LikeBtn isLiked={isLiked} musicId={musicDetailInfo.id} />
                     <div onClick={onStartClick}>
                         <StartBtn key={musicDetailInfo.id} />
                     </div>
