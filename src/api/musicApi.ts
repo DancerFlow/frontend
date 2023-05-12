@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://localhost:8000';
+
 export const fetchMusicList = async (sort?) => {
     if (sort) {
         const response = await axios.get(`${BASE_URL}/music?sort=${sort}`);
@@ -27,6 +28,18 @@ export const fetchMusicRank = async (musicId: number) => {
 
 export const fetchMusicSearch = async (keyword: string) => {
     const response = await axios.get(`${BASE_URL}/music/search/${keyword}`);
+    const json = response.data;
+    return json;
+};
+
+export const patchMusicLike = async (musicId: number) => {
+    const response = await axios.patch(`${BASE_URL}/music/like/${musicId}`);
+    const json = response.data;
+    return json;
+};
+
+export const deleteMusicLike = async (musicId: number) => {
+    const response = await axios.delete(`${BASE_URL}/music/like/${musicId}`);
     const json = response.data;
     return json;
 };
