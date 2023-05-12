@@ -71,7 +71,7 @@ const Pose = ({ setKeypointsDetected }) => {
                     ctx.beginPath();
                     ctx.strokeStyle = '#FE23FF';
                     ctx.lineWidth = 7;
-                    const centerX = (startKeypoint.x + endKeypoint.x) / 2;
+                    const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                     const centerY = (startKeypoint.y + endKeypoint.y) / 2;
                     ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
                     ctx.stroke();
@@ -79,8 +79,8 @@ const Pose = ({ setKeypointsDetected }) => {
                     ctx.beginPath();
                     ctx.strokeStyle = '#FE23FF';
                     ctx.lineWidth = 7;
-                    ctx.moveTo(startKeypoint.x, startKeypoint.y);
-                    ctx.lineTo(endKeypoint.x, endKeypoint.y);
+                    ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
+                    ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
                     ctx.stroke();
                 }
             };
@@ -91,7 +91,7 @@ const Pose = ({ setKeypointsDetected }) => {
 
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
-                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.2); // score가 0.2 이상인 keypoints만 valid로 가정
+                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.4 이상인 keypoints만 valid로 가정
                         setKeypointsDetected(validKeypoints.length);
 
                         // canvas 초기화

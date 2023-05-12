@@ -65,7 +65,7 @@ const Test = () => {
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} />
                     <AreaFooter>
-                        <KeyPointCount>신뢰도0.2이상 keypoints:{keypointsDetected}개</KeyPointCount>
+                        <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
                     </AreaFooter>
                 </VideoArea>
