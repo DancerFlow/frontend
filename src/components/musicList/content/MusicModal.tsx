@@ -8,11 +8,13 @@ interface ModalInfoProps {
     selected_music_id: number;
 }
 
-const MusicModal = ({ opened, selected_music_id, onClose }: ModalInfoProps) => {
+const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds }: ModalInfoProps) => {
+    // 찜목록 유무
+    const isLiked = likeMusicIds.includes(selected_music_id);
+
     const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(selected_music_id, {
         enabled: Boolean(selected_music_id)
     });
-
     const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(selected_music_id, {
         enabled: Boolean(selected_music_id)
     });
@@ -21,10 +23,14 @@ const MusicModal = ({ opened, selected_music_id, onClose }: ModalInfoProps) => {
 
     return (
         <>
-            {loading ? (
-                null
-            ) : (
-                <MusicModalContent onModalClose={onClose} onModalOpen={opened} musicDetailInfo={musicDetail} musicRankInfo={musicRank} />
+            {loading ? null : (
+                <MusicModalContent
+                    onModalClose={onClose}
+                    onModalOpen={opened}
+                    musicDetailInfo={musicDetail}
+                    musicRankInfo={musicRank}
+                    isLiked={isLiked}
+                />
             )}
         </>
     );

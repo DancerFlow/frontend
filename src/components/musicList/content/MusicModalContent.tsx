@@ -12,7 +12,7 @@ interface ModalFrameProps {
     musicDetailInfo: Music;
 }
 
-const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo }: ModalFrameProps) => {
+const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked }: ModalFrameProps) => {
     const navigate = useNavigate();
 
     const onStartClick = () => {
@@ -39,7 +39,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <LikeBtn />
+                    <LikeBtn isLiked={isLiked} />
                     <div onClick={onStartClick}>
                         <StartBtn key={musicDetailInfo.id} />
                     </div>
@@ -56,9 +56,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                 </MusicModalRankContent>
             </MusicModalRank>
         </ModalFrame>
-    ) : (
-        null
-    );
+    ) : null;
 };
 
 const MusicModalInfo = styled.div`

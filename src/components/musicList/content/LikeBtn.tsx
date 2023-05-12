@@ -4,17 +4,17 @@ interface Props {
     onClick: () => void;
 }
 
-const LikeBtn: React.FC<Props> = ({ onClick }) => {
-    const [liked, setLiked] = useState(false);
+const LikeBtn: React.FC<Props> = ({ onClick, isLiked }) => {
+    // const [liked, setLiked] = useState(false);
 
     const handleClick = () => {
-        setLiked(!liked);
+        // setLiked(!liked);
         onClick();
     };
 
     return (
         <LikeController>
-            <button onClick={handleClick} style={{ backgroundColor: liked ? 'green' : 'gray', color: 'white' }}>
+            <button onClick={handleClick} style={{ backgroundColor: isLiked ? 'green' : 'gray', color: 'white' }}>
                 Like
             </button>
         </LikeController>
