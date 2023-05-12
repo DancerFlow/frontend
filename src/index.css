@@ -134,3 +134,7 @@ table {
     font: inherit;
     vertical-align: baseline;
 }
+
+abbr[title] {
+    text-decoration: none;
+}

@@ -26,11 +26,11 @@ export enum Tier {
 
 export interface Profile {
     Status?: Status;
-    user_nickname: string;
-    user_email: string;
-    user_profile_image_url?: string;
-    user_tier: Tier;
-    user_xp: number;
+    nickname: string;
+    email: string;
+    profile_image_url?: string;
+    current_tier: Tier;
+    // user_xp: number;
 }
 
 export interface UserRank {
@@ -38,14 +38,14 @@ export interface UserRank {
     user_xp: number;
 }
 
-export interface Calendar {
-    calendar_date: Date[];
+export interface Stamps {
+    created_at: Date[];
 }
 
 export interface UserGameHistory {
     music_id: number;
     music_name: string;
-    music_image_url: string;
+    album_image_url: string;
     music_singer: string;
     user_music_best_score: number;
     music_total_score: number;
