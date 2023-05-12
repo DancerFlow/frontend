@@ -65,6 +65,13 @@ const MusicListPage = () => {
         });
     };
 
+    const musicIds = (data) => {
+        if (data === undefined) {
+            return []; // 또는 원하는 예외 처리 방식을 추가합니다.
+        }
+        return data.map((item) => item.music_id);
+    };
+
     // 선택된 필터에 따라서 적절한 데이터를 가져옴
     let dataToShow;
     switch (selectedFilter) {
@@ -94,7 +101,11 @@ const MusicListPage = () => {
                 inputValue={inputValue}
                 setInputValue={setInputValue}
             />
-            {musicSearchLoading || isLoading ? null : error ? <div>Error: {error}</div> : <Content musicList={dataToShow} />}
+            {musicSearchLoading || isLoading ? null : error ? (
+                <div>Error: {error}</div>
+            ) : (
+                <Content musicList={dataToShow} likeMusicIds={musicIds(userLikesList)} />
+            )}
         </Wrapper>
     );
 };
