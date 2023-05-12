@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeQuery';
+import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeQuery';
 interface Props {
     onClick: () => void;
 }
 
-const LikeBtn: React.FC<Props> = ({ onClick }) => {
-    const [liked, setLiked] = useState(false);
+const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId }) => {
+    const [liked, setLiked] = useState(isLiked);
+
+    const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId);
+    const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId);
 
     const handleClick = () => {
-        setLiked(!liked);
+        if (liked) {
+            deleteMusicLikeMutation.mutate();
+            setLiked(false);
+        } else {
+            patchMusicLikeMutation.mutate();
+            setLiked(true);
+        }
         onClick();
     };
 
     return (
         <LikeController>
             <button onClick={handleClick} style={{ backgroundColor: liked ? 'green' : 'gray', color: 'white' }}>
-                Like
+                {liked ? 'Liked' : 'Like'}
             </button>
         </LikeController>
     );

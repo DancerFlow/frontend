@@ -1,5 +1,6 @@
 import MusicModalContent from './MusicModalContent';
 import { useGetMusicDetailQuery } from '../../../api/useGetMusicDetailQuery';
+import { useGetMusicRankingQuery } from '../../../api/useGetMusicRankingQuery';
 
 interface ModalInfoProps {
     opened: boolean;
@@ -7,15 +8,32 @@ interface ModalInfoProps {
     selected_music_id: number;
 }
 
-const MusicModal = ({ opened, selected_music_id, onClose }: ModalInfoProps) => {
-    const { data: musicDetail } = useGetMusicDetailQuery(selected_music_id, {
+const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds }: ModalInfoProps) => {
+    // 찜목록 유무
+    const isLiked = likeMusicIds.includes(selected_music_id);
+
+    const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(selected_music_id, {
         enabled: Boolean(selected_music_id)
     });
-    if (!musicDetail || musicDetail?.length === 0) {
-        return null;
-    }
+    const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(selected_music_id, {
+        enabled: Boolean(selected_music_id)
+    });
 
-    return <MusicModalContent onModalClose={onClose} onModalOpen={opened} musicDetailInfo={musicDetail} />;
+    const loading = detailLoading || rankLoading;
+
+    return (
+        <>
+            {loading ? null : (
+                <MusicModalContent
+                    onModalClose={onClose}
+                    onModalOpen={opened}
+                    musicDetailInfo={musicDetail}
+                    musicRankInfo={musicRank}
+                    isLiked={isLiked}
+                />
+            )}
+        </>
+    );
 };
 
 export default MusicModal;
