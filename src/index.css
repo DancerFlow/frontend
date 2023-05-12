@@ -134,3 +134,7 @@ table {
     font: inherit;
     vertical-align: baseline;
 }
+
+html {
+    height: 100vh;
+}

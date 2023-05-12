@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 
-const Pose = () => {
+const Pose = ({ setKeypointsDetected }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -12,7 +12,7 @@ const Pose = () => {
     const POSE_CONNECTIONS = [
         [3, 4],
         [6, 8],
-        [8, 10],
+        [8,7],
         [6, 5],
         [5, 7],
         [7, 9],
@@ -69,16 +69,16 @@ const Pose = () => {
                 // 머리 좌표(3,4)
                 if (start === 3 && end === 4) {
                     ctx.beginPath();
-                    ctx.strokeStyle = 'blue';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#FE23FF';
+                    ctx.lineWidth = 7;
                     const centerX = (startKeypoint.x + endKeypoint.x) / 2;
                     const centerY = (startKeypoint.y + endKeypoint.y) / 2;
                     ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
                     ctx.stroke();
                 } else {
                     ctx.beginPath();
-                    ctx.strokeStyle = 'blue';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#FE23FF';
+                    ctx.lineWidth =7;
                     ctx.moveTo(startKeypoint.x, startKeypoint.y);
                     ctx.lineTo(endKeypoint.x, endKeypoint.y);
                     ctx.stroke();
@@ -88,28 +88,24 @@ const Pose = () => {
             const intervalId = setInterval(async () => {
                 if (videoRef.current && ctx) {
                     const poses = await detector.estimatePoses(videoRef.current, { maxPoses: 1 });
-                    // canvas 초기화
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    // 비디오 프레임을 캔버스에 렌더링
-                    // ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
                     poses.forEach((pose) => {
-                        // pose.keypoints.forEach((keypoint) => {
-                        //     const x = keypoint.x;
-                        //     const y = keypoint.y;
-                        //     // console.log(x, 'x');
-                        //     // console.log(y, 'y');
-                        //     // 각각의 keypoint를 빨간 점으로 표시
-                        //     ctx.beginPath();
-                        //     ctx.fillStyle = 'red';
-                        //     ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                        //     ctx.fill();
-                        // });
-
                         // keypoint들을 선으로 연결
-                        POSE_CONNECTIONS.forEach(([start, end]) => {
-                            connect(ctx, pose.keypoints, start, end);
-                        });
+                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.2); // score가 0.2 이상인 keypoints만 valid로 가정
+                        setKeypointsDetected(validKeypoints.length);
+
+                        // canvas 초기화
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        // validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
+                        if (validKeypoints.length >= 12) {
+                            // 비디오 프레임을 캔버스에 렌더링
+                            // ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+                            POSE_CONNECTIONS.forEach(([start, end]) => {
+                                connect(ctx, pose.keypoints, start, end);
+                            });
+                        }
                     });
                 }
             }, 100); // 100ms 마다 실행
@@ -119,14 +115,20 @@ const Pose = () => {
         runPoseEstimation();
     }, []);
     return (
-        <>
+        <Container>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
             <canvas ref={canvasRef}></canvas>
-        </>
+        </Container>
     );
 };
+
+const Container = styled.div`
+    height: 70%;
+    width: 100%;
+`;
+
 const HiddenVideo = styled.video`
-    height: 100vh;
+    height: 80%;
     width: 100%;
     display: none;
 `;
