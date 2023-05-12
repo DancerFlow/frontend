@@ -12,7 +12,7 @@ const Pose = ({ setKeypointsDetected }) => {
     const POSE_CONNECTIONS = [
         [3, 4],
         [6, 8],
-        [8,7],
+        [8, 10],
         [6, 5],
         [5, 7],
         [7, 9],
@@ -78,7 +78,7 @@ const Pose = ({ setKeypointsDetected }) => {
                 } else {
                     ctx.beginPath();
                     ctx.strokeStyle = '#FE23FF';
-                    ctx.lineWidth =7;
+                    ctx.lineWidth = 7;
                     ctx.moveTo(startKeypoint.x, startKeypoint.y);
                     ctx.lineTo(endKeypoint.x, endKeypoint.y);
                     ctx.stroke();

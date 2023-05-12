@@ -2,8 +2,6 @@ import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import ScorePoints from './ScorePoints';
 import Pose from './Pose';
-import preview from '../../assets/미리보기.png';
-import { Area } from 'recharts';
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
@@ -31,7 +29,7 @@ const Test = () => {
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} />
                     <AreaFooter>
-                        <KeyPointCount>신뢰도0.2이상 keypoints:{keypointsDetected}</KeyPointCount>
+                        <KeyPointCount>신뢰도0.2이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
                     </AreaFooter>
                 </VideoArea>
