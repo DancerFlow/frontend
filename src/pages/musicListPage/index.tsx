@@ -17,9 +17,9 @@ export enum FilterType {
 }
 
 const MusicListPage = () => {
-    const [selectedFilter, setSelectedFilter] = useState(FilterType.Popular);
+    const [selectedFilter, setSelectedFilter] = useState<FilterType>(FilterType.Popular);
     const [inputValue, setInputValue] = useState('');
-    const [searchMusic, setSearchMusic] = useState<Music>();
+    const [searchMusic, setSearchMusic] = useState<Music | undefined >();
 
     // 전체 리스트 (좋아요, 최신순)
     const {

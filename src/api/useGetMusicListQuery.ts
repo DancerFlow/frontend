@@ -1,9 +1,10 @@
 import { fetchMusicList } from './musicApi';
 import { useQuery } from 'react-query';
 
-enum FilterType {
+export enum FilterType {
     Popular = 'popular',
-    Latest = 'latest'
+    Latest = 'latest',
+    Like = 'isLiked'
 }
 
 export const useGetMusicListQuery = (filter: FilterType, options?: object) => {

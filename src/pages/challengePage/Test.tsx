@@ -1,11 +1,33 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import Modal from 'react-modal';
 import ScorePoints from './ScorePoints';
+import fearness from '../../assets/fearless.mp4';
 import Pose from './Pose';
+
+Modal.setAppElement('#root'); // This line is needed for accessibility reasons
+
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
+    const [countDown, setCountDown] = useState(5);
+    const [videoEnd, setVideoEnd] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
 
+    useEffect(() => {
+        if (keypointsDetected >= 16 && countDown > 0) {
+            setTimeout(() => setCountDown(countDown - 1), 1000);
+        }
+        if (keypointsDetected >= 16 && countDown === 0 && videoRef.current) {
+            videoRef.current.play();
+        }
+    }, [keypointsDetected, countDown]);
+
+    const handleVideoEnd = () => {
+        setVideoEnd(true);
+        setModalIsOpen(true);
+    };
     return (
         <>
             <Top>
@@ -18,11 +40,25 @@ const Test = () => {
                     <AreaHeader>
                         <h1>정답 영상 보여줄 예정</h1>
                     </AreaHeader>
-
-                    {/* <ScorePoints /> */}
-                    {/* <h1>Score Points</h1> */}
+                    <VideoWrapper>
+                        <video
+                            ref={videoRef}
+                            src={fearness}
+                            onEnded={handleVideoEnd}
+                            style={{
+                                pointerEvents: 'none',
+                                maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
+                                maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
+                                objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
+                            }}
+                        />
+                    </VideoWrapper>
                     <AreaFooter></AreaFooter>
                 </DancingArea>
+                <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} contentLabel="Video Ended">
+                    <h2>Video has ended</h2>
+                    <button onClick={() => setModalIsOpen(false)}>close</button>
+                </Modal>
                 <VideoArea>
                     <AreaHeader>
                         <h1>Video Area</h1>
@@ -85,6 +121,14 @@ const VideoArea = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center; */
+`;
+
+const VideoWrapper = styled.div`
+    height: 70%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const AreaHeader = styled.div`
