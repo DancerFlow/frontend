@@ -51,7 +51,6 @@ const NextArrow = (props: CustomArrowProps) => (
     </CustomArrow>
 );
 const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
-    
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -59,10 +58,10 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
         centerMode: false,
         infinite: musicList.length > 5 ? true : false,
         centerPadding: '60px',
-        slidesToShow: musicList.length < 15 ? 4 : 5,
+        slidesToShow: 3,
         speed: 800,
-        rows: musicList.length > 4 ? 3 : 1,
-        slidesToScroll: 5,
+        rows: musicList.length > 7 ? 3 : 2,
+        slidesToScroll: 3,
         slidesPerRow: 1,
         touchThreshold: 200,
         beforeChange: () => {
@@ -86,8 +85,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                 <ul> {dots} </ul>
             </div>
         ),
-        dotsClass: 'dots_custom',
-        
+        dotsClass: 'dots_custom'
     };
 
     useKeyEscClose((e: any) => {
@@ -97,7 +95,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
 
     return (
         <MusicListWrap>
-            <Slider {...settings}>
+            <StyledSlider {...settings}>
                 {musicList &&
                     musicList.length > 0 &&
                     musicList.map((data: Music, idx) => {
@@ -123,7 +121,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                             </MusicWrap>
                         );
                     })}
-            </Slider>
+            </StyledSlider>
         </MusicListWrap>
     );
 };
@@ -131,8 +129,14 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
 const MusicListWrap = styled.div`
     width: 71%;
     height: 100%;
-
+    position: relative;
     /* margin-top: 20px; */
+`;
+
+const StyledSlider = styled(Slider)`
+    // 슬라이더의 스타일을 정의합니다.
+    background-color: #ffffff1d;
+    border-radius: 20px;
 `;
 
 const CustomArrow = styled.div`
@@ -145,6 +149,7 @@ const CustomArrow = styled.div`
 
     &.prev {
         left: -40px;
+        visibility: ${({ currentSlide, slideCount }) => (currentSlide === 0 ? 'hidden' : 'visible')};
     }
 
     &.next {
