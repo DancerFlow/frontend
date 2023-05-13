@@ -1,32 +1,40 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import Modal from 'react-modal';
-import ScorePoints from './ScorePoints';
 import fearness from '../../assets/fearless.mp4';
 import Pose from './Pose';
-
-Modal.setAppElement('#root'); // This line is needed for accessibility reasons
 
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const [countDown, setCountDown] = useState(5);
-    const [videoEnd, setVideoEnd] = useState(false);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [message, setMessage] = useState('전신이 나오도록 위치해주세요.');
+    const [startCountdown, setStartCountdown] = useState(false);
     const videoRef = useRef(null);
+
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (keypointsDetected >= 16 && countDown > 0) {
-            setTimeout(() => setCountDown(countDown - 1), 1000);
+        if (keypointsDetected < 16 && !startCountdown) {
+            setMessage('전신이 나오도록 위치해주세요.');
+            setCountDown(5); // Reset the countdown
+        } else if (keypointsDetected >= 16) {
+            setStartCountdown(true); // Start the countdown
+            setMessage(countDown > 0 ? countDown : 'Dance!');
+            if (countDown > 0) {
+                setTimeout(() => setCountDown(countDown - 1), 1000);
+            }
+            if (countDown === 0 && videoRef.current) {
+                videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
+                videoRef.current.play();
+            }
         }
-        if (keypointsDetected >= 16 && countDown === 0 && videoRef.current) {
-            videoRef.current.play();
-        }
-    }, [keypointsDetected, countDown]);
+    }, [keypointsDetected, countDown, startCountdown]);
 
     const handleVideoEnd = () => {
-        setVideoEnd(true);
-        setModalIsOpen(true);
+        if (startCountdown) {
+            navigate('/result');
+        }
     };
     return (
         <>
@@ -37,9 +45,7 @@ const Test = () => {
             </Top>
             <Main>
                 <DancingArea>
-                    <AreaHeader>
-                        <h1>정답 영상 보여줄 예정</h1>
-                    </AreaHeader>
+                    <AreaHeader></AreaHeader>
                     <VideoWrapper>
                         <video
                             ref={videoRef}
@@ -55,13 +61,10 @@ const Test = () => {
                     </VideoWrapper>
                     <AreaFooter></AreaFooter>
                 </DancingArea>
-                <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} contentLabel="Video Ended">
-                    <h2>Video has ended</h2>
-                    <button onClick={() => setModalIsOpen(false)}>close</button>
-                </Modal>
+
                 <VideoArea>
                     <AreaHeader>
-                        <h1>Video Area</h1>
+                        <CountDown>{message}</CountDown>
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} />
                     <AreaFooter>
@@ -97,18 +100,21 @@ const Main = styled.div`
     flex: 1;
 `;
 
-const MovingArea = styled.div`
-    position: absolute;
-    left: 0;
-    animation: move 10s linear infinite;
-    @keyframes move {
-        0% {
-            left: 0;
-        }
-        100% {
-            left: 100%;
-        }
-    }
+// 강조 효과를 위한 스타일 컴포넌트와 애니메이션
+const pulse = keyframes`
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+`;
+
+const CountDown = styled.div`
+    /* position: absolute;
+    top: 12;
+    left: 50%; */
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: red;
+    animation: ${pulse} 1s linear infinite;
 `;
 
 const DancingArea = styled.div`
