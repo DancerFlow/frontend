@@ -1,17 +1,12 @@
 import styled from 'styled-components';
-import Header from '../../components/user/Header';
-import Sidebar from '../../components/user/Sidebar';
+import Profile from '../../components/user/Profile';
 import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
-import { useGetMyProfile } from '../../api/useGetMyProfile';
 
 const UserPage = () => {
-    const profile = useGetMyProfile('user/profile');
-
     return (
         <Container>
-            <Header profile={profile}></Header>
-            <Sidebar profile={profile}></Sidebar>
+            <Profile></Profile>
             <Main></Main>
             <Bottom></Bottom>
         </Container>

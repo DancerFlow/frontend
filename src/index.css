@@ -134,3 +134,10 @@ table {
     font: inherit;
     vertical-align: baseline;
 }
+
+abbr[title] {
+    text-decoration: none;
+}
+html {
+    height: 100vh;
+}
