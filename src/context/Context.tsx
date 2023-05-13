@@ -3,7 +3,6 @@ import React, { createContext, useReducer, useEffect } from 'react';
 interface UserState {
     login: boolean;
     admin: boolean;
-    token?: string;
 }
 interface State {
     userState: UserState;
@@ -11,7 +10,7 @@ interface State {
 type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' };
 
 const initialState: State = {
-    userState: { login: false, admin: false, token: '' }
+    userState: { login: false, admin: false }
 };
 
 const Reducer = (state: State, action: Action) => {
@@ -27,7 +26,7 @@ const Reducer = (state: State, action: Action) => {
             console.log('%c로그아웃!', 'color: #d93d1a;');
             return {
                 ...state,
-                userState: { login: false, admin: false, token: '' }
+                userState: { login: false, admin: false }
             };
 
         default:
@@ -41,20 +40,19 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
     const [state, dispatch] = useReducer(Reducer, initialState);
 
     useEffect(() => {
-        console.log('context call');
         if (localStorage.getItem('currentUser')) {
             const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
-            logIn({ login: true, admin: currentUser.admin, token: currentUser.token });
+            logIn({ login: true, admin: currentUser.admin });
         } else {
             logOut();
         }
     }, []);
 
-    const logIn = (state: UserState) => {
-        localStorage.setItem('currentUser', JSON.stringify(state));
+    const logIn = (userState: UserState) => {
+        localStorage.setItem('currentUser', JSON.stringify(userState));
         dispatch({
             type: 'LOGIN_SUCCESS',
-            payload: state
+            payload: userState
         });
     };
 

@@ -3,9 +3,9 @@ import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { MathUtils, Vector3 } from 'three';
-import { Reflector } from 'three/examples/jsm/objects/Reflector';
+import { easing } from 'maath';
 
-export default function House2() {
+export default function Room({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
@@ -21,22 +21,28 @@ export default function House2() {
 
     const navigate = useNavigate();
 
+    useFrame((state, delta) => {
+        easing.damp3(ref.current.scale, area === 3 ? 1 : 0.2, 0.1, 0.01);
+        easing.damp(state.camera.position, 'y', area === 3 ? 2 : 5, 0.5, 0.02);
+    });
+
     const handleHouseClick = (e) => {
+        e.stopPropagation();
         setHovered((cur) => !cur);
     };
 
     return (
-        <>
+        <group ref={ref} scale={1} position={[-9, 1.1, 9]}>
             <primitive
-                ref={ref}
                 object={gltf.scene}
-                scale={0.015}
-                rotation={[0, 0, 0]}
+                scale={0.013}
+                rotation={[0, 0 * Math.PI, 0]}
                 castShadow
                 receiveShadow
-                position={[0, -0.5, 0]}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
                 onClick={(e) => handleHouseClick(e)}
             ></primitive>
-        </>
+        </group>
     );
 }
