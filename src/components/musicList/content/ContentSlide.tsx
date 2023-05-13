@@ -51,6 +51,7 @@ const NextArrow = (props: CustomArrowProps) => (
     </CustomArrow>
 );
 const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps) => {
+    
     const [isDragged, setIsDragged] = useState(false);
     const settings: Settings = {
         dots: true,
@@ -58,7 +59,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
         centerMode: false,
         infinite: musicList.length > 5 ? true : false,
         centerPadding: '60px',
-        slidesToShow: 5,
+        slidesToShow: musicList.length < 15 ? 4 : 5,
         speed: 800,
         rows: musicList.length > 4 ? 3 : 1,
         slidesToScroll: 5,
@@ -85,12 +86,14 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                 <ul> {dots} </ul>
             </div>
         ),
-        dotsClass: 'dots_custom'
+        dotsClass: 'dots_custom',
+        
     };
 
     useKeyEscClose((e: any) => {
         onModalClose(e);
     });
+    console.log(musicList, 'musicList');
 
     return (
         <MusicListWrap>
