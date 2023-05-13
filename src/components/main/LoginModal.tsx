@@ -17,11 +17,10 @@ interface Props {
 
 const LoginModal = ({ setIsClicked }: Props) => {
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
-    const { logIn, state } = useContext(GlobalContext);
+    const { verifyUser, state } = useContext(GlobalContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        //로그인되어 있을 시 바로 모드선택으로 이동
         if (state.userState.login) navigate('/mode');
     }, []);
 
@@ -45,8 +44,8 @@ const LoginModal = ({ setIsClicked }: Props) => {
     });
 
     const { mutate: LoginMutate } = useLoginMutation({
-        onSuccess: (data: LoginRespose) => {
-            logIn({ login: true, admin: false });
+        onSuccess: () => {
+            verifyUser();
             navigate('/mode');
         },
         onError: (error: string) => {
