@@ -3,21 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { UserLikes } from '../../interface';
 import { useGetUserLikes } from '../../api/useGetUserLikes';
-import { useState } from 'react';
 
 export default function Bottom() {
-    const [pageNo, setPageNo] = useState(1);
-    const { data, isLoading, isError, error } = useGetUserLikes(12, pageNo);
-    console.log('fetchedLikedData', data);
-
-    const handleRightClick = () => {}; // 전체 페이지 수도 알아야하지 않음? pageNo=2로 요청했는데, 안먹게 해야되나
+    const { data, isLoading, isError, error } = useGetUserLikes(12, 1);
+    // console.log('fetchedLikedData', data);
 
     if (isLoading) {
         return <>loading...</>;
     }
 
     if (isError) {
-        return <>{error}</>;
+        console.log(error);
+        return <>error loading liked playlists</>;
     }
 
     return (
@@ -71,6 +68,7 @@ const LikedContainer = styled.section`
 const LikedList = styled.section`
     display: flex;
     justify-content: flex-start;
+    margin-top: 1rem;
 `;
 
 const ChevronIcon = styled(FontAwesomeIcon)`

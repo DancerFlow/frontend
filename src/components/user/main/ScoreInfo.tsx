@@ -2,18 +2,27 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import styled from 'styled-components';
 
 export default function ScoreInfo({ gamehistoryDates }: ScoreInfoProps) {
+    const formatDate = (value: string) => {
+        const date = new Date(value);
+        const year = date.getFullYear().toString().slice(-2);
+        const month = `0${date.getMonth() + 1}`.slice(-2);
+        const day = `0${date.getDate()}`.slice(-2);
+        return `${year}/${month}/${day}`;
+    };
+
     return (
         <Container>
             <GraphContainer>
                 <ResponsiveContainer width="90%" height="80%">
                     <LineChart data={gamehistoryDates}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            dataKey="music_score_created_at"
-                            tickFormatter={(value) => new Intl.DateTimeFormat('en-US', { day: '2-digit' }).format(new Date(value))}
-                        />
+                        <XAxis dataKey="music_score_created_at" />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip
+                            labelFormatter={(label) => `Date: ${formatDate(label)}`}
+                            contentStyle={{ color: '#ff69b4' }}
+                            formatter={(value, name) => (name === 'music_score_created_at' ? formatDate(value) : value)}
+                        />
                         <Legend />
                         <Line type="monotone" dataKey="music_score" name="Score" stroke="#ff69b4" activeDot={{ r: 8 }} />
                     </LineChart>

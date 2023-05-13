@@ -1,4 +1,6 @@
 import { UserGameHistoryDetail } from '../interface';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 export const useGetGameHistoryDetail = (music_id: number) => {
     const currentDate = new Date();
@@ -15,11 +17,11 @@ export const useGetGameHistoryDetail = (music_id: number) => {
             },
             music_total_score: 300,
             music_score_by_date: [
-                { music_score: 255, music_score_created_at: currentDate },
-                { music_score: 300, music_score_created_at: new Date(currentDate.getTime() - 10 * 24 * 60 * 60 * 1000) },
-                { music_score: 200, music_score_created_at: new Date(currentDate.getTime() - 20 * 24 * 60 * 60 * 1000) },
-                { music_score: 190, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) },
-                { music_score: 230, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) }
+                { music_score: 300, music_score_created_at: new Date(currentDate.getTime() - 40 * 24 * 60 * 60 * 1000) },
+                { music_score: 200, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) },
+                { music_score: 190, music_score_created_at: new Date(currentDate.getTime() - 20 * 24 * 60 * 60 * 1000) },
+                { music_score: 230, music_score_created_at: new Date(currentDate.getTime() - 10 * 24 * 60 * 60 * 1000) },
+                { music_score: 255, music_score_created_at: currentDate }
             ]
         },
         {
@@ -33,11 +35,11 @@ export const useGetGameHistoryDetail = (music_id: number) => {
             },
             music_total_score: 150,
             music_score_by_date: [
-                { music_score: 255, music_score_created_at: currentDate },
+                { music_score: 230, music_score_created_at: new Date(currentDate.getTime() - 40 * 24 * 60 * 60 * 1000) },
+                { music_score: 200, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) },
+                { music_score: 190, music_score_created_at: new Date(currentDate.getTime() - 20 * 24 * 60 * 60 * 1000) },
                 { music_score: 230, music_score_created_at: new Date(currentDate.getTime() - 10 * 24 * 60 * 60 * 1000) },
-                { music_score: 200, music_score_created_at: new Date(currentDate.getTime() - 20 * 24 * 60 * 60 * 1000) },
-                { music_score: 190, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) },
-                { music_score: 230, music_score_created_at: new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000) }
+                { music_score: 255, music_score_created_at: currentDate }
             ]
         },
         {

@@ -5,10 +5,10 @@ export default function RankInfo() {
     return (
         <Section>
             <MusicInfo>
-                <Img src={data.music_image_url}></Img>
+                <Img src={data.album_image_url}></Img>
                 <div>
-                    <Title>{data.music_name}</Title>
-                    <div>{data.music_singer}</div>
+                    <Title>{data.name}</Title>
+                    <div>{data.music_singer.name}</div>
                 </div>
             </MusicInfo>
         </Section>
@@ -38,10 +38,12 @@ const MusicInfo = styled.div`
 `;
 
 const data: Music = {
-    music_name: 'Bad boy',
-    music_image_url:
+    id: 1,
+    name: 'Bad boy',
+    album_image_url:
         'https://cdn-bastani.stunning.kr/prod/portfolios/2ae0be98-67cb-44e4-968a-5bf0f8d39ed4/contents/4d09fee5ae27fa145f1a6087e819cbd490fbbdb11d4b330c64792cf44a9afab0_v2.jpg',
-    music_singer: 'red velvet'
+    music_singer: { id: 1, name: 'red velvet' },
+    _genre: null
 };
 
 const Img = styled.img`
