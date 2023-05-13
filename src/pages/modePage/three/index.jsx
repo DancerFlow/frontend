@@ -5,28 +5,28 @@ import { Environment } from '@react-three/drei';
 import Model from './Model';
 import Floor from './Floor';
 import Spot from './Spot';
-import House from './House';
 import Player from './Player';
 import Logo from './Logo';
 import Background from './Background';
 import Practice from './Practice';
 import Challenge from './Challenge';
-import House2 from './House2';
+import Construction from './Construction';
+import Room from './Room';
 
 const Three = () => {
-    const [playerPosition, setPlayerPosition] = useState([0, -1.05, 0]);
-    const [destinationPoint, setDestinatioPoint] = useState();
+    const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
     const [playerAnimation, setPlayerAnimation] = useState(0);
-    const [angle, setAngle] = useState(0);
+    const [area, setArea] = useState(0); // 0: practice, 1: challenge, 2: construction, 3: room
+    const roomRef = useRef();
 
     return (
         <Canvas
             orthographic={true}
             shadows
             camera={{
-                position: [1, 5, 5],
+                position: [5, 5, 1],
                 fov: 50,
-                zoom: 70,
+                zoom: 55,
                 left: -(window.innerWidth / window.innerHeight),
                 right: window.innerWidth / window.innerHeight,
                 top: 1,
@@ -57,17 +57,18 @@ const Three = () => {
             <Background></Background>
             <Floor setDestinatioPoint={setDestinatioPoint}></Floor>
             <Spot></Spot>
-            <House></House>
-            <House2></House2>
-            <Practice></Practice>
-            <Challenge></Challenge>
+            <Construction area={area}></Construction>
+            <Practice area={area}></Practice>
+            <Room area={area}></Room>
+            <Challenge area={area}></Challenge>
             <Logo></Logo>
 
             <Player
                 destinationPoint={destinationPoint}
-                setPlayerPosition={setPlayerPosition}
                 playerAnimation={playerAnimation}
                 setPlayerAnimation={setPlayerAnimation}
+                setArea={setArea}
+                area={area}
             ></Player>
         </Canvas>
     );

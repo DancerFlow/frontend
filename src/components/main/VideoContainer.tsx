@@ -22,6 +22,7 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
         }
         videoRef.current.muted = true;
         const reversePlay = setInterval(() => {
+            if (videoRef.current == null) return;
             if (videoRef.current.currentTime < 0.01) {
                 clearInterval(reversePlay);
                 videoRef.current.pause();
@@ -33,6 +34,7 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
     }, [isHover, isClicked]);
 
     const onTimeUpdate = () => {
+        if (videoRef.current == null) return;
         if (!isClicked && videoRef.current?.currentTime >= 0.2) {
             videoRef.current?.pause();
         }
