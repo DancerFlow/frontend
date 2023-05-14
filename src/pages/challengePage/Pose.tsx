@@ -1,12 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
+import answer from './Score/score.json';
 
-const Pose = ({ setKeypointsDetected }) => {
+const Pose = ({ setKeypointsDetected, currentTime }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [lastSavedSecond, setLastSavedSecond] = useState(-1);
+    const [savedKeypoints, setSavedKeypoints] = useState([]);
 
     // 연결할 keypoints
     const POSE_CONNECTIONS = [
@@ -34,7 +39,8 @@ const Pose = ({ setKeypointsDetected }) => {
                 enableSmoothing: true, // smoothing 사용 여부
                 minPoseScore: 0.2 // 최소 pose score
             };
-            const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
+
+            detectorRef.current = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
 
             // 웹캠 연결
             if (navigator.mediaDevices.getUserMedia) {
@@ -87,7 +93,7 @@ const Pose = ({ setKeypointsDetected }) => {
             // pose 추정 실행
             const intervalId = setInterval(async () => {
                 if (videoRef.current && ctx) {
-                    const poses = await detector.estimatePoses(videoRef.current, { maxPoses: 1 });
+                    const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
 
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
@@ -114,6 +120,28 @@ const Pose = ({ setKeypointsDetected }) => {
         };
         runPoseEstimation();
     }, []);
+    useEffect(() => {
+        const currentSecond = Math.floor(currentTime);
+        if (currentSecond !== lastSavedSecond) {
+            const estimatePoses = async () => {
+                try {
+                    if (videoRef.current && detectorRef.current) {
+                        const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
+                        poses.forEach((pose) => {
+                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4);
+                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, validKeypoints]);
+                            console.log(validKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
+                        });
+                        setLastSavedSecond(currentSecond); // 이 위치로 변경
+                    }
+                } catch (error) {
+                    console.error('Error in estimatePoses:', error);
+                }
+            };
+            estimatePoses();
+        }
+    }, [currentTime]);
+
     return (
         <Container>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
