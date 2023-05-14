@@ -14,4 +14,4 @@ const getUserLikes = async (pageNo: number): Promise<UserLikes[]> => {
     return response.data;
 };
 
-export const useGetUserLikes = (pageNo: number) => useQuery({ queryKey: ['userlikes', pageNo], queryFn: () => getUserLikes(pageNo) });
+export const useGetUserLikesQuery = (pageNo: number) => useQuery({ queryKey: ['userlikes', pageNo], queryFn: () => getUserLikes(pageNo) });

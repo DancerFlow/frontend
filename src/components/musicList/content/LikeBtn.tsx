@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeQuery';
-import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeQuery';
+import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
+import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
 interface Props {
     onClick: () => void;
 }
@@ -36,7 +36,7 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
 const LikeController = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
     align-items: center;
     width: 100px;
     height: 50px;

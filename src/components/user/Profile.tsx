@@ -9,7 +9,7 @@ import Platinum from '../../assets/ranks/platinum.png';
 import Diamond from '../../assets/ranks/diamond.png';
 import { Tier, Profile } from '../../interface';
 import ProgressBar from '../common/ProgressBar';
-import { useGetUserProfile } from '../../api/useGetUserProfile';
+import { useGetUserProfileQuery } from '../../api/useGetUserProfileQuery';
 import { useState } from 'react';
 import { useGetGameStamps } from '../../api/useGetGameStamps';
 import smileSvg from '../../assets/smile.svg';
@@ -33,7 +33,7 @@ export default function Profile() {
     const [activeMonth, setActiveMonth] = useState(currDate.getMonth() + 1);
     const [activeYear, setActiveYear] = useState(currDate.getFullYear());
 
-    const { data: profile, isLoading, isError } = useGetUserProfile();
+    const { data: profile, isLoading, isError } = useGetUserProfileQuery();
     const { data: calendarData } = useGetGameStamps(activeYear, activeMonth);
     console.log('calender', calendarData);
 

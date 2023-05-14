@@ -14,5 +14,5 @@ const getUserGameHistory = async (pageNo: number): Promise<UserGameHistory[]> =>
     return response.data;
 };
 
-export const useGetGameHistory = (pageNo: number) =>
+export const useGetGameHistoryQuery = (pageNo: number) =>
     useQuery({ queryKey: ['usergamehistory', pageNo], queryFn: () => getUserGameHistory(pageNo) });

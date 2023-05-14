@@ -11,4 +11,4 @@ const getUserProfile = async (): Promise<Profile> => {
     return response.data;
 };
 
-export const useGetUserProfile = () => useQuery({ queryKey: ['userprofile'], queryFn: () => getUserProfile() });
+export const useGetUserProfileQuery = () => useQuery({ queryKey: ['userprofile'], queryFn: () => getUserProfile() });
