@@ -4,7 +4,7 @@ import Content from '../../components/musicList/content/';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
-import { useGetUserLikes } from '../../api/useGetUserLikesQuery';
+import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
 import { Music } from '../../interface';
 import { UserLikes } from '../../interface';
@@ -19,7 +19,7 @@ export enum FilterType {
 const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState<FilterType>(FilterType.Popular);
     const [inputValue, setInputValue] = useState('');
-    const [searchMusic, setSearchMusic] = useState<Music | undefined >();
+    const [searchMusic, setSearchMusic] = useState<Music | undefined>();
 
     // 전체 리스트 (좋아요, 최신순)
     const {
@@ -37,7 +37,7 @@ const MusicListPage = () => {
     const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicSearchQuery(searchMusic);
 
     // 찜한 목록 리스트
-    const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikes(12, 1);
+    const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikesQuery(1);
 
     const handleSort = (item: FilterType): void => {
         setSelectedFilter(item);
