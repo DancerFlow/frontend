@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
@@ -26,9 +26,22 @@ export default function Practice({ area }) {
         easing.damp(ref.current.position, 'y', area === 0 ? -0.94 : 0.3, 0.1, 0.01);
     });
 
+    useEffect(() => void (document.body.style.cursor = hovered ? 'pointer' : 'auto'), [hovered]);
+    const onPointerOver = useCallback(() => setHovered(true), []);
+    const onPointerOut = useCallback(() => setHovered(false), []);
+
     return (
         <group ref={ref} position={[8, -0.94, -10]}>
-            <primitive object={gltf.scene} scale={1.4} rotation={[0, 0.05 * Math.PI, 0]} castShadow receiveShadow></primitive>
+            <primitive
+                object={gltf.scene}
+                scale={1.4}
+                rotation={[0, 0.05 * Math.PI, 0]}
+                castShadow
+                receiveShadow
+                onPointerOut={onPointerOut}
+                onPointerOver={onPointerOver}
+            ></primitive>
+            {area === 0 && <spotLight position={[5, 5, -1]} color="blue" castShadow></spotLight>}
         </group>
     );
 }

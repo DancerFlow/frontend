@@ -1,8 +1,7 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import { useGetUserVerifyQuery } from '../api/useGetUserVerifyQuery';
-import { UserVerify } from '../interface';
+import { Status, UserVerify } from '../interface';
 import { AxiosError } from 'axios';
-import { Navigate } from 'react-router-dom';
 
 interface UserState {
     login: boolean;
@@ -48,13 +47,11 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
 
             logIn({ login: data.isLoggedIn, admin: data.isAdmin });
         },
-        onError: (error: AxiosError) => {
-            if (error.message === 'COOKIE NOT FOUND') {
+        onError: (error: AxiosError<Status>) => {
+            if (error.response?.data.message === 'COOKIE NOT FOUND') {
+                console.log('로그인이 만료되었습니다.');
                 logOut();
             }
-            console.log(error);
-            <Navigate to="/" />;
-            logOut();
         },
         retry: false
     });

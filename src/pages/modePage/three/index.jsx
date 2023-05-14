@@ -12,11 +12,12 @@ import Practice from './Practice';
 import Challenge from './Challenge';
 import Construction from './Construction';
 import Room from './Room';
+import DanceFloor from './DanceFloor';
 
 const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
     const [playerAnimation, setPlayerAnimation] = useState(0);
-    const [area, setArea] = useState(0); // 0: practice, 1: challenge, 2: construction, 3: room
+    const [area, setArea] = useState(-1); // 0: practice, 1: challenge, 2: construction, 3: room
     const roomRef = useRef();
 
     return (
@@ -24,7 +25,7 @@ const Three = () => {
             orthographic={true}
             shadows
             camera={{
-                position: [5, 5, 1],
+                position: [1, 5, 1],
                 fov: 50,
                 zoom: 55,
                 left: -(window.innerWidth / window.innerHeight),
@@ -35,7 +36,7 @@ const Three = () => {
                 far: 1000
             }}
         >
-            <ambientLight intensity={0.5} />
+            <ambientLight intensity={0.6} />
             <directionalLight
                 position={[10, 30, 10]}
                 intensity={2}
@@ -55,8 +56,13 @@ const Three = () => {
                 </Suspense>
             </group> */}
             <Background></Background>
-            <Floor setDestinatioPoint={setDestinatioPoint}></Floor>
-            <Spot></Spot>
+            {/* <Floor setDestinatioPoint={setDestinatioPoint}></Floor> */}
+            <DanceFloor
+                setDestinatioPoint={setDestinatioPoint}
+                destinationPoint={destinationPoint}
+                playerAnimation={playerAnimation}
+            ></DanceFloor>
+
             <Construction area={area}></Construction>
             <Practice area={area}></Practice>
             <Room area={area}></Room>
