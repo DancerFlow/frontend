@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import fearness from '../../assets/fearless.mp4';
 import Pose from './Pose';
-
+import answer from './Score/score.json';
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const [countDown, setCountDown] = useState(5);
     const [message, setMessage] = useState('전신이 나오도록 위치해주세요.');
     const [startCountdown, setStartCountdown] = useState(false);
+
+    const [currentTime, setCurrentTime] = useState(0);
+
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const navigate = useNavigate();
@@ -35,6 +38,10 @@ const Test = () => {
             navigate('/result');
         }
     };
+
+    const handleTimeUpdate = (e) => {
+        setCurrentTime(e.target.currentTime);
+    };
     return (
         <>
             <Top>
@@ -46,17 +53,18 @@ const Test = () => {
                 <DancingArea>
                     <AreaHeader></AreaHeader>
                     <VideoWrapper>
-                        {/* <video
+                        <video
                             ref={videoRef}
                             src={fearness}
                             onEnded={handleVideoEnd}
+                            onTimeUpdate={handleTimeUpdate}
                             style={{
                                 pointerEvents: 'none',
                                 maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
                                 maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
                                 objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
                             }}
-                        /> */}
+                        />
                     </VideoWrapper>
                     <AreaFooter></AreaFooter>
                 </DancingArea>
@@ -65,7 +73,7 @@ const Test = () => {
                     <AreaHeader>
                         <CountDown>{message}</CountDown>
                     </AreaHeader>
-                    <Pose setKeypointsDetected={setKeypointsDetected} />
+                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} />
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
