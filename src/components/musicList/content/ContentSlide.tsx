@@ -91,7 +91,6 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
     useKeyEscClose((e: any) => {
         onModalClose(e);
     });
-    console.log(musicList, 'musicList');
 
     return (
         <MusicListWrap>
@@ -100,25 +99,24 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                     musicList.length > 0 &&
                     musicList.map((data: Music, idx) => {
                         return (
-                            <MusicWrap key={`${data.id}-${data.name}`}>
-                                <MusicCard
-                                    onClick={(e) => {
-                                        if (!isDragged) {
-                                            e.preventDefault();
-                                            onMusicClick(data.id);
-                                        }
-                                    }}
-                                    img={data.album_image_url}
-                                    whileHover="hover"
-                                    initial="normal"
-                                    variants={musicVariants}
-                                >
-                                    <MusicInfo variants={musicInfoVariants}>
-                                        <h1>{data.name}</h1>
-                                        <h4>{data.music_singer.name}</h4>
-                                    </MusicInfo>
-                                </MusicCard>
-                            </MusicWrap>
+                            <MusicCard
+                                key={`${data.id}-${data.name}`}
+                                onClick={(e) => {
+                                    if (!isDragged) {
+                                        e.preventDefault();
+                                        onMusicClick(data.id);
+                                    }
+                                }}
+                                img={data.album_image_url}
+                                whileHover="hover"
+                                initial="normal"
+                                variants={musicVariants}
+                            >
+                                <MusicInfo variants={musicInfoVariants}>
+                                    <h1>{data.name}</h1>
+                                    <h4>{data.music_singer.name}</h4>
+                                </MusicInfo>
+                            </MusicCard>
                         );
                     })}
             </StyledSlider>
@@ -127,7 +125,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
 };
 
 const MusicListWrap = styled.div`
-    width: 71%;
+    width: 60%;
     height: 100%;
     position: relative;
     /* margin-top: 20px; */
@@ -144,12 +142,11 @@ const CustomArrow = styled.div`
     color: #fff;
     position: absolute;
     top: 50%;
-    z-index: 11100;
+    z-index: 1;
     transform: translateY(-50%);
 
     &.prev {
         left: -40px;
-        visibility: ${({ currentSlide, slideCount }) => (currentSlide === 0 ? 'hidden' : 'visible')};
     }
 
     &.next {
@@ -163,20 +160,14 @@ const CustomArrow = styled.div`
     }
 `;
 
-const MusicWrap = styled.div`
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-`;
 const MusicCard = styled(motion.div)<{ img: string }>`
-    width: calc(100% - 40px);
+    width: 150px;
     height: 25vh;
     max-width: 250px;
     max-height: 250px;
     background-color: white;
     border-radius: 10px;
-    margin: 15px;
+    margin: 10px;
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center center;
@@ -186,16 +177,22 @@ const MusicCard = styled(motion.div)<{ img: string }>`
     &:hover {
         box-shadow: ${(props) => props.theme.pink} 0px 5px 15px;
     }
+
+    @media screen and (max-width: 1500px) {
+        max-width: 190px;
+    }
 `;
 
 const MusicInfo = styled(motion.div)`
-    padding: 20px;
     background-color: ${(props) => props.theme.pink};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     opacity: 0;
     position: absolute;
     bottom: 0;
-    width: inherit;
-    height: 15%;
+    width: 100%;
+    height: 30%;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     cursor: pointer;

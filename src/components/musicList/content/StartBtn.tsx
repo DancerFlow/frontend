@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Lottie from 'lottie-web';
 import animationData from '../../../assets/startBtn.json';
-import { render } from 'react-dom';
 
 const StartBtn = () => {
     const lottieRef = useRef(null);
@@ -15,7 +14,7 @@ const StartBtn = () => {
             animationData: animationData,
             rendererSettings: {
                 preserveAspectRatio: 'xMidYMid slice',
-                width: 300,
+                width: 200,
                 height: 100
             }
         });
