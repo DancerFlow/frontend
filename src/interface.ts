@@ -7,17 +7,15 @@ export interface Status {
 export interface UserRespose {
     Status?: Status;
 }
-
-export interface LoginRespose {
-    Status?: Status;
-    accessToken: string;
-}
-
 export interface UserForm {
     email: string;
     password: string;
     passwordConfirm?: string;
     nickname?: string;
+}
+export interface UserVerify {
+    isLoggedIn: boolean;
+    isAdmin: boolean;
 }
 
 export enum Tier {

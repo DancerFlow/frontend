@@ -1,4 +1,8 @@
 import React, { createContext, useReducer, useEffect } from 'react';
+import { useGetUserVerifyQuery } from '../api/useGetUserVerifyQuery';
+import { UserVerify } from '../interface';
+import { AxiosError } from 'axios';
+import { Navigate } from 'react-router-dom';
 
 interface UserState {
     login: boolean;
@@ -38,18 +42,24 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);
+    const { data, refetch } = useGetUserVerifyQuery({
+        onSuccess: (data: UserVerify) => {
+            console.log(data);
 
-    useEffect(() => {
-        if (localStorage.getItem('currentUser')) {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
-            logIn({ login: true, admin: currentUser.admin });
-        } else {
+            logIn({ login: data.isLoggedIn, admin: data.isAdmin });
+        },
+        onError: (error: AxiosError) => {
+            if (error.message === 'COOKIE NOT FOUND') {
+                logOut();
+            }
+            console.log(error);
+            <Navigate to="/" />;
             logOut();
-        }
-    }, []);
+        },
+        retry: false
+    });
 
     const logIn = (userState: UserState) => {
-        localStorage.setItem('currentUser', JSON.stringify(userState));
         dispatch({
             type: 'LOGIN_SUCCESS',
             payload: userState
@@ -62,11 +72,16 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
         });
     };
 
+    const verifyUser = async () => {
+        refetch();
+    };
+
     return (
         <GlobalContext.Provider
             value={{
                 logIn,
                 logOut,
+                verifyUser,
                 state
             }}
         >
