@@ -28,6 +28,8 @@ export default function Profile() {
         setIsClicked(false);
     };
 
+    console.log('profile is rendered');
+
     //calendar
     const currDate = new Date();
     const [activeMonth, setActiveMonth] = useState(currDate.getMonth() + 1);
@@ -35,7 +37,6 @@ export default function Profile() {
 
     const { data: profile, isLoading, isError } = useGetUserProfileQuery();
     const { data: calendarData } = useGetGameStamps(activeYear, activeMonth);
-    console.log('calender', calendarData);
 
     const tileContent = ({ date }: { date: Date }) => {
         const formattedDate = date.toISOString().split('T')[0];
@@ -71,7 +72,7 @@ export default function Profile() {
                             <img src={getTierImage(profile?.current_tier)} alt="Rank" />
                         </RankImgWrapper>
                         <RankContainer>
-                            <div>Rank: {rank[profile?.current_tier]}</div>
+                            <div>Rank: {rank[profile?.current_tier - 1]}</div>
                             <div>
                                 <ProgressBar progress={60} height={20}></ProgressBar>
                                 <NextRankImg src={getNextTierImage(profile?.current_tier)} alt="nextRank" />
@@ -94,7 +95,11 @@ export default function Profile() {
                             />
                         </CalendarContainer>
                     </Sidebar>
-                    {ReactDOM.createPortal(<EditModal />, document.getElementById('modal-root') as HTMLElement)}
+                    {isClicked &&
+                        ReactDOM.createPortal(
+                            <EditModal profile={profile} onCloseModal={handleCloseModal} />,
+                            document.getElementById('modal-root') as HTMLElement
+                        )}
                 </>
             )}
         </>
@@ -145,7 +150,7 @@ const EditProfile = styled.p`
 const rank: string[] = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
 
 function getTierImage(tier: Tier): string {
-    switch (tier) {
+    switch (tier - 1) {
         case Tier.Bronze:
             return Bronze;
         case Tier.Silver:
@@ -162,7 +167,7 @@ function getTierImage(tier: Tier): string {
 }
 
 function getNextTierImage(tier: Tier): string {
-    switch (tier) {
+    switch (tier - 1) {
         case Tier.Bronze:
             return Silver;
         case Tier.Silver:

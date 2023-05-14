@@ -5,14 +5,12 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 import { UserGameHistory } from '../../../interface';
 import { useGetGameHistoryQuery } from '../../../api/useGetGameHistoryQuery';
-import { useGetGameHistoryDetailQuery } from '../../../api/useGetGameHistoryDetailQuery';
 import { useState } from 'react';
 import ScoreInfo from './ScoreInfo';
 
 export default function Main() {
     const [selected, setSelected] = useState(0);
     const { data: gamehistory, isLoading, isError } = useGetGameHistoryQuery(1);
-    const gamehistoryDetail = useGetGameHistoryDetailQuery(selected);
 
     // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
     useEffect(() => {
@@ -64,7 +62,7 @@ export default function Main() {
                         <div>No game history</div>
                     )}
                 </CardContainer>
-                <ScoreInfo gamehistoryDates={gamehistoryDetail.music_score_by_date}></ScoreInfo>
+                <ScoreInfo musicId={selected}></ScoreInfo>
             </Section>
         </Container>
     );
