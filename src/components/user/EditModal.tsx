@@ -1,30 +1,94 @@
 import styled from 'styled-components';
 import { useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { Profile } from '../../interface';
 
-export default function EditModal() {
-    const emailRef = useRef<HTMLInputElement>(null);
+export default function EditModal({ profile, onCloseModal }: { profile: Profile; onCloseModal: () => void }) {
+    //setstate를 쓰므로, 모달 변경 시 userPage에서 Re-render 발생시키고 싶지 않아서 useRef 사용함.
+    const avatarRef = useRef<HTMLInputElement>(null);
+    const currentpasswordRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const passwordConfirmRef = useRef<HTMLInputElement>(null);
     const nicknameRef = useRef<HTMLInputElement>(null);
     const [formValid, setFormValid] = useState<string>('');
+    const [avatarImage, setAvatarImage] = useState<string>('');
 
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imageUrl = event.target?.result as string;
+                setAvatarImage(imageUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    if (!profile) {
+        return <FormS>'loading profile...'</FormS>;
+    }
+
+    console.log('profile', profile);
     return (
         <>
-            <ModalBackground />
+            <ModalBackground onClick={onCloseModal} />
             <FormS>
                 <FormContainer>
-                    {' '}
                     <FieldContainer>
+                        <label htmlFor="avatar">
+                            <AvatarContainer>
+                                <AvatarImage src={profile?.profile_image_url} alt="Profile Image" />
+                                <CameraIcon>
+                                    <FontAwesomeIcon icon={faCamera} />
+                                    <input
+                                        type="file"
+                                        id="avatar"
+                                        name="avatar"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        ref={avatarRef}
+                                        style={{ display: 'none' }}
+                                    />
+                                </CameraIcon>
+                            </AvatarContainer>
+                        </label>
+
                         <Fieldset>
-                            <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
+                            <label htmlFor="nickname">Nickname</label>
+                            <input
+                                required
+                                ref={nicknameRef}
+                                id="nickname"
+                                type="text"
+                                name="nickname"
+                                placeholder="enter nickname"
+                                defaultValue={profile?.nickname}
+                            />
+                        </Fieldset>
+                        <Line />
+
+                        <Fieldset>
+                            <input
+                                required
+                                ref={currentpasswordRef}
+                                id="currentpassword"
+                                type="password"
+                                name="currentpassword"
+                                placeholder="enter current password"
+                            />
                         </Fieldset>
 
                         <Fieldset>
-                            <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
-                        </Fieldset>
-
-                        <Fieldset>
-                            <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
+                            <input
+                                required
+                                ref={passwordRef}
+                                id="password"
+                                type="password"
+                                name="password"
+                                placeholder="enter new password"
+                            />
                         </Fieldset>
 
                         <Fieldset>
@@ -38,7 +102,7 @@ export default function EditModal() {
                             />
                         </Fieldset>
 
-                        <LoginButton>Edit</LoginButton>
+                        <EditButton>Edit</EditButton>
                         <p>{formValid}</p>
                     </FieldContainer>
                 </FormContainer>
@@ -68,7 +132,7 @@ const FormS = styled.div`
 `;
 
 const FormContainer = styled.div`
-    /* display: flex;
+    display: flex;
     padding: 50px 20px 50px 20px;
     border-radius: 4px;
     width: 500px;
@@ -92,7 +156,11 @@ const FormContainer = styled.div`
     }
     input:focus {
         outline: 2px solid #27fd1c;
-    } */
+    }
+
+    label {
+        font-size: 10px;
+    }
 `;
 
 const FieldContainer = styled.div`
@@ -115,7 +183,8 @@ const Fieldset = styled.fieldset`
     padding: 0;
     border: none;
 `;
-const LoginButton = styled.button.attrs({ type: 'submit' })`
+
+const EditButton = styled.button.attrs({ type: 'submit' })`
     height: 40px;
     width: 200px;
     border-radius: 0px;
@@ -133,26 +202,39 @@ const LoginButton = styled.button.attrs({ type: 'submit' })`
     }
 `;
 
-const SelectContainer = styled.div`
+const Line = styled.hr`
+    width: 100%;
+    height: 1px;
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+`;
+
+const AvatarContainer = styled.div`
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`;
+
+const AvatarImage = styled.img`
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+`;
+
+const CameraIcon = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 10px;
-    a {
-        margin: 0px 10px;
-        border: solid #27fd1c;
-        border-width: 0 0 1px 0;
-        cursor: pointer;
-    }
-`;
-
-const ReturnButton = styled.div`
-    color: #27fd1c;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 24px;
-    padding: 10px;
-    font-family: 'NanumSquareNeoBold';
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 1.7rem;
 `;
