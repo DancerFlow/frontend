@@ -4,12 +4,15 @@ import { UserGameHistory } from '../interface';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const getUserGameHistory = async (userId: number, pageNo: number): Promise<UserGameHistory[]> => {
-    const response = await axios.get(`${baseUrl}user/game/history/${userId}`, {
-        params: { pageno: pageNo }
+const getUserGameHistory = async (pageNo: number): Promise<UserGameHistory[]> => {
+    const response = await axios.get(`${baseUrl}user/game/history`, {
+        withCredentials: true,
+        params: {
+            pageno: pageNo // 원하는 페이지 번호
+        }
     });
     return response.data;
 };
 
-export const useGetGameHistory = (userId: number, pageNo: number) =>
-    useQuery({ queryKey: ['usergamehistory', userId, pageNo], queryFn: () => getUserGameHistory(userId, pageNo) });
+export const useGetGameHistory = (pageNo: number) =>
+    useQuery({ queryKey: ['usergamehistory', pageNo], queryFn: () => getUserGameHistory(pageNo) });
