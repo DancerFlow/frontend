@@ -6,7 +6,7 @@ interface Props {
     onClick: () => void;
 }
 
-const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId }) => {
+const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }) => {
     const [liked, setLiked] = useState(isLiked);
 
     const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId);
@@ -28,19 +28,21 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId }) => {
             <button onClick={handleClick} style={{ backgroundColor: liked ? 'green' : 'gray', color: 'white' }}>
                 {liked ? 'Liked' : 'Like'}
             </button>
+            <p>Likes: {musicDetailInfo.likes}</p>
         </LikeController>
     );
 };
 
 const LikeController = styled.div`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content:space-around;
     align-items: center;
     width: 100px;
     height: 50px;
-    position: absolute;
+    /* position: absolute;
     top: 1;
-    left: 0;
+    left: 0; */
     border-radius: 10px;
 `;
 

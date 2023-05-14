@@ -38,9 +38,13 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <LikeBtn isLiked={isLiked} musicId={musicDetailInfo.id} />
+                    <LikeBtn isLiked={isLiked} musicId={musicDetailInfo.id} musicDetailInfo={musicDetailInfo} />
                     <div onClick={onStartClick}>
                         <StartBtn key={musicDetailInfo.id} />
+                    </div>
+                    <div>
+                        <h1>플레이 횟수</h1>
+                        <p>{musicDetailInfo.played}</p>
                     </div>
                 </MusicModalFooter>
             </MusicModalInfo>
@@ -76,15 +80,22 @@ interface MusicModalInfoHeaderProps {
 }
 const MusicModalInfoHeader = styled.div`
     width: 100%;
-    height: 40%;
+    height: 50%;
     background-color: ${(props) => props.theme.modal.content};
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const MusicModalInfoImg = styled.div<MusicModalInfoHeaderProps>`
+    width: 90%;
+    height: 90%;
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
 `;
 
 const MusicModalInfoContent = styled.div`
@@ -163,7 +174,7 @@ const MusicModalFooter = styled.div`
     height: 10%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     position: relative;
 `;
 
