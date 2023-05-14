@@ -2,23 +2,48 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
 import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
+import { useMutation, useQueryClient } from 'react-query';
 interface Props {
     onClick: () => void;
+    isLiked: boolean;
+    musicId: number;
+}
+
+interface Props {
+    onClick: () => void;
+    isLiked: boolean;
+    musicId: number;
+    musicDetailInfo: any; // make sure to replace 'any' with the actual type
 }
 
 const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }) => {
     const [liked, setLiked] = useState(isLiked);
+    const queryClient = useQueryClient();
+    const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['music', musicId]);
+            queryClient.invalidateQueries(['userlikes', 1]);
 
-    const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId);
-    const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId);
+            setLiked(true);
+        },
+        onError: () => {}
+    });
+    const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['music', musicId]);
+            queryClient.invalidateQueries(['userlikes', 1]);
+            setLiked(false);
+        },
+        onError: () => {
+            alert('Error updating unlike status');
+        }
+    });
 
     const handleClick = () => {
         if (liked) {
             deleteMusicLikeMutation.mutate();
-            setLiked(false);
         } else {
             patchMusicLikeMutation.mutate();
-            setLiked(true);
         }
         onClick();
     };
@@ -32,7 +57,6 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
         </LikeController>
     );
 };
-
 const LikeController = styled.div`
     display: flex;
     flex-direction: column;
