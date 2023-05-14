@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
 import { GlobalContext } from '../../context/Context';
-import DragDrop from '../common/DragDrop';
 import SignUpForm from './SignUpForm';
 import LoginForm from './LoginForm';
-import { useSignUpMutation } from '../../api/useSignUpMutation';
-import { useLoginMutation } from '../../api/useLoginMutation';
-import { LoginRespose } from '../../interface';
+import { usePostSignUpMutation } from '../../api/usePostSignUpMutation';
+import { usePostLoginMutation } from '../../api/usePostLoginMutation';
+import { AxiosError } from 'axios';
 
 interface Props {
     setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,7 +32,7 @@ const LoginModal = ({ setIsClicked }: Props) => {
         navigate('/mode');
     };
 
-    const { mutate: signUpMutate } = useSignUpMutation({
+    const { mutate: signUpMutate } = usePostSignUpMutation({
         onSuccess: () => {
             window.alert('회원가입에 성공하였습니다.');
             setIsSignUp(false);
@@ -43,13 +42,16 @@ const LoginModal = ({ setIsClicked }: Props) => {
         }
     });
 
-    const { mutate: LoginMutate } = useLoginMutation({
+    const { mutate: LoginMutate } = usePostLoginMutation({
         onSuccess: () => {
             verifyUser();
             navigate('/mode');
         },
-        onError: (error: string) => {
-            window.alert(`오류가 발생했습니다: ${error}`);
+        onError: (error: AxiosError) => {
+            if (error.response?.status === 500) window.alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+            else {
+                window.alert(`오류가 발생했습니다: ${error}`);
+            }
         }
     });
 
