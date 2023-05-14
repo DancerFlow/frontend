@@ -10,7 +10,6 @@ const Test = () => {
     const [message, setMessage] = useState('전신이 나오도록 위치해주세요.');
     const [startCountdown, setStartCountdown] = useState(false);
     const videoRef = useRef(null);
-
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const navigate = useNavigate();
 
@@ -47,7 +46,7 @@ const Test = () => {
                 <DancingArea>
                     <AreaHeader></AreaHeader>
                     <VideoWrapper>
-                        <video
+                        {/* <video
                             ref={videoRef}
                             src={fearness}
                             onEnded={handleVideoEnd}
@@ -57,7 +56,7 @@ const Test = () => {
                                 maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
                                 objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
                             }}
-                        />
+                        /> */}
                     </VideoWrapper>
                     <AreaFooter></AreaFooter>
                 </DancingArea>

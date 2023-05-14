@@ -3,6 +3,7 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
+import testVideo from '../../assets/fearless.mp4';
 
 const Pose = ({ setKeypointsDetected }) => {
     const videoRef = useRef<HTMLVideoElement>(null);

@@ -4,16 +4,19 @@ const ChallengePage = () => {
     const navigate = useNavigate();
     const { musicId } = useParams();
 
-    const handleMoveTest = () => {
-        navigate('/challenge/' + musicId + '/test');
+    const handleMovePage = (page?: string) => {
+        if (page) {
+            navigate('/challenge/' + musicId + '/' + page);
+        } else {
+            navigate('/challenge/' + musicId);
+        }
     };
-    const handleMoveHome = () => {
-        navigate('/challenge/' + musicId);
-    };
+
     return (
         <Container>
-            <Test onClick={handleMoveTest}>TEST 페이지</Test>
-            <Home onClick={handleMoveHome}>Home</Home>
+            <Home onClick={() => handleMovePage()}>Home</Home>
+            <Test onClick={() => handleMovePage('test')}>TEST 페이지</Test>
+            <Score onClick={() => handleMovePage('score')}>정답추출</Score>
             <Outlet />
         </Container>
     );
@@ -24,6 +27,20 @@ const Container = styled.div`
     flex-direction: column;
     height: 100vh;
     position: relative;
+`;
+
+const Home = styled.div`
+    width: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
+    height: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 100px;
+    left: 0;
 `;
 
 const Test = styled.div`
@@ -40,17 +57,19 @@ const Test = styled.div`
     left: 0;
     z-index: 100;
 `;
-const Home = styled.div`
+
+const Score = styled.div`
     width: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
     height: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
-    background-color: blue;
+    background-color: green;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
     cursor: pointer;
     position: absolute;
-    top: 100px;
+    top: 300px;
     left: 0;
+    z-index: 100;
 `;
 export default ChallengePage;

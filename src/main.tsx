@@ -5,7 +5,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.tsx';
-import Test from './pages/challengePage/Test.tsx';
+import Test from './pages/challengePage/Test.jsx';
+import ScoreExtraction from './pages/challengePage/Score/index.jsx';
 import { theme } from './theme.ts';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Rootlayout from './layouts/Rootlayout.tsx';
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
                     {
                         path: 'test',
                         element: <Test />
+                    },
+                    {
+                        path: 'score',
+                        element: <ScoreExtraction />
                     }
                 ]
             },
