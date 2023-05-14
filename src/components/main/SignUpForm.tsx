@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { UserForm } from '../../interface';
 import { validateEmail } from '../../utils/validateEmail';
-import { useSignUpMutation } from '../../api/useSignUpMutation';
+import { useSignUpMutation } from '../../api/usePostSignUpMutation';
 
 interface Props {
     onSubmit: (variables: UserForm) => void;
