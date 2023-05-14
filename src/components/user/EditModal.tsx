@@ -3,16 +3,54 @@ import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { Profile } from '../../interface';
+import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
+import axios from 'axios';
+import { useMutation } from 'react-query';
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export default function EditModal({ profile, onCloseModal }: { profile: Profile; onCloseModal: () => void }) {
-    //setstate를 쓰므로, 모달 변경 시 userPage에서 Re-render 발생시키고 싶지 않아서 useRef 사용함.
-    const avatarRef = useRef<HTMLInputElement>(null);
-    const currentpasswordRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const passwordConfirmRef = useRef<HTMLInputElement>(null);
-    const nicknameRef = useRef<HTMLInputElement>(null);
+    // const avatarRef = useRef<HTMLInputElement>(null);
     const [formValid, setFormValid] = useState<string>('');
     const [avatarImage, setAvatarImage] = useState<string>('');
+    const [nickname, setNickname] = useState('');
+    const [formValues, setFormValues] = useState({
+        current_password: '',
+        new_password: '',
+        passwordconfirm: ''
+    });
+
+    console.log('modal rerendered');
+
+    const mutation = useMutation(async ({ current_password, new_password }) => {
+        const response = await axios.patch(`${baseUrl}user/password`, { current_password, new_password }, { withCredentials: true });
+        return response.data;
+    });
+
+    const handleBlur = () => {
+        if (formValues.new_password !== formValues.passwordconfirm) {
+            setFormValid('비밀번호가 일치하지 않습니다.');
+        } else {
+            setFormValid('');
+        }
+    };
+
+    const handleSubmit = () => {
+        if (formValues.new_password !== formValues.passwordconfirm) {
+            return;
+        }
+
+        console.log('form', formValues);
+        mutation.mutate(formValues);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            [name]: value
+        }));
+    };
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -30,7 +68,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         return <FormS>'loading profile...'</FormS>;
     }
 
-    console.log('profile', profile);
     return (
         <>
             <ModalBackground onClick={onCloseModal} />
@@ -48,7 +85,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                                         name="avatar"
                                         accept="image/*"
                                         onChange={handleAvatarChange}
-                                        ref={avatarRef}
                                         style={{ display: 'none' }}
                                     />
                                 </CameraIcon>
@@ -58,8 +94,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                         <Fieldset>
                             <label htmlFor="nickname">Nickname</label>
                             <input
-                                required
-                                ref={nicknameRef}
+                                // required
                                 id="nickname"
                                 type="text"
                                 name="nickname"
@@ -68,42 +103,49 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                             />
                         </Fieldset>
                         <Line />
-
+                        {/* <ChangePassword>Change Password</ChangePassword> */}
                         <Fieldset>
+                            <label htmlFor="password">current password</label>
                             <input
-                                required
-                                ref={currentpasswordRef}
-                                id="currentpassword"
+                                // required
                                 type="password"
-                                name="currentpassword"
-                                placeholder="enter current password"
+                                name="current_password"
+                                placeholder="Enter current password"
+                                value={formValues.current_password}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
                             />
                         </Fieldset>
 
                         <Fieldset>
+                            <label htmlFor="new_password">new password</label>
                             <input
-                                required
-                                ref={passwordRef}
-                                id="password"
                                 type="password"
-                                name="password"
-                                placeholder="enter new password"
+                                name="new_password"
+                                placeholder="Enter new password"
+                                value={formValues.new_password}
+                                onChange={handleInputChange}
                             />
                         </Fieldset>
 
                         <Fieldset>
+                            <label htmlFor="passwordconfirm">confirm new password</label>
                             <input
-                                required
-                                ref={passwordConfirmRef}
-                                id="passwordConfirm"
+                                id="passwordconfirm"
                                 type="password"
-                                name="password"
-                                placeholder="confirm password"
+                                name="passwordconfirm"
+                                placeholder="Confirm new password"
+                                value={formValues.passwordconfirm}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
                             />
                         </Fieldset>
-
-                        <EditButton>Edit</EditButton>
-                        <p>{formValid}</p>
+                        <p style={{ color: 'red' }}>{formValid}</p>
+                        <EditButton onClick={handleSubmit} disabled={formValues.new_password !== formValues.passwordconfirm}>
+                            Edit
+                        </EditButton>
+                        {mutation.isError ? <div>An error occurred: {mutation?.error?.message}</div> : null}
+                        {mutation.isSuccess ? <div>Todo added!</div> : null}
                     </FieldContainer>
                 </FormContainer>
             </FormS>
@@ -168,7 +210,6 @@ const FieldContainer = styled.div`
     flex-direction: column;
     align-items: center;
     p {
-        padding-top: 20px;
         font-family: 'NanumSquareNeo';
         font-size: 14px;
         color: #27c71e;
@@ -237,4 +278,8 @@ const CameraIcon = styled.div`
     width: 30px;
     height: 30px;
     font-size: 1.7rem;
+`;
+
+const ChangePassword = styled.div`
+    text-align: start;
 `;
