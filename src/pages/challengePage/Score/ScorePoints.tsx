@@ -3,7 +3,6 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
-
 const ScorePoints = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -78,6 +77,7 @@ const ScorePoints = () => {
             const intervalId = setInterval(async () => {
                 if (videoRef.current && ctx) {
                     const poses = await detector.estimatePoses(videoRef.current, { maxPoses: 1 });
+
                     // canvas 초기화
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     // 비디오 프레임을 캔버스에 렌더링
@@ -86,8 +86,8 @@ const ScorePoints = () => {
                         pose.keypoints.forEach((keypoint) => {
                             const x = keypoint.x;
                             const y = keypoint.y;
-                            // console.log(x, 'x');
-                            // console.log(y, 'y');
+                            console.log(x, 'x');
+                            console.log(y, 'y');
                             // 각각의 keypoint를 빨간 점으로 표시
                             ctx.beginPath();
                             ctx.fillStyle = 'red';

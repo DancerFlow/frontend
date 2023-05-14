@@ -33,13 +33,27 @@ export const fetchMusicSearch = async (keyword: string) => {
 };
 
 export const patchMusicLike = async (musicId: number) => {
-    const response = await axios.patch(`${BASE_URL}/music/like/${musicId}`);
+    const response = await axios.patch(
+        `${BASE_URL}/music/like/${musicId}`,
+        {},
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        }
+    );
     const json = response.data;
     return json;
 };
 
 export const deleteMusicLike = async (musicId: number) => {
-    const response = await axios.delete(`${BASE_URL}/music/like/${musicId}`);
+    const response = await axios.delete(`${BASE_URL}/music/like/${musicId}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    });
     const json = response.data;
     return json;
 };
