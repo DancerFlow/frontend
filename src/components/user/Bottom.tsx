@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { UserLikes } from '../../interface';
-import { useGetUserLikes } from '../../api/useGetUserLikes';
+import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
 export default function Bottom() {
-    const { data, isLoading, isError, error } = useGetUserLikes(1);
+    const { data, isLoading, isError, error } = useGetUserLikesQuery(1);
     // console.log('fetchedLikedData', data);
 
     if (isLoading) {

@@ -4,7 +4,7 @@ import Content from '../../components/musicList/content/';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
-import { useGetUserLikes } from '../../api/useGetUserLikes';
+import { useGetUserLikes } from '../../api/useGetUserLikesQuery';
 
 import { Music } from '../../interface';
 import { UserLikes } from '../../interface';

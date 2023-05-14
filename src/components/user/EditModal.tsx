@@ -12,33 +12,36 @@ export default function EditModal() {
         <>
             <ModalBackground />
             <FormS>
-                <FieldContainer>
-                    <Fieldset>
-                        <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
-                    </Fieldset>
+                <FormContainer>
+                    {' '}
+                    <FieldContainer>
+                        <Fieldset>
+                            <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
+                        </Fieldset>
 
-                    <Fieldset>
-                        <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
-                    </Fieldset>
+                        <Fieldset>
+                            <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
+                        </Fieldset>
 
-                    <Fieldset>
-                        <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
-                    </Fieldset>
+                        <Fieldset>
+                            <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
+                        </Fieldset>
 
-                    <Fieldset>
-                        <input
-                            required
-                            ref={passwordConfirmRef}
-                            id="passwordConfirm"
-                            type="password"
-                            name="password"
-                            placeholder="confirm password"
-                        />
-                    </Fieldset>
+                        <Fieldset>
+                            <input
+                                required
+                                ref={passwordConfirmRef}
+                                id="passwordConfirm"
+                                type="password"
+                                name="password"
+                                placeholder="confirm password"
+                            />
+                        </Fieldset>
 
-                    <LoginButton>Edit</LoginButton>
-                    <p>{formValid}</p>
-                </FieldContainer>
+                        <LoginButton>Edit</LoginButton>
+                        <p>{formValid}</p>
+                    </FieldContainer>
+                </FormContainer>
             </FormS>
         </>
     );
@@ -63,6 +66,7 @@ const FormS = styled.div`
     justify-content: center;
     display: flex;
 `;
+
 const FormContainer = styled.div`
     /* display: flex;
     padding: 50px 20px 50px 20px;

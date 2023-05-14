@@ -2,7 +2,7 @@ import { UserGameHistoryDetail } from '../interface';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
-export const useGetGameHistoryDetail = (music_id: number) => {
+export const useGetGameHistoryDetailQuery = (music_id: number) => {
     const currentDate = new Date();
 
     const gamehistoryDetail: UserGameHistoryDetail[] = [
