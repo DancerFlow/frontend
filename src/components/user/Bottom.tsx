@@ -5,7 +5,7 @@ import { UserLikes } from '../../interface';
 import { useGetUserLikes } from '../../api/useGetUserLikes';
 
 export default function Bottom() {
-    const { data, isLoading, isError, error } = useGetUserLikes(12, 1);
+    const { data, isLoading, isError, error } = useGetUserLikes(1);
     // console.log('fetchedLikedData', data);
 
     if (isLoading) {

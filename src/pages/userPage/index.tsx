@@ -6,9 +6,9 @@ import Bottom from '../../components/user/Bottom';
 const UserPage = () => {
     return (
         <Container>
-            <Profile></Profile>
-            <Main></Main>
-            <Bottom></Bottom>
+            <Profile />
+            <Main />
+            <Bottom />
         </Container>
     );
 };

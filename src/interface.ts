@@ -43,7 +43,7 @@ export interface UserRank {
 }
 
 export interface Stamps {
-    created_at: Date[];
+    created_at: string[];
 }
 
 export interface UserGameHistory {
@@ -78,7 +78,7 @@ export interface Music {
     _genre: string | null;
     music_singer: MusicSinger;
     album_image_url: string;
-    
+
     likes?: number;
     music_genre?: string;
     palyed?: number;

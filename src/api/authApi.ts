@@ -4,7 +4,8 @@ import { UserForm, UserRespose } from '../interface';
 const BASE_URL = 'http://localhost:8000';
 
 export const authApi = axios.create({
-    baseURL: BASE_URL
+    baseURL: BASE_URL,
+    withCredentials: true
 });
 
 export const signUpAxios = async (userData: UserForm) => {

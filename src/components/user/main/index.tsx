@@ -11,9 +11,8 @@ import ScoreInfo from './ScoreInfo';
 
 export default function Main() {
     const [selected, setSelected] = useState(0);
-    const { data: gamehistory, isLoading, isError } = useGetGameHistory(12, 1);
+    const { data: gamehistory, isLoading, isError } = useGetGameHistory(1);
     const gamehistoryDetail = useGetGameHistoryDetail(selected);
-    console.log('selected', selected);
 
     // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
     useEffect(() => {
