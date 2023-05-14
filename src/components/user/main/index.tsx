@@ -4,15 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 import { UserGameHistory } from '../../../interface';
-import { useGetGameHistory } from '../../../api/useGetGameHistory';
-import { useGetGameHistoryDetail } from '../../../api/useGetGameHistoryDetail';
+import { useGetGameHistoryQuery } from '../../../api/useGetGameHistoryQuery';
 import { useState } from 'react';
 import ScoreInfo from './ScoreInfo';
 
 export default function Main() {
     const [selected, setSelected] = useState(0);
-    const { data: gamehistory, isLoading, isError } = useGetGameHistory(1);
-    const gamehistoryDetail = useGetGameHistoryDetail(selected);
+    const { data: gamehistory, isLoading, isError } = useGetGameHistoryQuery(1);
 
     // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
     useEffect(() => {
@@ -64,7 +62,7 @@ export default function Main() {
                         <div>No game history</div>
                     )}
                 </CardContainer>
-                <ScoreInfo gamehistoryDates={gamehistoryDetail.music_score_by_date}></ScoreInfo>
+                <ScoreInfo musicId={selected}></ScoreInfo>
             </Section>
         </Container>
     );

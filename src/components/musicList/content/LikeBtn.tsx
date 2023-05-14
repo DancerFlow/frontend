@@ -1,24 +1,49 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeQuery';
-import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeQuery';
+import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
+import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
+import { useMutation, useQueryClient } from 'react-query';
 interface Props {
     onClick: () => void;
+    isLiked: boolean;
+    musicId: number;
 }
 
-const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId }) => {
-    const [liked, setLiked] = useState(isLiked);
+interface Props {
+    onClick: () => void;
+    isLiked: boolean;
+    musicId: number;
+    musicDetailInfo: any; // make sure to replace 'any' with the actual type
+}
 
-    const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId);
-    const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId);
+const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }) => {
+    const [liked, setLiked] = useState(isLiked);
+    const queryClient = useQueryClient();
+    const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['music', musicId]);
+            queryClient.invalidateQueries(['userlikes', 1]);
+
+            setLiked(true);
+        },
+        onError: () => {}
+    });
+    const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['music', musicId]);
+            queryClient.invalidateQueries(['userlikes', 1]);
+            setLiked(false);
+        },
+        onError: () => {
+            alert('Error updating unlike status');
+        }
+    });
 
     const handleClick = () => {
         if (liked) {
             deleteMusicLikeMutation.mutate();
-            setLiked(false);
         } else {
             patchMusicLikeMutation.mutate();
-            setLiked(true);
         }
         onClick();
     };
@@ -28,19 +53,20 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId }) => {
             <button onClick={handleClick} style={{ backgroundColor: liked ? 'green' : 'gray', color: 'white' }}>
                 {liked ? 'Liked' : 'Like'}
             </button>
+            <p>Likes: {musicDetailInfo.likes}</p>
         </LikeController>
     );
 };
-
 const LikeController = styled.div`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
     width: 100px;
     height: 50px;
-    position: absolute;
+    /* position: absolute;
     top: 1;
-    left: 0;
+    left: 0; */
     border-radius: 10px;
 `;
 

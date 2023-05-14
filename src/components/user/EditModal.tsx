@@ -1,44 +1,153 @@
 import styled from 'styled-components';
 import { useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { Profile } from '../../interface';
+import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
+import axios from 'axios';
+import { useMutation } from 'react-query';
 
-export default function EditModal() {
-    const emailRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const passwordConfirmRef = useRef<HTMLInputElement>(null);
-    const nicknameRef = useRef<HTMLInputElement>(null);
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+export default function EditModal({ profile, onCloseModal }: { profile: Profile; onCloseModal: () => void }) {
+    // const avatarRef = useRef<HTMLInputElement>(null);
     const [formValid, setFormValid] = useState<string>('');
+    const [avatarImage, setAvatarImage] = useState<string>('');
+    const [nickname, setNickname] = useState('');
+    const [formValues, setFormValues] = useState({
+        current_password: '',
+        new_password: '',
+        passwordconfirm: ''
+    });
+
+    console.log('modal rerendered');
+
+    const mutation = useMutation(async ({ current_password, new_password }) => {
+        const response = await axios.patch(`${baseUrl}user/password`, { current_password, new_password }, { withCredentials: true });
+        return response.data;
+    });
+
+    const handleBlur = () => {
+        if (formValues.new_password !== formValues.passwordconfirm) {
+            setFormValid('비밀번호가 일치하지 않습니다.');
+        } else {
+            setFormValid('');
+        }
+    };
+
+    const handleSubmit = () => {
+        if (formValues.new_password !== formValues.passwordconfirm) {
+            return;
+        }
+
+        console.log('form', formValues);
+        mutation.mutate(formValues);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            [name]: value
+        }));
+    };
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imageUrl = event.target?.result as string;
+                setAvatarImage(imageUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    if (!profile) {
+        return <FormS>'loading profile...'</FormS>;
+    }
 
     return (
         <>
-            <ModalBackground />
+            <ModalBackground onClick={onCloseModal} />
             <FormS>
-                <FieldContainer>
-                    <Fieldset>
-                        <input placeholder="enter email" required ref={emailRef} id="email" type="email" name="email" />
-                    </Fieldset>
+                <FormContainer>
+                    <FieldContainer>
+                        <label htmlFor="avatar">
+                            <AvatarContainer>
+                                <AvatarImage src={profile?.profile_image_url} alt="Profile Image" />
+                                <CameraIcon>
+                                    <FontAwesomeIcon icon={faCamera} />
+                                    <input
+                                        type="file"
+                                        id="avatar"
+                                        name="avatar"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        style={{ display: 'none' }}
+                                    />
+                                </CameraIcon>
+                            </AvatarContainer>
+                        </label>
 
-                    <Fieldset>
-                        <input required ref={nicknameRef} id="nickname" type="text" name="nickname" placeholder="enter nickname" />
-                    </Fieldset>
+                        <Fieldset>
+                            <label htmlFor="nickname">Nickname</label>
+                            <input
+                                // required
+                                id="nickname"
+                                type="text"
+                                name="nickname"
+                                placeholder="enter nickname"
+                                defaultValue={profile?.nickname}
+                            />
+                        </Fieldset>
+                        <Line />
+                        {/* <ChangePassword>Change Password</ChangePassword> */}
+                        <Fieldset>
+                            <label htmlFor="password">current password</label>
+                            <input
+                                // required
+                                type="password"
+                                name="current_password"
+                                placeholder="Enter current password"
+                                value={formValues.current_password}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                            />
+                        </Fieldset>
 
-                    <Fieldset>
-                        <input required ref={passwordRef} id="password" type="password" name="password" placeholder="enter password" />
-                    </Fieldset>
+                        <Fieldset>
+                            <label htmlFor="new_password">new password</label>
+                            <input
+                                type="password"
+                                name="new_password"
+                                placeholder="Enter new password"
+                                value={formValues.new_password}
+                                onChange={handleInputChange}
+                            />
+                        </Fieldset>
 
-                    <Fieldset>
-                        <input
-                            required
-                            ref={passwordConfirmRef}
-                            id="passwordConfirm"
-                            type="password"
-                            name="password"
-                            placeholder="confirm password"
-                        />
-                    </Fieldset>
-
-                    <LoginButton>Edit</LoginButton>
-                    <p>{formValid}</p>
-                </FieldContainer>
+                        <Fieldset>
+                            <label htmlFor="passwordconfirm">confirm new password</label>
+                            <input
+                                id="passwordconfirm"
+                                type="password"
+                                name="passwordconfirm"
+                                placeholder="Confirm new password"
+                                value={formValues.passwordconfirm}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                            />
+                        </Fieldset>
+                        <p style={{ color: 'red' }}>{formValid}</p>
+                        <EditButton onClick={handleSubmit} disabled={formValues.new_password !== formValues.passwordconfirm}>
+                            Edit
+                        </EditButton>
+                        {mutation.isError ? <div>An error occurred: {mutation?.error?.message}</div> : null}
+                        {mutation.isSuccess ? <div>Todo added!</div> : null}
+                    </FieldContainer>
+                </FormContainer>
             </FormS>
         </>
     );
@@ -63,8 +172,9 @@ const FormS = styled.div`
     justify-content: center;
     display: flex;
 `;
+
 const FormContainer = styled.div`
-    /* display: flex;
+    display: flex;
     padding: 50px 20px 50px 20px;
     border-radius: 4px;
     width: 500px;
@@ -88,7 +198,11 @@ const FormContainer = styled.div`
     }
     input:focus {
         outline: 2px solid #27fd1c;
-    } */
+    }
+
+    label {
+        font-size: 10px;
+    }
 `;
 
 const FieldContainer = styled.div`
@@ -96,7 +210,6 @@ const FieldContainer = styled.div`
     flex-direction: column;
     align-items: center;
     p {
-        padding-top: 20px;
         font-family: 'NanumSquareNeo';
         font-size: 14px;
         color: #27c71e;
@@ -111,7 +224,8 @@ const Fieldset = styled.fieldset`
     padding: 0;
     border: none;
 `;
-const LoginButton = styled.button.attrs({ type: 'submit' })`
+
+const EditButton = styled.button.attrs({ type: 'submit' })`
     height: 40px;
     width: 200px;
     border-radius: 0px;
@@ -129,26 +243,43 @@ const LoginButton = styled.button.attrs({ type: 'submit' })`
     }
 `;
 
-const SelectContainer = styled.div`
+const Line = styled.hr`
+    width: 100%;
+    height: 1px;
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+`;
+
+const AvatarContainer = styled.div`
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`;
+
+const AvatarImage = styled.img`
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+`;
+
+const CameraIcon = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 10px;
-    a {
-        margin: 0px 10px;
-        border: solid #27fd1c;
-        border-width: 0 0 1px 0;
-        cursor: pointer;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 1.7rem;
 `;
 
-const ReturnButton = styled.div`
-    color: #27fd1c;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 24px;
-    padding: 10px;
-    font-family: 'NanumSquareNeoBold';
-    cursor: pointer;
+const ChangePassword = styled.div`
+    text-align: start;
 `;

@@ -63,7 +63,7 @@ export interface UserGameHistoryDetail {
         miss: number;
     };
     music_total_score: number;
-    music_score_by_date: { music_score: number; music_score_created_at: Date }[];
+    music_score_list: { music_score: number; music_score_created_at: String }[];
 }
 
 interface MusicSinger {
