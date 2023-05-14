@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
@@ -21,14 +21,16 @@ export default function Room({ area }) {
 
     const navigate = useNavigate();
 
+    useEffect(() => void (document.body.style.cursor = hovered ? 'pointer' : 'auto'), [hovered]);
+    const onPointerOver = useCallback(() => setHovered(true), []);
+    const onPointerOut = useCallback(() => setHovered(false), []);
+
     useFrame((state, delta) => {
         easing.damp3(ref.current.scale, area === 3 ? 1 : 0.2, 0.1, 0.01);
-        easing.damp(state.camera.position, 'y', area === 3 ? 2 : 5, 0.5, 0.02);
     });
 
     const handleHouseClick = (e) => {
         e.stopPropagation();
-        setHovered((cur) => !cur);
     };
 
     return (

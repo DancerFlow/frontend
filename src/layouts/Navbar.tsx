@@ -33,11 +33,13 @@ export default function NavBar() {
     }, []);
 
     const navLinks = [
-        { to: 'challenge', text: 'login' },
-        { to: '', text: 'main' },
+        { to: '', text: 'home' },
         { to: 'mode', text: 'select mode' },
-        { to: 'musiclist', text: 'music list' },
+        { to: 'musiclist', text: 'challenge' },
+        { to: 'musiclist', text: 'practice' },
         { to: 'user', text: 'my page' },
+        { to: '', text: '-개발이후삭제-' },
+        { to: 'challenge', text: 'gamescreen' },
         { to: 'admin', text: 'admin' },
         { to: 'result', text: 'result' }
     ];
@@ -59,10 +61,13 @@ export default function NavBar() {
                             <ul>
                                 {navLinks.map((navLink, index) => (
                                     <li key={index} onClick={() => setOpen(false)}>
-                                        <NavLink to={navLink.to}>{navLink.text}</NavLink>
+                                        <NavLink to={navLink.to}>
+                                            <span>{navLink.text}</span>
+                                        </NavLink>
                                     </li>
                                 ))}
                             </ul>
+                            <ul className="contact us"></ul>
                         </SideNav>
                     </CSSTransition>
                 )}
@@ -85,7 +90,7 @@ const Button = styled.button`
     top: 1rem;
     left: 1.5rem;
     border: 0;
-    background-color: ${(props) => props.theme.pink};
+    background-color: ${(props) => props.theme.green};
     padding: 0.5rem 0.6rem;
     border-radius: 5px;
     cursor: pointer;
@@ -94,11 +99,11 @@ const Button = styled.button`
 const SideNav = styled.aside`
     position: fixed;
     z-index: 2000;
-    background-color: ${(props) => props.theme.pink};
+    background-color: ${(props) => props.theme.blue};
     top: 0;
     left: 0;
     bottom: 0;
-    width: 200px;
+    width: 300px;
 
     button {
         border: none;
@@ -111,14 +116,28 @@ const SideNav = styled.aside`
     }
 
     a {
+        span {
+            font-size: 36px;
+            font-family: 'NanumSquareNeoHeavy';
+            color: ${(props) => props.theme.green};
+            transition: letter-spacing 0.3s ease-in-out;
+        }
+        span:hover {
+            letter-spacing: 1.5px;
+        }
+        transform: skew(-6deg);
         display: block;
         text-decoration: none;
         padding: 1rem 1.5rem;
     }
 
     a.active {
-        /* background-color: rgba(255, 255, 255, 0.5); */
-        background-color: ${(props) => props.theme.green};
+        span {
+            -webkit-text-stroke: 1.5px #27fd1c;
+            color: transparent;
+            text-decoration-line: underline;
+            text-underline-offset: 7px;
+        }
     }
 
     &.sidenav-enter {
@@ -141,10 +160,10 @@ const SideNav = styled.aside`
 `;
 
 const IconWrapper = styled.div`
-    text-align: start;
+    text-align: end;
     margin: 1rem 1.5rem;
 `;
 const CloseFontAwesomeIcon = styled(FontAwesomeIcon)`
-    color: #ffffff;
+    color: ${(props) => props.theme.green};
     cursor: pointer;
 `;

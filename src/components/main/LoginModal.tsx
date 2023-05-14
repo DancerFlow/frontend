@@ -19,10 +19,6 @@ const LoginModal = ({ setIsClicked }: Props) => {
     const { verifyUser, state } = useContext(GlobalContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (state.userState.login) navigate('/mode');
-    }, []);
-
     const handleModalClick = () => {
         setIsClicked(false);
         setIsSignUp(false);

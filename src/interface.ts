@@ -1,6 +1,6 @@
 export interface Status {
     error?: object;
-    massage?: string;
+    message?: string;
     status_code?: number;
 }
 
