@@ -41,7 +41,7 @@ export interface UserRank {
 }
 
 export interface Stamps {
-    created_at: Date[];
+    created_at: string[];
 }
 
 export interface UserGameHistory {
