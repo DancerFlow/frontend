@@ -14,13 +14,28 @@ import { useState } from 'react';
 import { useGetGameStamps } from '../../api/useGetGameStamps';
 import smileSvg from '../../assets/smile.svg';
 
+import ReactDOM from 'react-dom';
+import EditModal from './EditModal';
+
 export default function Profile() {
+    //edit profile
+    const [isClicked, setIsClicked] = useState(false);
+    const handleOpenModal = () => {
+        setIsClicked(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsClicked(false);
+    };
+
+    //calendar
     const currDate = new Date();
     const [activeMonth, setActiveMonth] = useState(currDate.getMonth() + 1);
     const [activeYear, setActiveYear] = useState(currDate.getFullYear());
 
-    const { data: profile, isLoading, isError } = useGetUserProfile(12);
-    const { data: calendarData } = useGetGameStamps(12, activeYear, activeMonth);
+    const { data: profile, isLoading, isError } = useGetUserProfile();
+    const { data: calendarData } = useGetGameStamps(activeYear, activeMonth);
+    console.log('calender', calendarData);
 
     const tileContent = ({ date }: { date: Date }) => {
         const formattedDate = date.toISOString().split('T')[0];
@@ -46,7 +61,8 @@ export default function Profile() {
                         <UserInfo>
                             <Title>Hello, {profile?.nickname}</Title>
                             <div>
-                                <EditProfile>Edit Profile</EditProfile> <FontAwesomeIcon icon={faPen} style={{ display: 'inline' }} />
+                                <EditProfile onClick={handleOpenModal}>Edit Profile</EditProfile>
+                                <FontAwesomeIcon icon={faPen} style={{ display: 'inline' }} onClick={handleOpenModal} />
                             </div>
                         </UserInfo>
                     </Header>
@@ -67,7 +83,7 @@ export default function Profile() {
                             </CalendarTitle>
                             <StyledCalendar
                                 calendarType="US"
-                                formatDay={(locale, date) => date.toLocaleString('en', { day: 'numeric' })}
+                                formatDay={(locale, date) => date.toLocaleString(locale, { day: 'numeric' }).replace('일', '')}
                                 onActiveStartDateChange={({ activeStartDate }) => {
                                     if (activeStartDate) {
                                         setActiveMonth(activeStartDate.getMonth() + 1);
@@ -78,6 +94,7 @@ export default function Profile() {
                             />
                         </CalendarContainer>
                     </Sidebar>
+                    {ReactDOM.createPortal(<EditModal />, document.getElementById('modal-root') as HTMLElement)}
                 </>
             )}
         </>
@@ -120,6 +137,7 @@ const Avatar = styled.img`
 
 const EditProfile = styled.p`
     padding-top: 0.5rem;
+    cursor: pointer;
 `;
 
 // Sidebar
@@ -266,7 +284,9 @@ const StyledCalendar = styled(Calendar)`
         color: #fff;
         margin-bottom: 1rem;
     }
-
+    .react-calendar__month-view__days__day--neighboringMonth {
+        color: grey;
+    }
     button {
         border: 0;
         background-color: transparent;

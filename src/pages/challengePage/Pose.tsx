@@ -91,7 +91,7 @@ const Pose = ({ setKeypointsDetected }) => {
 
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
-                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.2); // score가 0.2 이상인 keypoints만 valid로 가정
+                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.2 이상인 keypoints만 valid로 가정
                         setKeypointsDetected(validKeypoints.length);
 
                         // canvas 초기화

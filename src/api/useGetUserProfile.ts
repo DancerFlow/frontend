@@ -4,9 +4,11 @@ import { Profile } from '../interface';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const getUserProfile = async (userId: number): Promise<Profile> => {
-    const response = await axios.get(`${baseUrl}user/profile/${userId}`);
+const getUserProfile = async (): Promise<Profile> => {
+    const response = await axios.get(`${baseUrl}user/profile/`, {
+        withCredentials: true
+    });
     return response.data;
 };
 
-export const useGetUserProfile = (userId: number) => useQuery({ queryKey: ['userprofile'], queryFn: () => getUserProfile(userId) });
+export const useGetUserProfile = () => useQuery({ queryKey: ['userprofile'], queryFn: () => getUserProfile() });
