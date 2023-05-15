@@ -26,7 +26,7 @@ const musicVariants = {
 
 const musicInfoVariants = {
     hover: {
-        opacity: 0.8,
+        opacity: 1,
         transition: {
             delay: 0,
             type: 'tween'
@@ -113,6 +113,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                                 variants={musicVariants}
                             >
                                 <MusicInfo variants={musicInfoVariants}>
+                                    <div></div>
                                     <h1>{data.name}</h1>
                                     <h4>{data.music_singer.name}</h4>
                                 </MusicInfo>
@@ -175,7 +176,7 @@ const MusicCard = styled(motion.div)<{ img: string }>`
 
     cursor: pointer;
     &:hover {
-        box-shadow: ${(props) => props.theme.pink} 0px 5px 15px;
+        box-shadow: 0 0 14px rgb(0, 0, 0);
     }
 
     @media screen and (max-width: 1500px) {
@@ -184,7 +185,6 @@ const MusicCard = styled(motion.div)<{ img: string }>`
 `;
 
 const MusicInfo = styled(motion.div)`
-    background-color: ${(props) => props.theme.pink};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -192,18 +192,19 @@ const MusicInfo = styled(motion.div)`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 30%;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: 100%;
+    background-color: #3d3d3d9f;
+
     cursor: pointer;
 
     h1 {
         text-align: center;
         font-size: 15px;
-        color: ${(props) => props.theme.yellow};
+        color: white;
         font-weight: 700;
         z-index: 99;
         margin-bottom: 5px;
+        font-family: 'NanumSquareNeoExtraBold';
         @media screen and (max-width: 1500px) {
             font-size: 15px;
         }
@@ -212,8 +213,9 @@ const MusicInfo = styled(motion.div)`
     h4 {
         text-align: center;
         font-size: 13px;
-        color: ${(props) => props.theme.blue};
-        font-weight: 700;
+        color: ${(props) => props.theme.pink};
+        font-family: 'NanumSquareNeoExtraBold';
+
         @media screen and (max-width: 1500px) {
             font-size: 10px;
         }

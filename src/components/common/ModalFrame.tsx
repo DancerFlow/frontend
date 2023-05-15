@@ -60,10 +60,10 @@ const Background = styled.div`
 const ModalBlock = styled.div`
     position: absolute;
     top: 3.5rem;
-    border-radius: 10px;
-    padding: 1.5rem;
+    padding: 2rem;
     background-color: ${(props) => props.theme.modal.background};
     width: 55rem;
+    border-radius: 10px;
     @media (max-width: 1120px) {
         width: 50rem;
     }
@@ -93,11 +93,14 @@ const Close = styled.div`
     right: 0.5rem;
     top: 0.2rem;
     cursor: pointer;
+    color: white;
 `;
 
 const Contents = styled.div`
     display: flex;
     align-items: center;
+    flex-direction: column;
+
     width: 100%;
     height: 80vh;
 `;

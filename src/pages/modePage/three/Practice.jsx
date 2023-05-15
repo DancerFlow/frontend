@@ -40,7 +40,7 @@ export default function Practice({ area }) {
                 receiveShadow
                 onPointerOut={onPointerOut}
                 onPointerOver={onPointerOver}
-                onClick={() => navigate('/musiclist')}
+                onClick={() => navigate('/musiclist/practice')}
             ></primitive>
             {area === 0 && <spotLight position={[5, 5, -1]} color="blue" castShadow></spotLight>}
         </group>

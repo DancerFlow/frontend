@@ -40,7 +40,7 @@ export default function Challenge({ area }) {
                 receiveShadow
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
-                onClick={() => navigate('/musiclist')}
+                onClick={() => navigate('/musiclist/challenge')}
             >
                 <meshStandardMaterial emissive={[0.5, 0.5, 0.5]} color={[0, 0, 0]} />
             </primitive>
