@@ -126,11 +126,17 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
 
     const handleToggleNickname = () => {
         setChangeNicknameEnabled(!changeNicknameEnabled);
+        setNicknameValid('');
     };
 
     const handleTogglePassword = () => {
         setChangePasswordEnabled(!changePasswordEnabled);
         setFormValues((prev) => ({ ...prev, current_password: '', new_password: '' }));
+        setFormValid('');
+
+        if (passwordConfirmRef.current) {
+            passwordConfirmRef.current.value = '';
+        }
     };
 
     const handleDuplicateCheck = () => {
@@ -270,6 +276,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                             Update
                         </EditButton>
                     </FieldContainer>
+                    <p>회원탈퇴</p>
                 </FormContainer>
             </FormS>
         </>
