@@ -49,12 +49,16 @@ export default function NavBar() {
     };
 
     const navLinks = [
-        { to: '', text: 'home' },
-        { to: 'mode', text: 'select mode' },
-        { to: 'musiclist', text: 'challenge' },
-        { to: 'musiclist', text: 'practice' },
-        { to: 'user', text: 'my page' }
+        { to: '', text: 'Home' },
+        { to: 'mode', text: 'Select Mode' },
+        { to: 'musiclist/challenge', text: 'Challenge' },
+        { to: 'musiclist/practice', text: 'Practice' },
+        { to: 'user', text: 'My Page' }
     ];
+
+    if (!state.userState.login) {
+        navLinks.pop();
+    }
 
     return (
         <>
@@ -116,7 +120,7 @@ const SideNav = styled.aside`
     top: 0;
     left: 0;
     bottom: 0;
-    width: 300px;
+    width: 310px;
 
     button {
         border: none;

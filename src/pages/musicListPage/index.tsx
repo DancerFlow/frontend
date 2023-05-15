@@ -8,6 +8,8 @@ import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
 import { UserLikes } from '../../interface';
 import LaserAnimation from '../../hooks/LazerAnimation';
+import ModeBackground from '../../components/musicList/content/ModeBackGround';
+import { useParams } from 'react-router-dom';
 
 export enum FilterType {
     Popular = 'popular',
@@ -19,6 +21,7 @@ const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState<FilterType | ''>(FilterType.Popular);
     const [inputValue, setInputValue] = useState('');
     const [searchMusic, setSearchMusic] = useState<string | undefined>(undefined);
+    const { mode } = useParams();
 
     // 전체 리스트 (좋아요, 최신순)
     const {
@@ -90,7 +93,8 @@ const MusicListPage = () => {
 
     return (
         <Wrapper>
-            <LaserAnimation />
+            {/* <LaserAnimation /> */}
+            <ModeBackground mode={mode} />
             <Filter
                 onFilter={handleSort}
                 selected={selectedFilter}

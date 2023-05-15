@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import bgVideo from '../../assets/dancerflow.mp4';
+import { useContext } from 'react';
+import { GlobalContext } from '../../context/Context';
 
 interface Props {
     isClicked: boolean;
@@ -10,6 +12,7 @@ interface Props {
 const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
     const [isHover, setIsHover] = useState<boolean>(false);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const { bgmControl } = useContext(GlobalContext);
 
     useEffect(() => {
         if (videoRef.current == null) return;

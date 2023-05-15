@@ -10,8 +10,6 @@ interface Props {
 
 const NavUserInfo = ({ onLogout }: Props) => {
     const { data: profile, isLoading, isError } = useGetUserProfileQuery();
-
-    console.log(profile);
     if (isLoading) {
         return <div>Loading profile...</div>;
     }

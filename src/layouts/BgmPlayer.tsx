@@ -1,43 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Lottie from 'lottie-react';
 import ReactHowler from 'react-howler';
 import styled, { keyframes } from 'styled-components';
+import { useContext } from 'react';
 
+import { GlobalContext } from '../context/Context';
 import bgm from '../assets/rukunetsu.mp3';
 import bgmOnOff from '../assets/bgmOnOff.json';
 
 const BgmPlayer = () => {
-    const [isSoundOn, setIsSoundOn] = useState<boolean>(false);
     const lottieRef = useRef<any>(null);
+    const { bgmControl, state } = useContext(GlobalContext);
 
     useEffect(() => {
-        isSoundOn ? lottieRef.current.playSegments([37, 67], true) : lottieRef.current.playSegments([5, 33], true);
-    }, [isSoundOn]);
+        state.bgmState.bgm ? lottieRef.current.playSegments([37, 67], true) : lottieRef.current.playSegments([5, 33], true);
+    }, [state.bgmState.bgm]);
 
     const handleSound = () => {
-        setIsSoundOn((cur) => !cur);
+        bgmControl({ bgm: !state.bgmState.bgm });
     };
 
     return (
         <>
+            {' '}
             <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
                 <span>신나는 브금이랑 함께 하실래요?</span>
                 <div
                     onClick={() => {
-                        setIsSoundOn(true);
+                        bgmControl({ bgm: true });
                     }}
                 >
                     넹!
                 </div>
                 <div
                     onClick={() => {
-                        setIsSoundOn(false);
+                        bgmControl({ bgm: false });
                     }}
                 >
                     아뇨
                 </div>
             </ConfirmSoundPlay>
-            <ReactHowler src={[bgm]} playing={isSoundOn} volume={0.2} loop={true} />
+            <ReactHowler src={[bgm]} playing={state.bgmState.bgm} volume={0.1} loop={true} />
             <BgmController onClick={handleSound}>
                 <Lottie lottieRef={lottieRef} animationData={bgmOnOff} loop={false} autoPlay={false}></Lottie>
             </BgmController>
