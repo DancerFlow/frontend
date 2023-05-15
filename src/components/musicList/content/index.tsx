@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import ContentSlide from './ContentSlide';
 import { Music } from '../../../interface';
@@ -6,11 +6,12 @@ import MusicModal from './MusicModal';
 
 export interface ContentProps {
     musicList: Music[];
+    likeMusicIds: number[] | undefined;
 }
 
 const Content = ({ musicList, likeMusicIds }: ContentProps) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [musicId, setMusicId] = useState<number | undefined>();
+    const [musicId, setMusicId] = useState<number>();
 
     const handleModalOpen = async (musicId: number) => {
         setIsOpenModal(!isOpenModal);
@@ -26,7 +27,12 @@ const Content = ({ musicList, likeMusicIds }: ContentProps) => {
             {musicList?.length ? (
                 <Wrapper>
                     <ContentSlide onMusicClick={handleModalOpen} musicList={musicList} onModalClose={setIsOpenModal} />
-                    <MusicModal opened={isOpenModal} selected_music_id={musicId} onClose={handleModalClose} likeMusicIds={likeMusicIds} />
+                    <MusicModal
+                        opened={isOpenModal}
+                        selected_music_id={musicId || 0}
+                        onClose={handleModalClose}
+                        likeMusicIds={likeMusicIds || []}
+                    />
                 </Wrapper>
             ) : null}
         </>

@@ -6,10 +6,12 @@ interface ModalInfoProps {
     opened: boolean;
     onClose: () => void;
     selected_music_id: number;
+    likeMusicIds: number[];
 }
 
 const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds }: ModalInfoProps) => {
     // 찜목록 유무
+  
     const isLiked = likeMusicIds.includes(selected_music_id);
     const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(selected_music_id, {
         enabled: Boolean(selected_music_id)

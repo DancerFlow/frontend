@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8000';
 
-export const fetchMusicList = async (sort?) => {
+export const fetchMusicList = async (sort?: any) => {
     if (sort) {
         const response = await axios.get(`${BASE_URL}/music?sort=${sort}`);
         const json = response.data;
@@ -26,7 +26,7 @@ export const fetchMusicRank = async (musicId: number) => {
     return json;
 };
 
-export const fetchMusicSearch = async (keyword: string) => {
+export const fetchMusicSearch = async (keyword: string | undefined) => {
     const response = await axios.get(`${BASE_URL}/music/search/${keyword}`);
     const json = response.data;
     return json;

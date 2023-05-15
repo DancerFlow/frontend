@@ -23,7 +23,7 @@ const Rank = ({ rank, musicName, userAvatar, score }: RankProps) => {
     );
 };
 
-const TopRankingUI = ({ rankingList }) => {
+const TopRankingUI = ({ rankingList }: any) => {
     return (
         <MusicModalRankContent>
             <div className="rankList">
@@ -34,7 +34,7 @@ const TopRankingUI = ({ rankingList }) => {
                     </div>
                 </Header>
                 <RankList>
-                    {rankingList.map((rank) => (
+                    {rankingList.map((rank: any) => (
                         <Rank
                             key={rank.id}
                             rank={rank.rank}
@@ -105,7 +105,7 @@ const RankUserInfo = styled.div`
     flex: 1;
 `;
 
-const RankUserAvatar = styled.div`
+const RankUserAvatar = styled.div<{ rank: number }>`
     width: 3rem;
     height: 3rem;
     margin-right: ${(props) => (props.rank === 1 ? '-0.1rem' : '0.5rem')};

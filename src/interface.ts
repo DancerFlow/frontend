@@ -79,7 +79,7 @@ export interface Music {
 
     likes?: number;
     music_genre?: string;
-    palyed?: number;
+    played?: number;
     description?: string;
 }
 
