@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const numLasers = 250;
 const tail = 400;
 
-const createLasers = (n) => {
+const createLasers = (n: any) => {
     const lasers = [];
     for (let i = 0; i < n; ++i) {
         lasers.push({
@@ -17,14 +17,16 @@ const createLasers = (n) => {
 };
 
 const LaserAnimation = () => {
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const lasersRef = useRef(createLasers(numLasers));
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        if (canvas === null) return;
         const ctx = canvas.getContext('2d');
 
-        const renderLaser = (l) => {
+        const renderLaser = (l: any) => {
+            if (ctx === null) return;
             const grad = ctx.createLinearGradient(l.x, l.y, l.x, l.y + tail);
             const a = 1 - ((canvas.height - l.y) / canvas.height) * 0.8;
             grad.addColorStop(0, `hsla(340,100%,100%,${a})`);
@@ -36,15 +38,15 @@ const LaserAnimation = () => {
             ctx.stroke();
         };
 
-        const updateLaser = (l) => {
+        const updateLaser = (l: any) => {
             l.y -= l.s;
             if (l.y < -tail) {
                 l.y = window.innerHeight;
             }
-   
         };
 
-        const render = (lasers) => {
+        const render = (lasers: any) => {
+            if (ctx === null) return;
             ctx.fillStyle = 'hsl(261,43%,7%)';
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
             for (let l of lasers) {

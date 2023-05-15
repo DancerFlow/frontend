@@ -7,6 +7,6 @@ export enum FilterType {
     Like = 'isLiked'
 }
 
-export const useGetMusicListQuery = (filter: FilterType, options?: object) => {
+export const useGetMusicListQuery = (filter: FilterType | '', options?: object) => {
     return useQuery(['musicList', filter], () => fetchMusicList(filter), options);
 };

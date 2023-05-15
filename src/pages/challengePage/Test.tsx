@@ -32,12 +32,6 @@ const Test = () => {
         }
     }, [keypointsDetected, countDown, startCountdown]);
 
-    const handleVideoEnd = () => {
-        if (startCountdown) {
-            navigate('/result');
-        }
-    };
-
     const handleTimeUpdate = (e) => {
         setCurrentTime(e.target.currentTime);
     };
