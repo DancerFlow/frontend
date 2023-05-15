@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import fearness from '../../assets/fearless.mp4';
 import Pose from './Pose';
+import ScorePoints from './Score/ScorePoints';
 import answer from './Score/score.json';
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
@@ -55,7 +56,7 @@ const Test = () => {
                     <VideoWrapper>
                         <video
                             ref={videoRef}
-                            src={fearness}
+                            src="https://s3ai11team.s3.ap-northeast-2.amazonaws.com/fearless.mp4"
                             onEnded={handleVideoEnd}
                             onTimeUpdate={handleTimeUpdate}
                             style={{
@@ -73,7 +74,8 @@ const Test = () => {
                     <AreaHeader>
                         <CountDown>{message}</CountDown>
                     </AreaHeader>
-                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} />
+                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
+                    {/* <ScorePoints /> */}
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>

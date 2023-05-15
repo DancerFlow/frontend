@@ -4,15 +4,15 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import answer from './Score/score.json';
-
-const Pose = ({ setKeypointsDetected, currentTime }) => {
+import { forwardRef } from 'react';
+const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
+    const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
     const [lastSavedSecond, setLastSavedSecond] = useState(-1);
     const [savedKeypoints, setSavedKeypoints] = useState([]);
-
+    // console.log(scoreVideoRef, 'scoreVideoRef');
     // 연결할 keypoints
     const POSE_CONNECTIONS = [
         [3, 4],
@@ -128,9 +128,16 @@ const Pose = ({ setKeypointsDetected, currentTime }) => {
                     if (videoRef.current && detectorRef.current) {
                         const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
                         poses.forEach((pose) => {
-                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4);
-                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, validKeypoints]);
-                            console.log(validKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
+                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0);
+                            // Add the time property to each keypoint
+                            const timedKeypoints = validKeypoints.map((keypoint) => ({ ...keypoint, time: currentSecond }));
+                            // 'time'과 'keypoints' 속성을 가진 객체로 저장
+                            const poseData = {
+                                time: currentSecond,
+                                keypoints: timedKeypoints
+                            };
+                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
+                            console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
                         });
                         setLastSavedSecond(currentSecond); // 이 위치로 변경
                     }
@@ -140,6 +147,7 @@ const Pose = ({ setKeypointsDetected, currentTime }) => {
             };
             estimatePoses();
         }
+        console.log(savedKeypoints);
     }, [currentTime]);
 
     return (
@@ -148,7 +156,7 @@ const Pose = ({ setKeypointsDetected, currentTime }) => {
             <canvas ref={canvasRef}></canvas>
         </Container>
     );
-};
+});
 
 const Container = styled.div`
     height: 70%;
