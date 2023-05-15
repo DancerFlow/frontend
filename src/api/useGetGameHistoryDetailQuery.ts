@@ -8,8 +8,6 @@ const getUserGameHistoryDetail = async (musicId: number): Promise<UserGameHistor
     const response = await axios.get(`${baseUrl}user/game/history/${musicId}`, {
         withCredentials: true
     });
-
-    console.log('getgamehistorydetailquery', response.data);
     return response.data;
 };
 
