@@ -31,12 +31,14 @@ const Score = ({ setKeypointsDetected }) => {
                 });
                 // 'timeupdate' 이벤트 리스너 추가
                 videoRef.current.addEventListener('timeupdate', async () => {
-                    const currentTime = Math.round(videoRef.current.currentTime); // 현재 시간을 정수로 반올림
+                    const currentTime = Math.round(videoRef.current.currentTime * 2) / 2; // 현재 시간을 0.5초 단위로 반올림
+
                     // 현재 시간이 마지막으로 keypoints를 추출한 시간보다 크다면
                     if (currentTime > lastTime) {
                         lastTime = currentTime; // 마지막으로 keypoints를 추출한 시간을 업데이트
                         const pose = await detector.estimatePoses(videoRef.current, { maxPoses: 1 });
-                        const validKeypoints = pose[0].keypoints.filter((keypoint) => keypoint.score > 0.4);
+                        // const validKeypoints = pose[0].keypoints.filter((keypoint) => keypoint.score > 0);
+                        const validKeypoints = pose[0].keypoints;
                         setKeypointsDetected(validKeypoints.length);
                         keypointsArray.push({
                             time: currentTime,
@@ -50,6 +52,7 @@ const Score = ({ setKeypointsDetected }) => {
                 });
             }
         };
+
         runPoseEstimation();
     }, []);
 

@@ -22,7 +22,7 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId, {
         onSuccess: () => {
             queryClient.invalidateQueries(['music', musicId]);
-            queryClient.invalidateQueries(['userlikes', 1]);
+            queryClient.invalidateQueries(['userlikes']);
 
             setLiked(true);
         },
@@ -31,7 +31,7 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId, {
         onSuccess: () => {
             queryClient.invalidateQueries(['music', musicId]);
-            queryClient.invalidateQueries(['userlikes', 1]);
+            queryClient.invalidateQueries(['userlikes']);
             setLiked(false);
         },
         onError: () => {

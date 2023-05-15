@@ -37,7 +37,7 @@ const MusicListPage = () => {
     const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicSearchQuery(searchMusic);
 
     // 찜한 목록 리스트
-    const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikesQuery(1);
+    const { isLoading: musicLikeLoading, data: userLikesList } = useGetUserLikesQuery();
 
     const handleSort = (item: FilterType): void => {
         setSelectedFilter(item);
