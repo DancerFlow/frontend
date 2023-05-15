@@ -182,7 +182,6 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         }
     }, [videoEnded, navigate]);
 
-    
     return (
         <Container>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
@@ -192,8 +191,11 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 });
 
 const Container = styled.div`
-    height: 70%;
+    height: 70vh;
     width: 100%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
 `;
 
 const HiddenVideo = styled.video`

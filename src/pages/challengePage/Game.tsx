@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-
+import fearless from '../../assets/fearless.mp4';
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const [countDown, setCountDown] = useState(5);
@@ -9,16 +9,17 @@ const Game = () => {
     const [startCountdown, setStartCountdown] = useState(false);
     const [volume, setVolume] = useState(0.5); // 초기 볼륨을 100%로 설정
     const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
 
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
-    const minKeypointsCount = 16; // 최소 검출되어야하는 keypoints의 수
+    const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
 
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
         if (keypointsDetected < minKeypointsCount && !startCountdown) {
             setMessage('전신이 나오도록 위치해주세요.');
-            setCountDown(5); // Reset the countdown
+            setCountDown(3); // Reset the countdown
         } else if (keypointsDetected >= minKeypointsCount) {
             setStartCountdown(true); // Start the countdown
             setMessage(countDown > 0 ? countDown : 'Dance!');
@@ -44,21 +45,35 @@ const Game = () => {
     };
 
     const handleTimeUpdate = (e) => {
-        setCurrentTime(e.target.currentTime);
+        setCurrentTime(e.target.currentTime); // 비디오의 현재 재생 시간을 갱신
+    };
+
+    const handleLoadedMetadata = (e) => {
+        setDuration(e.target.duration); // 비디오의 총 길이를 갱신
+    };
+
+    // Bottom의 width를 계산하는 함수
+    const getBottomWidth = () => {
+        if (!duration) {
+            return '0%';
+        }
+        const percentage = (currentTime / duration) * 100;
+        return `${percentage}%`;
     };
 
     return (
         <>
             <Main>
-                <DancingArea>
+                <VideoArea>
                     <AreaHeader></AreaHeader>
                     <VideoWrapper>
                         <video
+                            className="answer-video"
                             ref={videoRef}
-                            src="https://s3ai11team.s3.ap-northeast-2.amazonaws.com/fearless.mp4"
+                            src={fearless}
+                            onLoadedMetadata={handleLoadedMetadata}
                             onTimeUpdate={handleTimeUpdate}
                             style={{
-                                pointerEvents: 'none',
                                 maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
                                 maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
                                 objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
@@ -76,21 +91,20 @@ const Game = () => {
                             onChange={handleVolumeChange}
                         />
                     </AreaFooter>
-                </DancingArea>
+                </VideoArea>
 
-                <VideoArea>
+                <DancingArea>
                     <AreaHeader>
                         <CountDown>{`${message}`}</CountDown>
-                        <p>{`${keypointsPercent.toFixed(2)}%`}</p>
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
                     </AreaFooter>
-                </VideoArea>
+                </DancingArea>
             </Main>
-            <Bottom></Bottom>
+            <Bottom style={{ width: getBottomWidth(), transition: 'width 0.5s ease' }}></Bottom>
         </>
     );
 };
@@ -108,31 +122,30 @@ const pulse = keyframes`
 `;
 
 const CountDown = styled.div`
-    /* position: absolute;
-    top: 12;
-    left: 50%; */
     transform: translate(-50%, -50%);
     font-size: 3rem;
     color: red;
     animation: ${pulse} 1s linear infinite;
 `;
 
+const VideoArea = styled.div`
+    flex: 1;
+    margin-left: 10px;
+`;
+
 const DancingArea = styled.div`
     flex: 1;
 `;
-
-const VideoArea = styled.div`
-    flex: 1;
-`;
-
 const VideoWrapper = styled.div`
-    height: 70%;
+    height: 70vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
 `;
-
 const AreaHeader = styled.div`
     display: flex;
     justify-content: center;
@@ -162,18 +175,20 @@ const progress = keyframes`
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
 `;
-
 const Bottom = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     width: 100%;
-    height: 150px; // 필요한 높이로 조정하세요.
+    height: 50px; // 필요한 높이로 조정하세요.
     background: linear-gradient(270deg, yellow, lime, blue, magenta);
     background-size: 200% 200%;
     animation: ${progress} 10s ease-in-out infinite;
     border-radius: 20px;
+    transition: transform 0.5s ease; // width 대신 transform 속성에 전환 효과 적용
+
+    transform: ${({ width }) => `translateX(-${100 - width}%)`}; // translateX를 사용하여 수평 위치 조절
 `;
 
 export default Game;
