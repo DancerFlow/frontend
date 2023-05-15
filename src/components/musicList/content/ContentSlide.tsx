@@ -166,7 +166,7 @@ const MusicCard = styled(motion.div)<{ img: string }>`
     max-width: 250px;
     max-height: 250px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 00px;
     margin: 10px;
     background-image: url(${(props) => props.img});
     background-size: cover;

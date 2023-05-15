@@ -1,14 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import NavUserInfo from './NavUserInfo';
+import { useContext } from 'react';
+
+import { GlobalContext } from '../context/Context';
+import { useDeleteLogoutMutation } from '../api/useDeleteLogoutMutation';
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
     const navRef = useRef<HTMLDivElement>(null);
     const toggleButtonRef = useRef(null);
+    const { state, logOut } = useContext(GlobalContext);
+
+    const navigate = useNavigate();
+    const { mutate } = useDeleteLogoutMutation();
+
+    useEffect(() => {
+        document.addEventListener('click', handleDocumentClick);
+
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
 
     // 토글보다 handleDocumentClick이 먼저 실행되서 바로 닫히는 오류 떄문에 setTimeout 넣어줌.
     const handleToggle = () => {
@@ -24,24 +41,19 @@ export default function NavBar() {
         }
     };
 
-    useEffect(() => {
-        document.addEventListener('click', handleDocumentClick);
-
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
-        };
-    }, []);
+    const handleLogout = () => {
+        mutate();
+        logOut();
+        setOpen(false);
+        navigate('/');
+    };
 
     const navLinks = [
         { to: '', text: 'home' },
         { to: 'mode', text: 'select mode' },
         { to: 'musiclist', text: 'challenge' },
         { to: 'musiclist', text: 'practice' },
-        { to: 'user', text: 'my page' },
-        { to: '', text: '-개발이후삭제-' },
-        { to: 'challenge', text: 'gamescreen' },
-        { to: 'admin', text: 'admin' },
-        { to: 'result', text: 'result' }
+        { to: 'user', text: 'my page' }
     ];
 
     return (
@@ -58,6 +70,7 @@ export default function NavBar() {
                             <IconWrapper>
                                 <CloseFontAwesomeIcon icon={faXmark} size="2xl" onClick={handleToggle} />
                             </IconWrapper>
+                            {state.userState.login ? <NavUserInfo onLogout={handleLogout} /> : <div>guest</div>}
                             <ul>
                                 {navLinks.map((navLink, index) => (
                                     <li key={index} onClick={() => setOpen(false)}>
@@ -160,8 +173,9 @@ const SideNav = styled.aside`
 `;
 
 const IconWrapper = styled.div`
-    text-align: end;
+    text-align: start;
     margin: 1rem 1.5rem;
+    padding-bottom: 10px;
 `;
 const CloseFontAwesomeIcon = styled(FontAwesomeIcon)`
     color: ${(props) => props.theme.green};

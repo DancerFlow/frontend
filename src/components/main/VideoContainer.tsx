@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import bgVideo from '../../assets/dancerflow.mp4';
 
 interface Props {
@@ -47,24 +47,6 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
 
     return (
         <BackgroundContainer>
-            {/* <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
-                <span>신나는 브금이랑 함께 하실래요?</span>
-                <div
-                    onClick={() => {
-                        setIsSoundOn(true);
-                    }}
-                >
-                    넹!
-                </div>
-                <div
-                    onClick={() => {
-                        setIsSoundOn(false);
-                    }}
-                >
-                    아뇨
-                </div>
-            </ConfirmSoundPlay> */}
-
             <VideoS
                 ref={videoRef}
                 onTimeUpdate={onTimeUpdate}
@@ -78,63 +60,6 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
         </BackgroundContainer>
     );
 };
-
-const ConfirmKeyframes = keyframes`
-    0%{
-        top: 90%;
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    70%{
-        top: 70%;
-        transform: translate(-50%, -50%) rotate(-3deg);
-    }
-    90%{
-        top: 55%;
-        transform: translate(-50%, -50%) rotate(-4deg);
-    }
-    100%{
-        top: 50%;
-        transform: translate(-50%, -50%) rotate(-5deg);
-    }
-`;
-
-const ConfirmSoundPlay = styled.div`
-    z-index: 99;
-    display: flex;
-    position: absolute;
-    width: 680px;
-    height: 120px;
-    background-color: ${(props) => props.theme.green};
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-5deg);
-    animation: ${ConfirmKeyframes} 0.3s linear 0s 1;
-    align-items: center;
-    font-family: 'NanumSquareNeoBold';
-    transition: 0.3s ease-out;
-    span {
-        margin-right: 80px;
-        margin-left: 150px;
-    }
-    div {
-        width: 60px;
-        height: 60px;
-        background-color: white;
-        line-height: 60px;
-        margin-left: 30px;
-        border-radius: 40px;
-        transition: transform 0.5s;
-        cursor: pointer;
-    }
-    div:hover {
-        opacity: 0.9;
-        transform: scale(1.05);
-    }
-    &.clear {
-        visibility: hidden;
-        opacity: 0;
-    }
-`;
 
 const BackgroundContainer = styled.div`
     width: 100vw;
