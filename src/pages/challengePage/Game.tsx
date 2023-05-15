@@ -1,25 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
 
-const Test = () => {
+const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const [countDown, setCountDown] = useState(5);
     const [message, setMessage] = useState('전신이 나오도록 위치해주세요.');
     const [startCountdown, setStartCountdown] = useState(false);
-
+    const [volume, setVolume] = useState(0.5); // 초기 볼륨을 100%로 설정
     const [currentTime, setCurrentTime] = useState(0);
 
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
-    const navigate = useNavigate();
+    const minKeypointsCount = 16; // 최소 검출되어야하는 keypoints의 수
 
+    // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
-        if (keypointsDetected < 16 && !startCountdown) {
+        if (keypointsDetected < minKeypointsCount && !startCountdown) {
             setMessage('전신이 나오도록 위치해주세요.');
             setCountDown(5); // Reset the countdown
-        } else if (keypointsDetected >= 16) {
+        } else if (keypointsDetected >= minKeypointsCount) {
             setStartCountdown(true); // Start the countdown
             setMessage(countDown > 0 ? countDown : 'Dance!');
             if (countDown > 0) {
@@ -32,9 +32,21 @@ const Test = () => {
         }
     }, [keypointsDetected, countDown, startCountdown]);
 
+    // * volume이 바뀔 때마다 실행되는 이펙트
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.volume = volume;
+        }
+    }, [volume]);
+
+    const handleVolumeChange = (e) => {
+        setVolume(e.target.value); // 슬라이더의 값이 바뀔 때마다 볼륨 상태를 갱신
+    };
+
     const handleTimeUpdate = (e) => {
         setCurrentTime(e.target.currentTime);
     };
+
     return (
         <>
             <Main>
@@ -53,12 +65,23 @@ const Test = () => {
                             }}
                         />
                     </VideoWrapper>
-                    <AreaFooter></AreaFooter>
+                    <AreaFooter>
+                        볼륨:
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01" // 볼륨 조절의 정밀도를 1%로 설정
+                            value={volume}
+                            onChange={handleVolumeChange}
+                        />
+                    </AreaFooter>
                 </DancingArea>
 
                 <VideoArea>
                     <AreaHeader>
-                        <CountDown>{message}</CountDown>
+                        <CountDown>{`${message}`}</CountDown>
+                        <p>{`${keypointsPercent.toFixed(2)}%`}</p>
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
                     <AreaFooter>
@@ -153,10 +176,4 @@ const Bottom = styled.div`
     border-radius: 20px;
 `;
 
-const Img = styled.img`
-    width: 70px;
-    height: 120px;
-    object-fit: cover;
-`;
-
-export default Test;
+export default Game;

@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.tsx';
-import Test from './pages/challengePage/Test.jsx';
+import Test from './pages/challengePage/Game.jsx';
 import ScoreExtraction from './pages/challengePage/Score/index.jsx';
 import { theme } from './theme.ts';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
                 element: <ChallengePage />,
                 children: [
                     {
-                        path: 'test',
+                        path: 'game',
                         element: <Test />
                     },
                     {

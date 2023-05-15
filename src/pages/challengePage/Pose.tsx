@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,7 +19,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     const navigate = useNavigate();
 
-    // 연결할 keypoints
+    // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
         [3, 4],
         [6, 8],
@@ -35,6 +36,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         [13, 15]
     ];
 
+    // * canvas에 연결할 keypoints를 그리는 함수
     useEffect(() => {
         const runPoseEstimation = async () => {
             await tf.setBackend('webgl'); // 백엔드 설정
@@ -125,6 +127,8 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         };
         runPoseEstimation();
     }, []);
+
+    // * 유저 keypoints를 저장하는 함수
     useEffect(() => {
         const currentSecond = Math.floor(currentTime);
         if (currentSecond !== lastSavedSecond) {
@@ -154,6 +158,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         }
     }, [currentTime]);
 
+    // * video 재생 종료 확인
     useEffect(() => {
         if (scoreVideoRef.current) {
             scoreVideoRef.current.addEventListener('ended', () => {
@@ -169,12 +174,15 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         };
     }, []);
 
+    // * video 재생 종료 후 navigate, 데이터 전달
     useEffect(() => {
         if (videoEnded) {
             console.log(savedKeypoints);
             navigate('/result');
         }
     }, [videoEnded, navigate]);
+
+    
     return (
         <Container>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
