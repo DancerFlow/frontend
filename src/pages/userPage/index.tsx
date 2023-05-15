@@ -1,19 +1,14 @@
 import styled from 'styled-components';
-import Header from '../../components/user/Header';
-import Sidebar from '../../components/user/Sidebar';
+import Profile from '../../components/user/Profile';
 import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
-import { useGetMyProfile } from '../../api/useGetMyProfile';
 
 const UserPage = () => {
-    const profile = useGetMyProfile('user/profile');
-
     return (
         <Container>
-            <Header profile={profile}></Header>
-            <Sidebar profile={profile}></Sidebar>
-            <Main></Main>
-            <Bottom></Bottom>
+            <Profile />
+            <Main />
+            <Bottom />
         </Container>
     );
 };
@@ -32,8 +27,8 @@ const Container = styled.body`
         'sidebar main  '
         'sidebar bottom ';
     padding: 1rem;
-    grid-auto-rows: minmax(100px, auto);
-    grid-auto-columns: minmax(100px, auto);
+    grid-auto-rows: minmax(80px, auto);
+    grid-auto-columns: minmax(60px, auto);
     color: #fff;
     & > * {
         padding: 10px;

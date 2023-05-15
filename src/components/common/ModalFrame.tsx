@@ -16,7 +16,7 @@ const ModalFrame = ({ onClose, children, isOpened, ...rest }: ModalFrameProps) =
                     <Background onClick={onClose} />
                     <ModalBlock {...rest}>
                         <Close>
-                            <FontAwesomeIcon icon={faXmark} size='xl' onClick={onClose} />
+                            <FontAwesomeIcon icon={faXmark} size="xl" onClick={onClose} />
                         </Close>
                         <Contents>{children}</Contents>
                     </ModalBlock>
@@ -59,11 +59,11 @@ const Background = styled.div`
 
 const ModalBlock = styled.div`
     position: absolute;
-    top: 6.5rem;
+    top: 3.5rem;
     border-radius: 10px;
     padding: 1.5rem;
-    background-color: #5b3850;
-    width: 40rem;
+    background-color: ${(props) => props.theme.modal.background};
+    width: 55rem;
     @media (max-width: 1120px) {
         width: 50rem;
     }
@@ -82,6 +82,10 @@ const ModalBlock = styled.div`
             margin-top: 0;
         }
     }
+
+    @media screen and (max-width: 1500px) {
+        width: 50rem;
+    }
 `;
 
 const Close = styled.div`
@@ -95,7 +99,7 @@ const Contents = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 600px;
+    height: 80vh;
 `;
 
 export default ModalFrame;

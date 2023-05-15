@@ -1,12 +1,21 @@
 export interface Status {
     error?: object;
-    massage?: string;
-    status_code: number;
+    message?: string;
+    status_code?: number;
 }
 
-export interface User {
-    Status: Status;
-    access_token: string;
+export interface UserRespose {
+    Status?: Status;
+}
+export interface UserForm {
+    email: string;
+    password: string;
+    passwordConfirm?: string;
+    nickname?: string;
+}
+export interface UserVerify {
+    isLoggedIn: boolean;
+    isAdmin: boolean;
 }
 
 export enum Tier {
@@ -19,11 +28,11 @@ export enum Tier {
 
 export interface Profile {
     Status?: Status;
-    user_nickname: string;
-    user_email: string;
-    user_profile_image_url?: string;
-    user_tier: Tier;
-    user_xp: number;
+    nickname: string;
+    email: string;
+    profile_image_url?: string;
+    current_tier: Tier;
+    // user_xp: number;
 }
 
 export interface UserRank {
@@ -31,20 +40,21 @@ export interface UserRank {
     user_xp: number;
 }
 
-export interface Calendar {
-    calendar_date: Date[];
+export interface Stamps {
+    created_at: string[];
 }
 
 export interface UserGameHistory {
-    music_id: string;
+    music_id: number;
     music_name: string;
-    music_image_url: string;
+    album_image_url: string;
     music_singer: string;
     user_music_best_score: number;
     music_total_score: number;
 }
 
-export interface UserGameMusicHistory {
+export interface UserGameHistoryDetail {
+    music_id: number;
     music_best_score_detail: {
         score: number;
         rank: number;
@@ -53,7 +63,7 @@ export interface UserGameMusicHistory {
         miss: number;
     };
     music_total_score: number;
-    music_score_by_date: { music_score: number; music_score_created_at: Date };
+    music_score_list: { music_score: number; music_score_created_at: String }[];
 }
 
 interface MusicSinger {
@@ -66,16 +76,25 @@ export interface Music {
     _genre: string | null;
     music_singer: MusicSinger;
     album_image_url: string;
+
     likes?: number;
     music_genre?: string;
-    palyed?: number;
+    played?: number;
     description?: string;
 }
 
 export interface MusicRank {
-    user_name: string;
-    user_score: number;
+    id: number;
+    nickname: string;
+    profile_image_url: string;
+    score: number;
+    rank: number;
+}
+
+export interface UserLikes {
+    id: number;
+    user_id: number;
+    music_id: number;
     created_at: Date;
-    my_score: string;
-    my_rank: number;
+    music: Music;
 }

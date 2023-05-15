@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-export const useKeyEscClose = (closeThing) => {
+export const useKeyEscClose = (closeThing: any) => {
     useEffect(() => {
-        const escKeyModalClose = (e) => {
+        const escKeyModalClose = (e: any) => {
             if (e.keyCode === 27) {
                 closeThing();
             }

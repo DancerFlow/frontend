@@ -1,23 +1,32 @@
 import { useEffect, useRef } from 'react';
 import Lottie from 'lottie-web';
 import animationData from '../../../assets/tropy.json';
-
+import styled from 'styled-components';
 const Tropy = () => {
-    const lottieRef = useRef(null);
+    const lottieRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if (!lottieRef.current) return;
         const animation = Lottie.loadAnimation({
             container: lottieRef.current,
             renderer: 'svg',
             loop: true,
             autoplay: true,
-            animationData: animationData
+            animationData: animationData,
+            rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice'
+            }
         });
         return () => {
             animation.destroy();
         };
     }, []);
-    return <div ref={lottieRef} style={{ width: '30%', background: '#906f8c', borderRadius: '10px',padding:"5px", marginTop:"10px" }} />;
+    return <Container ref={lottieRef} />;
 };
+const Container = styled.div`
+    background-color: ${(props) => props.theme.modal.content};
+    border-radius: 10px;
+    margin-left: 20px;
+`;
 
 export default Tropy;
