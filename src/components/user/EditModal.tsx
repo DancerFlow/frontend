@@ -1,34 +1,101 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { Profile } from '../../interface';
-import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
-import axios from 'axios';
+import { Profile, Status } from '../../interface';
+// import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
+import axios, { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export default function EditModal({ profile, onCloseModal }: { profile: Profile; onCloseModal: () => void }) {
-    // const avatarRef = useRef<HTMLInputElement>(null);
-    const [formValid, setFormValid] = useState<string>('');
-    const [avatarImage, setAvatarImage] = useState<string>('');
-    const [nickname, setNickname] = useState('');
+    const [avatarImage, setAvatarImage] = useState<string | undefined>(profile?.profile_image_url);
+    const [changeNicknameEnabled, setChangeNicknameEnabled] = useState(false);
+    const [changePasswordEnabled, setChangePasswordEnabled] = useState(false);
+
+    //수정할 제출 폼
     const [formValues, setFormValues] = useState({
+        nickname: profile?.nickname,
         current_password: '',
-        new_password: '',
-        passwordconfirm: ''
+        new_password: ''
     });
+    const passwordConfirmRef = useRef<HTMLInputElement>(null);
+    const [nicknameValid, setNicknameValid] = useState<string>('');
+    const [formValid, setFormValid] = useState<string>('');
+    const [file, setFile] = useState<File | undefined>(undefined);
 
     console.log('modal rerendered');
 
-    const mutation = useMutation(async ({ current_password, new_password }) => {
-        const response = await axios.patch(`${baseUrl}user/password`, { current_password, new_password }, { withCredentials: true });
-        return response.data;
-    });
+    const mutationAvatar = useMutation(
+        async (file: File | undefined) => {
+            if (!file) {
+                return;
+            }
+            const formData = new FormData();
+            console.log('file', file);
+            formData.append('file', file);
 
-    const handleBlur = () => {
-        if (formValues.new_password !== formValues.passwordconfirm) {
+            const response = await axios.post(`${baseUrl}user/profile/image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                withCredentials: true
+            });
+
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                // alert(data);
+                console.log('file upload api', data);
+            },
+            onError: (error: AxiosError<Status>) => {
+                alert(error.response?.data.message);
+                console.log('file error  upload api', error);
+            }
+        }
+    );
+
+    const mutationDuplicateNickname = useMutation(
+        async (nickname: string) => {
+            const response = await axios.post(`${baseUrl}auth/join/duplicate/nickname`, { nickname }, { withCredentials: true });
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                if (data) {
+                    setNicknameValid('nickname is taken. please use other nickname');
+                } else {
+                    setNicknameValid('nickname is available');
+                }
+            },
+            onError: (error: AxiosError<Status>) => {
+                alert(error.response?.data.message);
+            }
+        }
+    );
+
+    const mutationProfile = useMutation(
+        async (formValues: object | undefined) => {
+            const response = await axios.patch(`${baseUrl}user/profile`, formValues, { withCredentials: true });
+            console.log('profile response', response.data);
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                alert(data);
+            },
+            onError: (error: AxiosError<Status>) => {
+                alert(error.response?.data.message);
+                console.log('profile error', error);
+            }
+        }
+    );
+
+    const handleBlurPassword = () => {
+        if (passwordConfirmRef.current && formValues.new_password !== passwordConfirmRef.current.value) {
             setFormValid('비밀번호가 일치하지 않습니다.');
         } else {
             setFormValid('');
@@ -36,15 +103,20 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     };
 
     const handleSubmit = () => {
-        if (formValues.new_password !== formValues.passwordconfirm) {
-            return;
-        }
+        mutationAvatar.mutate(file);
 
-        console.log('form', formValues);
-        mutation.mutate(formValues);
+        if (!changeNicknameEnabled) {
+            const emptyNicknameFormValues = {
+                ...formValues,
+                nickname: '' // 닉네임 필드는 빈칸으로 제출함
+            };
+            mutationProfile.mutate(emptyNicknameFormValues);
+        } else {
+            mutationProfile.mutate(formValues);
+        }
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormValues((prevValues) => ({
             ...prevValues,
@@ -52,15 +124,34 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         }));
     };
 
+    const handleToggleNickname = () => {
+        setChangeNicknameEnabled(!changeNicknameEnabled);
+    };
+
+    const handleTogglePassword = () => {
+        setChangePasswordEnabled(!changePasswordEnabled);
+        setFormValues((prev) => ({ ...prev, current_password: '', new_password: '' }));
+    };
+
+    const handleDuplicateCheck = () => {
+        mutationDuplicateNickname.mutate(formValues?.nickname);
+    };
+
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile) {
+            if (selectedFile.size > MAX_FILE_SIZE) {
+                alert('File size can not exceed size of 2MB.');
+                return;
+            }
+
+            setFile(selectedFile);
             const reader = new FileReader();
             reader.onload = (event) => {
                 const imageUrl = event.target?.result as string;
                 setAvatarImage(imageUrl);
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(selectedFile);
         }
     };
 
@@ -76,7 +167,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                     <FieldContainer>
                         <label htmlFor="avatar">
                             <AvatarContainer>
-                                <AvatarImage src={profile?.profile_image_url} alt="Profile Image" />
+                                <AvatarImage src={avatarImage} alt="Profile Image" />
                                 <CameraIcon>
                                     <FontAwesomeIcon icon={faCamera} />
                                     <input
@@ -92,18 +183,44 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                         </label>
 
                         <Fieldset>
+                            <RowContainer>
+                                <ToggleSwitchContainer>
+                                    <ToggleButton onClick={handleToggleNickname} isActive={changeNicknameEnabled}>
+                                        <ToggleCircle isActive={changeNicknameEnabled} />
+                                    </ToggleButton>
+                                </ToggleSwitchContainer>
+                                <p>Change Nickname</p>
+                            </RowContainer>
                             <label htmlFor="nickname">Nickname</label>
-                            <input
-                                // required
-                                id="nickname"
-                                type="text"
-                                name="nickname"
-                                placeholder="enter nickname"
-                                defaultValue={profile?.nickname}
-                            />
+                            <RowContainer>
+                                <input
+                                    id="nickname"
+                                    type="text"
+                                    name="nickname"
+                                    placeholder="enter nickname"
+                                    value={formValues.nickname}
+                                    onChange={handleInputFormChange}
+                                    disabled={!changeNicknameEnabled}
+                                />
+                                <DuplicateCheckButton onClick={handleDuplicateCheck} disabled={!changeNicknameEnabled}>
+                                    중복확인
+                                </DuplicateCheckButton>
+                            </RowContainer>
+                            {nicknameValid && <NicknameValidMessage>{nicknameValid}</NicknameValidMessage>}
                         </Fieldset>
                         <Line />
-                        {/* <ChangePassword>Change Password</ChangePassword> */}
+
+                        <Fieldset>
+                            <RowContainer>
+                                <ToggleSwitchContainer>
+                                    <ToggleButton onClick={handleTogglePassword} isActive={changePasswordEnabled}>
+                                        <ToggleCircle isActive={changePasswordEnabled} />
+                                    </ToggleButton>
+                                </ToggleSwitchContainer>
+                                <p>Change Password</p>
+                            </RowContainer>
+                        </Fieldset>
+
                         <Fieldset>
                             <label htmlFor="password">current password</label>
                             <input
@@ -112,8 +229,9 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                                 name="current_password"
                                 placeholder="Enter current password"
                                 value={formValues.current_password}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur}
+                                onChange={handleInputFormChange}
+                                onBlur={handleBlurPassword}
+                                disabled={!changePasswordEnabled}
                             />
                         </Fieldset>
 
@@ -124,7 +242,9 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                                 name="new_password"
                                 placeholder="Enter new password"
                                 value={formValues.new_password}
-                                onChange={handleInputChange}
+                                onChange={handleInputFormChange}
+                                disabled={!changePasswordEnabled}
+                                onBlur={handleBlurPassword}
                             />
                         </Fieldset>
 
@@ -135,17 +255,20 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                                 type="password"
                                 name="passwordconfirm"
                                 placeholder="Confirm new password"
-                                value={formValues.passwordconfirm}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur}
+                                // value={formValues.passwordconfirm}
+                                // onChange={handleInputFormChange}
+                                ref={passwordConfirmRef}
+                                onBlur={handleBlurPassword}
+                                disabled={!changePasswordEnabled}
                             />
                         </Fieldset>
                         <p style={{ color: 'red' }}>{formValid}</p>
-                        <EditButton onClick={handleSubmit} disabled={formValues.new_password !== formValues.passwordconfirm}>
-                            Edit
+                        <EditButton
+                            onClick={handleSubmit}
+                            disabled={changePasswordEnabled && formValues.new_password !== passwordConfirmRef?.current?.value}
+                        >
+                            Update
                         </EditButton>
-                        {mutation.isError ? <div>An error occurred: {mutation?.error?.message}</div> : null}
-                        {mutation.isSuccess ? <div>Todo added!</div> : null}
                     </FieldContainer>
                 </FormContainer>
             </FormS>
@@ -225,13 +348,20 @@ const Fieldset = styled.fieldset`
     border: none;
 `;
 
+const DuplicateCheckButton = styled.button`
+    border-style: none;
+    margin-left: 1rem;
+    height: 40px;
+    /* cursor: pointer; */
+    width: 100px;
+`;
+
 const EditButton = styled.button.attrs({ type: 'submit' })`
     height: 40px;
     width: 200px;
     border-radius: 0px;
     border-style: none;
     background-color: #27fd1c;
-
     padding: 8px 20px;
     letter-spacing: 0.8px;
     display: block;
@@ -259,6 +389,7 @@ const AvatarContainer = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-bottom: 1rem;
 `;
 
 const AvatarImage = styled.img`
@@ -279,7 +410,46 @@ const CameraIcon = styled.div`
     height: 30px;
     font-size: 1.7rem;
 `;
+const ToggleSwitchContainer = styled.div`
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 35px;
+`;
 
-const ChangePassword = styled.div`
-    text-align: start;
+const ToggleButton = styled.button<{ isActive: boolean }>`
+    display: inline-block;
+    border-style: none;
+    width: 62px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: ${(props) => (props.isActive ? '#27fd1c' : '#ccc')};
+    cursor: pointer;
+`;
+
+const ToggleCircle = styled.span<{ isActive: boolean }>`
+    display: inline-block;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+    background-color: white;
+    transform: translateX(${(props) => (props.isActive ? '30px' : '4px')});
+    transition: transform 0.3s ease;
+`;
+
+const RowContainer = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    p {
+        margin-left: 1.2rem;
+    }
+    margin-bottom: 0.5rem;
+`;
+
+const NicknameValidMessage = styled.div`
+    font-size: 9px;
 `;

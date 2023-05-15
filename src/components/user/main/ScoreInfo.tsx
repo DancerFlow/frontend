@@ -21,38 +21,45 @@ export default function ScoreInfo({ musicId }: { musicId: number }) {
 
     return (
         <Container>
-            <GraphContainer>
-                <ResponsiveContainer width="90%" height="80%">
-                    <LineChart data={gamehistorydetail?.music_score_list}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="music_score_created_at" label={{ value: 'Date', position: 'insideBottom' }} tick={false} />
-                        <YAxis />
-                        <Tooltip
-                            labelFormatter={(label) => `Date: ${formatDate(label)}`}
-                            contentStyle={{ color: '#ff69b4' }}
-                            formatter={(value, name) => (name === 'music_score_created_at' ? formatDate(String(value)) : value)}
-                        />
-                        <Legend />
-                        <Line type="monotone" dataKey="music_score" name="Score" stroke="#ff69b4" activeDot={{ r: 8 }} />
-                    </LineChart>
-                </ResponsiveContainer>
-            </GraphContainer>
-            <BestScoreContainer>
-                <h1>Best Score</h1>
-                <ScoreDetail>
-                    <MyScoreRank>
-                        <div>
-                            My Best Score: {gamehistorydetail?.music_best_score_detail?.score}/{gamehistorydetail?.music_total_score}
-                        </div>
-                        <div>
-                            <p>My Rank: {gamehistorydetail?.music_best_score_detail?.rank}</p>
-                        </div>
-                    </MyScoreRank>
-                    <Scoring>Perfect: {gamehistorydetail?.music_best_score_detail?.perfect}</Scoring>
-                    <Scoring>Good: {gamehistorydetail?.music_best_score_detail?.good}</Scoring>
-                    <Scoring>Miss: {gamehistorydetail?.music_best_score_detail?.miss}</Scoring>
-                </ScoreDetail>
-            </BestScoreContainer>
+            {gamehistorydetail && gamehistorydetail.music_score_list?.length ? (
+                <>
+                    <GraphContainer>
+                        <ResponsiveContainer width="90%" height="80%">
+                            <LineChart data={gamehistorydetail?.music_score_list}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="music_score_created_at" label={{ value: 'Date', position: 'insideBottom' }} tick={false} />
+                                <YAxis />
+                                <Tooltip
+                                    labelFormatter={(label) => `Date: ${formatDate(label)}`}
+                                    contentStyle={{ color: '#ff69b4' }}
+                                    formatter={(value, name) => (name === 'music_score_created_at' ? formatDate(String(value)) : value)}
+                                />
+                                <Legend />
+                                <Line type="monotone" dataKey="music_score" name="Score" stroke="#ff69b4" activeDot={{ r: 8 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </GraphContainer>
+                    <BestScoreContainer>
+                        <h1>Best Score</h1>
+                        <ScoreDetail>
+                            <MyScoreRank>
+                                <div>
+                                    My Best Score: {gamehistorydetail?.music_best_score_detail?.score}/
+                                    {gamehistorydetail?.music_total_score}
+                                </div>
+                                <div>
+                                    <p>My Rank: {gamehistorydetail?.music_best_score_detail?.rank}</p>
+                                </div>
+                            </MyScoreRank>
+                            <Scoring>Perfect: {gamehistorydetail?.music_best_score_detail?.perfect}</Scoring>
+                            <Scoring>Good: {gamehistorydetail?.music_best_score_detail?.good}</Scoring>
+                            <Scoring>Miss: {gamehistorydetail?.music_best_score_detail?.miss}</Scoring>
+                        </ScoreDetail>
+                    </BestScoreContainer>
+                </>
+            ) : (
+                <div>No game history</div>
+            )}
         </Container>
     );
 }
