@@ -3,9 +3,10 @@ import Lottie from 'lottie-web';
 import animationData from '../../../assets/rankingBanner.json';
 
 const RankingBanner = () => {
-    const lottieRef = useRef(null);
+    const lottieRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if (!lottieRef.current) return;
         const animation = Lottie.loadAnimation({
             container: lottieRef.current,
             renderer: 'svg',
@@ -13,17 +14,15 @@ const RankingBanner = () => {
             autoplay: true,
             animationData: animationData,
             rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
+                preserveAspectRatio: 'xMidYMid slice'
                 // SVG의 크기를 조정할 width와 height 값 추가
-                width: 60,
-                height: 10
             }
         });
         return () => {
             animation.destroy();
         };
     }, []);
-    return <div ref={lottieRef} />;
+    return <div ref={lottieRef as React.RefObject<HTMLDivElement>} />;
 };
 
 export default RankingBanner;

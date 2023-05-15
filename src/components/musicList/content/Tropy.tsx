@@ -3,9 +3,10 @@ import Lottie from 'lottie-web';
 import animationData from '../../../assets/tropy.json';
 import styled from 'styled-components';
 const Tropy = () => {
-    const lottieRef = useRef(null);
+    const lottieRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if (!lottieRef.current) return;
         const animation = Lottie.loadAnimation({
             container: lottieRef.current,
             renderer: 'svg',
@@ -13,10 +14,7 @@ const Tropy = () => {
             autoplay: true,
             animationData: animationData,
             rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
-                // SVG의 크기를 조정할 width와 height 값 추가
-                width: 100,
-                height: 100
+                preserveAspectRatio: 'xMidYMid slice'
             }
         });
         return () => {

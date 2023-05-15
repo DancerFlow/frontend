@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
 import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
-import { useMutation, useQueryClient } from 'react-query';
-interface Props {
-    onClick: () => void;
-    isLiked: boolean;
-    musicId: number;
-}
+import { useQueryClient } from 'react-query';
 
 interface Props {
     onClick: () => void;

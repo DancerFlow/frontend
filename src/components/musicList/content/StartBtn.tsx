@@ -3,9 +3,10 @@ import Lottie from 'lottie-web';
 import animationData from '../../../assets/startBtn.json';
 
 const StartBtn = () => {
-    const lottieRef = useRef(null);
+    const lottieRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if (!lottieRef.current) return;
         const animation = Lottie.loadAnimation({
             container: lottieRef.current,
             renderer: 'svg',
@@ -13,9 +14,7 @@ const StartBtn = () => {
             autoplay: true,
             animationData: animationData,
             rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
-                width: 200,
-                height: 100
+                preserveAspectRatio: 'xMidYMid slice'
             }
         });
         return () => {
@@ -23,7 +22,7 @@ const StartBtn = () => {
         };
     }, []);
 
-    return <div ref={lottieRef} style={{ cursor: 'pointer' }} />;
+    return <div ref={lottieRef as React.RefObject<HTMLDivElement>} style={{ cursor: 'pointer' }} />;
 };
 
 export default StartBtn;

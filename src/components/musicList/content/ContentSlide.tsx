@@ -97,7 +97,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
             <StyledSlider {...settings}>
                 {musicList &&
                     musicList.length > 0 &&
-                    musicList.map((data: Music, idx) => {
+                    musicList.map((data: Music) => {
                         return (
                             <MusicCard
                                 key={`${data.id}-${data.name}`}

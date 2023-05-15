@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import fearness from '../../assets/fearless.mp4';
 import Pose from './Pose';
-import ScorePoints from './Score/ScorePoints';
-import answer from './Score/score.json';
+
 const Test = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
     const [countDown, setCountDown] = useState(5);
@@ -34,22 +32,11 @@ const Test = () => {
         }
     }, [keypointsDetected, countDown, startCountdown]);
 
-    const handleVideoEnd = () => {
-        if (startCountdown) {
-            navigate('/result');
-        }
-    };
-
     const handleTimeUpdate = (e) => {
         setCurrentTime(e.target.currentTime);
     };
     return (
         <>
-            <Top>
-                <Icon color="red">Miss</Icon>
-                <Icon color="blue">GOOD</Icon>
-                <Icon color="pink">PERFECT</Icon>
-            </Top>
             <Main>
                 <DancingArea>
                     <AreaHeader></AreaHeader>
@@ -57,7 +44,6 @@ const Test = () => {
                         <video
                             ref={videoRef}
                             src="https://s3ai11team.s3.ap-northeast-2.amazonaws.com/fearless.mp4"
-                            onEnded={handleVideoEnd}
                             onTimeUpdate={handleTimeUpdate}
                             style={{
                                 pointerEvents: 'none',
@@ -75,7 +61,6 @@ const Test = () => {
                         <CountDown>{message}</CountDown>
                     </AreaHeader>
                     <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
-                    {/* <ScorePoints /> */}
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
@@ -86,23 +71,6 @@ const Test = () => {
         </>
     );
 };
-
-const Top = styled.div`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-`;
-
-const Icon = styled.div`
-    width: 200px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
-    height: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${(props) => props.color};
-    color: white;
-    border-radius: 10px;
-`;
 
 const Main = styled.div`
     display: flex;
@@ -132,10 +100,6 @@ const DancingArea = styled.div`
 
 const VideoArea = styled.div`
     flex: 1;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
 `;
 
 const VideoWrapper = styled.div`

@@ -3,16 +3,21 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
-import answer from './Score/score.json';
 import { forwardRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
     const [lastSavedSecond, setLastSavedSecond] = useState(-1);
     const [savedKeypoints, setSavedKeypoints] = useState([]);
-    // console.log(scoreVideoRef, 'scoreVideoRef');
+    const [videoEnded, setVideoEnded] = useState(false);
+
+    const navigate = useNavigate();
+
     // 연결할 keypoints
     const POSE_CONNECTIONS = [
         [3, 4],
@@ -147,9 +152,29 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             };
             estimatePoses();
         }
-        console.log(savedKeypoints);
     }, [currentTime]);
 
+    useEffect(() => {
+        if (scoreVideoRef.current) {
+            scoreVideoRef.current.addEventListener('ended', () => {
+                setVideoEnded(true);
+            });
+        }
+        return () => {
+            if (scoreVideoRef.current) {
+                scoreVideoRef.current.removeEventListener('ended', () => {
+                    setVideoEnded(true);
+                });
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (videoEnded) {
+            console.log(savedKeypoints);
+            navigate('/result');
+        }
+    }, [videoEnded, navigate]);
     return (
         <Container>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
