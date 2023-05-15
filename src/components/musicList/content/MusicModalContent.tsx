@@ -10,6 +10,8 @@ interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
     musicDetailInfo: Music;
+    musicRankInfo: any;
+    isLiked: boolean;
 }
 
 const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked }: ModalFrameProps) => {
@@ -38,7 +40,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                     </div>
                 </MusicModalInfoContent>
                 <MusicModalFooter>
-                    <LikeBtn isLiked={isLiked} musicId={musicDetailInfo.id} musicDetailInfo={musicDetailInfo} />
+                    <LikeBtn onClick={() => {}} isLiked={isLiked} musicId={musicDetailInfo.id} musicDetailInfo={musicDetailInfo} />
                     <div onClick={onStartClick}>
                         <StartBtn key={musicDetailInfo.id} />
                     </div>

@@ -8,8 +8,10 @@ export enum FilterType {
 }
 interface FilterProps {
     onFilter: (type: FilterType) => void;
-    selected: FilterType;
+    selected: FilterType | '';
     onSearch: (input: string) => void;
+    inputValue: string;
+    setInputValue: (input: string) => void;
 }
 const Filter = ({ onFilter, selected, onSearch, inputValue, setInputValue }: FilterProps) => {
     return (

@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
 import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
-import { useMutation, useQueryClient } from 'react-query';
-interface Props {
-    onClick: () => void;
-    isLiked: boolean;
-    musicId: number;
-}
+import { useQueryClient } from 'react-query';
 
 interface Props {
     onClick: () => void;
@@ -22,7 +17,7 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId, {
         onSuccess: () => {
             queryClient.invalidateQueries(['music', musicId]);
-            queryClient.invalidateQueries(['userlikes', 1]);
+            queryClient.invalidateQueries(['userlikes']);
 
             setLiked(true);
         },
@@ -31,7 +26,7 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     const deleteMusicLikeMutation = useDeleteMusicLikeMutation(musicId, {
         onSuccess: () => {
             queryClient.invalidateQueries(['music', musicId]);
-            queryClient.invalidateQueries(['userlikes', 1]);
+            queryClient.invalidateQueries(['userlikes']);
             setLiked(false);
         },
         onError: () => {
