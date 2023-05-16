@@ -14,7 +14,9 @@ const Game = () => {
     const [volume, setVolume] = useState(0.5); // 초기 볼륨을 100%로 설정
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
+    const [playTest, setPlayTest] = useState(false); // 테스트용
 
+    const [answer, setAnswer] = useState(0); // 정답을 저장할 상태
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
@@ -23,6 +25,35 @@ const Game = () => {
     const { musicId } = useParams();
 
     const { data: gameData } = useGetGameDataQuery(9);
+
+    // * 비디오가 정지되었을 때 실행되는 이펙트
+    const playVideoInChunks = () => {
+        if (playTest && videoRef.current) {
+            videoRef.current.play(); // 비디오 재생 시작
+
+            // 1초 후에 비디오 일시정지
+            setTimeout(() => {
+                if (videoRef.current) {
+                    videoRef.current.pause(); // 비디오 일시정지
+                    setPlayTest(false);
+                    console.log(videoRef.current.currentTime, '동영상이 멈췄을때 재생시간'); // 동영상이 멈췄을 때의 재생시간
+                    setAnswer(Math.round(videoRef.current.currentTime)); // 정답을 저장
+                }
+            }, 1000);
+        }
+    };
+
+    useEffect(() => {
+        let timerId;
+
+        timerId = setInterval(playVideoInChunks, 500); // 0.5초마다 playVideoInChunks 함수를 실행합니다.
+
+        return () => {
+            if (timerId) {
+                clearInterval(timerId); // 컴포넌트가 언마운트되거나 의존성이 바뀔 때 타이머를 제거
+            }
+        };
+    }, [playTest]); // 이 useEffect는 "조건"이 바뀔 때마다 다시 실행됩니다.
 
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
@@ -77,7 +108,7 @@ const Game = () => {
         const percentage = (currentTime / duration) * 100;
         return `${percentage}%`;
     };
-
+    console.log(answer, '정답');
     return (
         <>
             <Main>
@@ -120,6 +151,13 @@ const Game = () => {
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
+                        <button
+                            onClick={() => {
+                                setPlayTest(!playTest);
+                            }}
+                        >
+                            테스트
+                        </button>
                     </AreaFooter>
                 </DancingArea>
             </Main>

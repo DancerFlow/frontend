@@ -166,7 +166,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                                 keypoints: timedKeypoints
                             };
                             setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
-                            console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
+                            // console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
                         });
                         setLastSavedSecond(currentSecond); // 이 위치로 변경
                     }
