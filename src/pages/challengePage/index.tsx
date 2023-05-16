@@ -5,17 +5,19 @@ const ChallengePage = () => {
     const { musicId } = useParams();
 
     const handleMovePage = (page?: string) => {
-        if (page) {
-            navigate('/challenge/' + musicId + '/' + page);
+        if (page === 'game') {
+            navigate(`/challenge/${musicId}`);
+        } else if (page === 'score') {
+            navigate(`/challenge/score/${musicId}`);
         } else {
-            navigate('/challenge/' + musicId);
+            navigate('/challenge');
         }
     };
 
     return (
         <Container>
             <Home onClick={() => handleMovePage()}>Home</Home>
-            <Test onClick={() => handleMovePage('test')}>TEST 페이지</Test>
+            <Game onClick={() => handleMovePage('game')}>game</Game>
             <Score onClick={() => handleMovePage('score')}>정답추출</Score>
             <Outlet />
         </Container>
@@ -43,7 +45,7 @@ const Home = styled.div`
     left: 0;
 `;
 
-const Test = styled.div`
+const Game = styled.div`
     width: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
     height: 100px; // 아이콘의 크기를 조정하려면 이 값을 변경하세요.
     background-color: red;

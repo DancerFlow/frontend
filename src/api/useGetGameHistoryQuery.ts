@@ -5,7 +5,7 @@ import { UserGameHistory } from '../interface';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const getUserGameHistory = async (pageNo: number): Promise<UserGameHistory[]> => {
-    const response = await axios.get(`${baseUrl}user/game/history`, {
+    const response = await axios.get(`${baseUrl}/user/game/history`, {
         withCredentials: true,
         params: {
             pageno: pageNo // 원하는 페이지 번호

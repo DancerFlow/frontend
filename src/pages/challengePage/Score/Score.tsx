@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import testVideo from '../../../assets/fearless.mp4';
-
+import 춤예시 from '../../../assets/춤예시.mp4';
 const Score = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -22,7 +22,7 @@ const Score = () => {
             const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
             const keypointsArray: any = []; // 추출한 keypoints를 담을 배열
             if (videoRef.current) {
-                videoRef.current.src = testVideo;
+                videoRef.current.src = 춤예시;
 
                 // 'timeupdate' 이벤트 리스너 추가
                 videoRef.current.addEventListener('timeupdate', async () => {
