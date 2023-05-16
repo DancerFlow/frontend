@@ -39,7 +39,7 @@ export default function Logo() {
             receiveShadow
             position={[0, 1, -15]}
             onClick={(e) => handleHouseClick(e)}
-            scale={0.8}
+            scale={0.9}
         ></primitive>
     );
 }

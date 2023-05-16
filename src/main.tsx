@@ -46,7 +46,7 @@ const router = createBrowserRouter([
                 element: <ModePage />
             },
             {
-                path: '/musiclist',
+                path: '/musiclist/:mode',
                 element: <MusicListPage />
             },
             {

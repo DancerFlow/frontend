@@ -7,10 +7,10 @@ export const theme: DefaultTheme = {
     green: '#27FD1C',
     yellow: '#FEFD1E',
     modal: {
-        background: '#5b3851',
-        container: '#81607b',
-        content: '#906f8c',
-        fontColorOne: '#ffc905',
+        background: '#1E2429',
+        container: '#1E2429',
+        content: '#1E2429',
+        fontColorOne: '#000',
         fontColorTwo: '#fff',
         fontColorThree: '#565353'
     }

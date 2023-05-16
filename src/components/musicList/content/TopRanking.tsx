@@ -28,7 +28,6 @@ const TopRankingUI = ({ rankingList }: any) => {
         <MusicModalRankContent>
             <div className="rankList">
                 <Header>
-                    <RankingBanner />
                     <div className="Header-title">
                         <h1>Ranking</h1>
                     </div>
@@ -45,29 +44,24 @@ const TopRankingUI = ({ rankingList }: any) => {
                     ))}
                 </RankList>
             </div>
+            <div className="arrow"> &#8595;</div>
         </MusicModalRankContent>
     );
 };
 
 const Header = styled.div`
-    height: 2rem;
-    display: flex;
-    flex-direction: column;
     position: absolute;
-    top: -2rem;
+    top: -2.8rem;
     left: 0;
     right: 0;
-    margin: auto;
 
     .Header-title {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100%;
         h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: ${(props) => props.theme.modal.fontColorTwo};
             margin-left: 2rem;
         }
         position: absolute;
@@ -79,6 +73,7 @@ const Header = styled.div`
 `;
 
 const RankList = styled.div`
+    width: 90%;
     margin-top: 0.5rem;
     height: 100%;
     overflow-y: scroll;
@@ -89,13 +84,13 @@ const RankContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid ${(props) => props.theme.modal.fontColorOne};
+    border-bottom: 1px solid #dddede;
     padding: 0.5rem 0;
 `;
 
 const RankNumber = styled.span`
-    font-size: 1.5rem;
-    color: ${(props) => props.theme.modal.fontColorOne};
+    font-size: 1rem;
+    color: #dddede;
 `;
 
 const RankUserInfo = styled.div`
@@ -123,14 +118,12 @@ const RankUserName = styled.div`
     font-size: 0.5rem;
     margin-top: 0.2rem;
     width: 5rem;
-    color: ${(props) => props.theme.modal.fontColorTwo};
 `;
 
 const RankScore = styled.span`
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-left: auto;
     margin-right: 0.2rem;
-    color: ${(props) => props.theme.modal.fontColorOne};
 `;
 
 const MusicModalRankContent = styled.div`
@@ -139,7 +132,8 @@ const MusicModalRankContent = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
+    flex-direction: column;
+    color: #dddede;
     .rankList {
         width: 90%;
         height: 90%;
@@ -147,6 +141,8 @@ const MusicModalRankContent = styled.div`
         padding: 1rem;
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
         position: relative;
     }
 `;
