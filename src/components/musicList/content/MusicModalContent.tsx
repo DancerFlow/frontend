@@ -47,7 +47,9 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                             <p>{musicDetailInfo.played}</p>
                         </div>
                     </MusicModalFooter>
-                    <GameStartBtn aria-label="GAME START">GAME START</GameStartBtn>
+                    <GameStartBtn onClick={onStartClick} aria-label="GAME START">
+                        GAME START
+                    </GameStartBtn>
                 </MusicModalInfoContent>
             </MusicModalInfo>
             <MusicModalRank>

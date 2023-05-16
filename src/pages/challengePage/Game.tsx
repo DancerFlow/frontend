@@ -22,12 +22,12 @@ const Game = () => {
     const navigate = useNavigate();
     const { musicId } = useParams();
 
-    const { data: gameData, isLoading, isError } = useGetGameDataQuery(9);
-
-    console.log(gameData, 'gameData');
+    const { data: gameData } = useGetGameDataQuery(9);
 
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
+        let timerId; // 타이머 ID를 저장할 변수
+
         if (keypointsDetected < minKeypointsCount && !startCountdown) {
             setMessage('전신이 나오도록 위치해주세요.');
             setCountDown(3); // Reset the countdown
@@ -35,13 +35,19 @@ const Game = () => {
             setStartCountdown(true); // Start the countdown
             setMessage(countDown > 0 ? countDown : 'Dance!');
             if (countDown > 0) {
-                setTimeout(() => setCountDown(countDown - 1), 1000);
+                timerId = setTimeout(() => setCountDown(countDown - 1), 1000); // 타이머 ID를 저장
             }
             if (countDown === 0 && videoRef.current) {
                 videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
                 videoRef.current.play();
             }
         }
+
+        return () => {
+            if (timerId) {
+                clearTimeout(timerId); // 컴포넌트가 언마운트되거나 의존성이 바뀔 때 타이머를 제거
+            }
+        };
     }, [keypointsDetected, countDown, startCountdown]);
 
     // * volume이 바뀔 때마다 실행되는 이펙트
@@ -78,18 +84,20 @@ const Game = () => {
                 <VideoArea>
                     <AreaHeader></AreaHeader>
                     <VideoWrapper>
-                        <video
-                            className="answer-video"
-                            ref={videoRef}
-                            src={춤예시}
-                            onLoadedMetadata={handleLoadedMetadata}
-                            onTimeUpdate={handleTimeUpdate}
-                            style={{
-                                maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
-                                maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
-                                objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
-                            }}
-                        />
+                        {gameData && (
+                            <video
+                                className="answer-video"
+                                ref={videoRef}
+                                src={gameData.video_url}
+                                onLoadedMetadata={handleLoadedMetadata}
+                                onTimeUpdate={handleTimeUpdate}
+                                style={{
+                                    maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
+                                    maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
+                                    objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
+                                }}
+                            />
+                        )}
                     </VideoWrapper>
                     <AreaFooter>
                         볼륨:
