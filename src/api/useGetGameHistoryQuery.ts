@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { UserGameHistory } from '../interface';
+import { UserGameHistorywithMaxPage } from '../interface';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const getUserGameHistory = async (pageNo: number): Promise<UserGameHistory[]> => {
+const getUserGameHistory = async (pageNo: number): Promise<UserGameHistorywithMaxPage> => {
     const response = await axios.get(`${baseUrl}/user/game/history`, {
         withCredentials: true,
         params: {

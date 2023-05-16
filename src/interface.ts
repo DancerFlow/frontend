@@ -44,28 +44,6 @@ export interface Stamps {
     created_at: string[];
 }
 
-export interface UserGameHistory {
-    music_id: number;
-    music_name: string;
-    album_image_url: string;
-    music_singer: string;
-    user_music_best_score: number;
-    music_total_score: number;
-}
-
-export interface UserGameHistoryDetail {
-    music_id: number;
-    music_best_score_detail: {
-        score: number;
-        rank: number;
-        perfect: number;
-        good: number;
-        miss: number;
-    };
-    music_total_score: number;
-    music_score_list: { music_score: number; music_score_created_at: String }[];
-}
-
 interface MusicSinger {
     id: number;
     name: string;
@@ -91,10 +69,42 @@ export interface MusicRank {
     rank: number;
 }
 
-export interface UserLikes {
+export interface UserLikeswithMaxPage {
+    userLikes: UserLike[];
+    maxPage: number;
+}
+
+export interface UserLike {
     id: number;
     user_id: number;
     music_id: number;
     created_at: Date;
     music: Music;
+}
+
+export interface UserGameHistorywithMaxPage {
+    historyList: UserGameHistory[];
+    maxPage: number;
+}
+
+export interface UserGameHistory {
+    music_id: number;
+    music_name: string;
+    album_image_url: string;
+    music_singer: string;
+    user_music_best_score: number;
+    music_total_score: number;
+}
+
+export interface UserGameHistoryDetail {
+    music_id: number;
+    music_best_score_detail: {
+        score: number;
+        rank: number;
+        perfect: number;
+        good: number;
+        miss: number;
+    };
+    music_total_score: number;
+    music_score_list: { music_score: number; music_score_created_at: String }[];
 }
