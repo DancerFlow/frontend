@@ -2,8 +2,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import styled from 'styled-components';
 import { useGetGameHistoryDetailQuery } from '../../../api/useGetGameHistoryDetailQuery';
 
-export default function ScoreInfo({ musicId }: { musicId: number }) {
-    const { data: gamehistorydetail, isLoading, isError } = useGetGameHistoryDetailQuery(musicId);
+export default function ScoreInfo({ musicId }: { musicId?: number }) {
+    const { data: gamehistorydetail, isLoading, isError } = useGetGameHistoryDetailQuery(musicId!, { enabled: !!musicId });
 
     const formatDate = (value: string) => {
         const date = new Date(value);
