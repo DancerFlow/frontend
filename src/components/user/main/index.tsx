@@ -3,25 +3,22 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie, Cell, Label } from 'recharts';
-import { UserGameHistory } from '../../../interface';
+import { UserGameHistory, UserGameHistorywithMaxPage } from '../../../interface';
 import { useGetGameHistoryQuery } from '../../../api/useGetGameHistoryQuery';
 import { useState } from 'react';
 import ScoreInfo from './ScoreInfo';
 
 export default function Main() {
     const [selected, setSelected] = useState(0);
-    const { data: gamehistory, isLoading, isError } = useGetGameHistoryQuery(1);
+    const [pageNo, setPageNo] = useState(1);
+    const { data, isLoading, isError } = useGetGameHistoryQuery(pageNo);
+    console.log('gamehistory', data);
 
-    // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
     useEffect(() => {
-        if (gamehistory && gamehistory.length > 0) {
-            setSelected(gamehistory[0].music_id);
+        if (data && data.historyList && data.historyList.length > 0) {
+            setSelected(data.historyList[0].music_id);
         }
-    }, [gamehistory]);
-
-    const handleClick = (music_id: number) => {
-        setSelected(music_id);
-    };
+    }, [data]);
 
     if (isLoading) {
         return <div>Loading history...</div>;
@@ -31,13 +28,21 @@ export default function Main() {
         return <div>Error loading history</div>;
     }
 
+    const { historyList, maxPage } = data;
+
+    const handleClick = (music_id: number) => {
+        setSelected(music_id);
+    };
+
+    // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
+
     return (
         <Container>
             <SectionTitle>Play History</SectionTitle>
             <Section>
                 <CardContainer>
-                    {gamehistory?.length ? (
-                        gamehistory.map((game: UserGameHistory) => (
+                    {historyList?.length ? (
+                        historyList.map((game: UserGameHistory) => (
                             <MusicCard
                                 key={game.music_id}
                                 onClick={() => {
