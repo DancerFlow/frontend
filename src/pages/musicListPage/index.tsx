@@ -39,7 +39,6 @@ const MusicListPage = () => {
 
     // 찜한 목록 리스트
     const { data: userLikesList } = useGetUserLikesQuery();
-
     const handleSort = (item: FilterType): void => {
         setSelectedFilter(item);
         setSearchMusic(undefined);
@@ -50,26 +49,24 @@ const MusicListPage = () => {
         setSelectedFilter('');
     };
     // 찜한 목록 리스트를 musicList 형태로 변환
-    const musicListForm = (data: UserLikes[] | undefined) => {
-        if (!data) {
-            return [];
-        }
-        return data.map((userLike) => {
-            return {
-                ...userLike.music,
-                id: userLike.music.id,
-                music_genre: userLike.music.music_genre,
-                music_singer: {
-                    id: userLike.music.music_singer.id,
-                    name: userLike.music.music_singer.name
-                },
-                album_image_url: userLike.music.album_image_url
-            };
-        });
+    const musicListForm = (data: { userLikes: UserLikes[]; maxPage: number } | undefined) => {
+        return (
+            data?.userLikes.map((userLike) => {
+                return {
+                    ...userLike.music,
+                    id: userLike.music.id,
+                    music_genre: userLike.music.music_genre,
+                    music_singer: {
+                        id: userLike.music.music_singer.id,
+                        name: userLike.music.music_singer.name
+                    },
+                    album_image_url: userLike.music.album_image_url
+                };
+            }) ?? []
+        );
     };
-
-    const musicIds = (data: UserLikes[] | undefined) => {
-        return data?.map(({ music_id }) => music_id) ?? [];
+    const musicIds = (data: { userLikes: UserLikes[]; maxPage: number } | undefined) => {
+        return data?.userLikes.map(({ music_id }) => music_id) ?? [];
     };
 
     // 선택된 필터에 따라서 적절한 데이터를 가져옴
