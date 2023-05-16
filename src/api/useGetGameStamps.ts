@@ -5,7 +5,7 @@ import { Stamps } from '../interface';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const getGameStamps = async (year: number, month: number): Promise<Stamps[]> => {
-    const response = await axios.get(`${baseUrl}user/calendar`, { withCredentials: true, params: { year, month } });
+    const response = await axios.get(`${baseUrl}/user/calendar`, { withCredentials: true, params: { year, month } });
     return response.data;
 };
 

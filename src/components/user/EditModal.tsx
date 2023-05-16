@@ -37,7 +37,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             console.log('file', file);
             formData.append('file', file);
 
-            const response = await axios.post(`${baseUrl}user/profile/image`, formData, {
+            const response = await axios.post(`${baseUrl}/user/profile/image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
@@ -60,7 +60,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
 
     const mutationDuplicateNickname = useMutation(
         async (nickname: string) => {
-            const response = await axios.post(`${baseUrl}auth/join/duplicate/nickname`, { nickname }, { withCredentials: true });
+            const response = await axios.post(`${baseUrl}/auth/join/duplicate/nickname`, { nickname }, { withCredentials: true });
             return response.data;
         },
         {
@@ -79,7 +79,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
 
     const mutationProfile = useMutation(
         async (formValues: object | undefined) => {
-            const response = await axios.patch(`${baseUrl}user/profile`, formValues, { withCredentials: true });
+            const response = await axios.patch(`${baseUrl}/user/profile`, formValues, { withCredentials: true });
             console.log('profile response', response.data);
             return response.data;
         },

@@ -7,7 +7,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 const getUserLikes = async (pageNo?: number): Promise<UserLikes[]> => {
     const params = pageNo ? { pageno: pageNo } : {};
 
-    const response = await axios.get(`${baseUrl}user/likes`, {
+    const response = await axios.get(`${baseUrl}/user/likes`, {
         withCredentials: true,
         params: params
     });
