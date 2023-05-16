@@ -18,6 +18,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const [changePasswordEnabled, setChangePasswordEnabled] = useState(false);
 
     const navigate = useNavigate();
+    const { mutate: logoutMutate } = useDeleteLogoutMutation();
 
     //수정할 제출 폼
     const [formValues, setFormValues] = useState({
@@ -299,9 +300,11 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                     </FieldContainer>
                     <DeleteAccount
                         onClick={() => {
-                            mutationDeleteAccount.mutate();
-                            useDeleteLogoutMutation.mutate();
-                            navigate('/');
+                            if (window.confirm('Do you really want to delete your account?')) {
+                                mutationDeleteAccount.mutate();
+                                logoutMutate();
+                                navigate('/');
+                            }
                         }}
                     >
                         회원탈퇴
