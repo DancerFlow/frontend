@@ -72,7 +72,7 @@ export default function Profile() {
                             <img src={getTierImage(profile?.current_tier)} alt="Rank" />
                         </RankImgWrapper>
                         <RankContainer>
-                            <div>Rank: {rank[profile?.current_tier - 1]}</div>
+                            <div>Tier: {rank[profile?.current_tier - 1]}</div>
                             <div>
                                 <ProgressBar progress={60} height={20}></ProgressBar>
                                 <NextRankImg src={getNextTierImage(profile?.current_tier)} alt="nextRank" />
