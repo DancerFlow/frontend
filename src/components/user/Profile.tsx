@@ -19,13 +19,13 @@ import EditModal from './EditModal';
 
 export default function Profile() {
     //edit profile
-    const [isClicked, setIsClicked] = useState(false);
+    const [isEditClicked, setIsEditClicked] = useState(false);
     const handleOpenModal = () => {
-        setIsClicked(true);
+        setIsEditClicked(true);
     };
 
     const handleCloseModal = () => {
-        setIsClicked(false);
+        setIsEditClicked(false);
     };
 
     console.log('profile is rendered');
@@ -95,7 +95,7 @@ export default function Profile() {
                             />
                         </CalendarContainer>
                     </Sidebar>
-                    {isClicked &&
+                    {isEditClicked &&
                         ReactDOM.createPortal(
                             <EditModal profile={profile} onCloseModal={handleCloseModal} />,
                             document.getElementById('modal-root') as HTMLElement
