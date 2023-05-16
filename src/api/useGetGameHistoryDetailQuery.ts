@@ -5,7 +5,7 @@ import axios from 'axios';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const getUserGameHistoryDetail = async (musicId: number): Promise<UserGameHistoryDetail> => {
-    const response = await axios.get(`${baseUrl}user/game/history/${musicId}`, {
+    const response = await axios.get(`${baseUrl}/user/game/history/${musicId}`, {
         withCredentials: true
     });
     return response.data;

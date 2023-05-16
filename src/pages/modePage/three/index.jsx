@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
@@ -13,6 +13,7 @@ import Challenge from './Challenge';
 import Construction from './Construction';
 import Room from './Room';
 import DanceFloor from './DanceFloor';
+import LoadingView from '../../../components/common/LoadingView';
 
 const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
@@ -49,12 +50,6 @@ const Three = () => {
                 shadow-camera-bottom={-20}
                 color="white"
             />
-
-            {/* <group position={[0, -1, 0]}>
-                <Suspense fallback={null}>
-                    <Model pose={4} position={[0, 0, 0]} />
-                </Suspense>
-            </group> */}
             <Background></Background>
             {/* <Floor setDestinatioPoint={setDestinatioPoint}></Floor> */}
             <DanceFloor
@@ -62,13 +57,11 @@ const Three = () => {
                 destinationPoint={destinationPoint}
                 playerAnimation={playerAnimation}
             ></DanceFloor>
-
             <Construction area={area}></Construction>
             <Practice area={area}></Practice>
             <Room area={area}></Room>
             <Challenge area={area}></Challenge>
             <Logo></Logo>
-
             <Player
                 destinationPoint={destinationPoint}
                 playerAnimation={playerAnimation}
