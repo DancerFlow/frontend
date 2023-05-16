@@ -16,7 +16,7 @@ const Game = () => {
     const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
     const [playTest, setPlayTest] = useState(false); // 테스트용
 
-    const [answer, setAnswer] = useState(0); // 정답을 저장할 상태
+    const [answerTime, setAnswerTime] = useState(0); // 정답을 저장할 상태
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
@@ -37,7 +37,7 @@ const Game = () => {
                     videoRef.current.pause(); // 비디오 일시정지
                     setPlayTest(false);
                     console.log(videoRef.current.currentTime, '동영상이 멈췄을때 재생시간'); // 동영상이 멈췄을 때의 재생시간
-                    setAnswer(Math.round(videoRef.current.currentTime)); // 정답을 저장
+                    setAnswerTime(Math.round(videoRef.current.currentTime)); // 정답을 저장
                 }
             }, 1000);
         }
@@ -70,7 +70,7 @@ const Game = () => {
             }
             if (countDown === 0 && videoRef.current) {
                 videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
-                videoRef.current.play();
+                // videoRef.current.play();
             }
         }
 
@@ -108,7 +108,6 @@ const Game = () => {
         const percentage = (currentTime / duration) * 100;
         return `${percentage}%`;
     };
-    console.log(answer, '정답');
     return (
         <>
             <Main>
@@ -147,7 +146,7 @@ const Game = () => {
                     <AreaHeader>
                         <CountDown>{`${message}`}</CountDown>
                     </AreaHeader>
-                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
+                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} answerTime={answerTime} />
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>

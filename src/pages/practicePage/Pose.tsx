@@ -5,9 +5,11 @@ import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import sheet from './keypoints.json';
+import { test } from './scoring';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
+const Pose = forwardRef(({ setKeypointsDetected, currentTime, answerTime }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
@@ -127,6 +129,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
+
                         const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.4 이상인 keypoints만 valid로 가정
                         setKeypointsDetected(validKeypoints.length);
 
@@ -139,6 +142,8 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                                 connect(ctx, pose.keypoints, start, end);
                             });
                         }
+                        console.log(Math.round(scoreVideoRef.current.currentTime));
+                        console.log(test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints));
                     });
                 }
             }, 100); // 100ms 마다 실행
@@ -147,60 +152,6 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         };
         runPoseEstimation();
     }, []);
-
-    // * 유저 keypoints를 저장하는 함수
-    useEffect(() => {
-        const currentSecond = Math.floor(currentTime);
-        if (currentSecond !== lastSavedSecond) {
-            const estimatePoses = async () => {
-                try {
-                    if (videoRef.current && detectorRef.current) {
-                        const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
-                        poses.forEach((pose) => {
-                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0);
-                            // Add the time property to each keypoint
-                            const timedKeypoints = validKeypoints.map((keypoint) => ({ ...keypoint, time: currentSecond }));
-                            // 'time'과 'keypoints' 속성을 가진 객체로 저장
-                            const poseData = {
-                                time: currentSecond,
-                                keypoints: timedKeypoints
-                            };
-                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
-                            // console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
-                        });
-                        setLastSavedSecond(currentSecond); // 이 위치로 변경
-                    }
-                } catch (error) {
-                    console.error('Error in estimatePoses:', error);
-                }
-            };
-            estimatePoses();
-        }
-    }, [currentTime]);
-
-    // * video 재생 종료 확인
-    useEffect(() => {
-        if (scoreVideoRef.current) {
-            scoreVideoRef.current.addEventListener('ended', () => {
-                setVideoEnded(true);
-            });
-        }
-        return () => {
-            if (scoreVideoRef.current) {
-                scoreVideoRef.current.removeEventListener('ended', () => {
-                    setVideoEnded(true);
-                });
-            }
-        };
-    }, []);
-
-    // * video 재생 종료 후 navigate, 데이터 전달
-    useEffect(() => {
-        if (videoEnded) {
-            console.log(savedKeypoints);
-            navigate('/result');
-        }
-    }, [videoEnded, navigate]);
 
     return (
         <Container>
