@@ -28,15 +28,15 @@ const router = createBrowserRouter([
                 element: <AdminPage />
             },
             {
-                path: '/challenge/:musicId',
+                path: '/challenge',
                 element: <ChallengePage />,
                 children: [
                     {
-                        path: 'game',
+                        path: '/challenge/:musicId',
                         element: <Test />
                     },
                     {
-                        path: 'score',
+                        path: '/challenge/score/:musicId',
                         element: <ScoreExtraction />
                     }
                 ]

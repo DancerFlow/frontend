@@ -86,7 +86,30 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                     ctx.lineWidth = 7;
                     const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                     const centerY = (startKeypoint.y + endKeypoint.y) / 2;
-                    ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
+                    ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+                    ctx.stroke();
+
+                    // 눈 그리기
+                    const eyeLength = 10; // 눈의 길이 설정
+                    const eyeDistance = 15; // 눈 사이의 거리 설정
+                    const eyeHeight = -5; // 눈의 높이 설정
+
+                    // 왼쪽 눈 그리기
+                    ctx.beginPath();
+                    ctx.strokeStyle = 'blue';
+                    ctx.lineWidth = 3;
+                    ctx.moveTo(centerX - eyeDistance, centerY); // 왼쪽 눈의 중앙
+                    ctx.lineTo(centerX - eyeDistance - eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 왼쪽 끝
+                    ctx.lineTo(centerX - eyeDistance + eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 오른쪽 끝
+                    ctx.closePath(); // 선의 시작점과 끝점을 연결
+                    ctx.stroke();
+
+                    // 오른쪽 눈 그리기
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + eyeDistance, centerY); // 오른쪽 눈의 중앙
+                    ctx.lineTo(centerX + eyeDistance - eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 왼쪽 끝
+                    ctx.lineTo(centerX + eyeDistance + eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 오른쪽 끝
+                    ctx.closePath(); // 선의 시작점과 끝점을 연결
                     ctx.stroke();
                 } else {
                     ctx.beginPath();
@@ -111,10 +134,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                         // validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        if (validKeypoints.length >= 12) {
-                            // 비디오 프레임을 캔버스에 렌더링
-                            // ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
+                        if (validKeypoints.length >= 5) {
                             POSE_CONNECTIONS.forEach(([start, end]) => {
                                 connect(ctx, pose.keypoints, start, end);
                             });

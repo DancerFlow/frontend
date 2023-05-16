@@ -5,10 +5,12 @@ const ChallengePage = () => {
     const { musicId } = useParams();
 
     const handleMovePage = (page?: string) => {
-        if (page) {
-            navigate('/challenge/' + musicId + '/' + page);
+        if (page === 'game') {
+            navigate(`/challenge/${musicId}`);
+        } else if (page === 'score') {
+            navigate(`/challenge/score/${musicId}`);
         } else {
-            navigate('/challenge/' + musicId);
+            navigate('/challenge');
         }
     };
 
