@@ -6,6 +6,8 @@ import { Profile, Status } from '../../interface';
 // import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
+import { useDeleteLogoutMutation } from '../../api/useDeleteLogoutMutation';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -14,6 +16,8 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const [avatarImage, setAvatarImage] = useState<string | undefined>(profile?.profile_image_url);
     const [changeNicknameEnabled, setChangeNicknameEnabled] = useState(false);
     const [changePasswordEnabled, setChangePasswordEnabled] = useState(false);
+
+    const navigate = useNavigate();
 
     //수정할 제출 폼
     const [formValues, setFormValues] = useState({
@@ -90,6 +94,23 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
                 console.log('profile error', error);
+            }
+        }
+    );
+
+    const mutationDeleteAccount = useMutation(
+        async () => {
+            const response = await axios.delete(`${baseUrl}/auth/leave`, { withCredentials: true });
+            console.log('account delete', response.data);
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                alert(data.message);
+            },
+            onError: (error: AxiosError<Status>) => {
+                alert(error.response?.data.message);
+                console.log('delete error', error);
             }
         }
     );
@@ -276,7 +297,15 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                             Update
                         </EditButton>
                     </FieldContainer>
-                    <p>회원탈퇴</p>
+                    <DeleteAccount
+                        onClick={() => {
+                            mutationDeleteAccount.mutate();
+                            useDeleteLogoutMutation.mutate();
+                            navigate('/');
+                        }}
+                    >
+                        회원탈퇴
+                    </DeleteAccount>
                 </FormContainer>
             </FormS>
         </>
@@ -298,14 +327,15 @@ const FormS = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    align-items: center;
-    justify-content: center;
+    /* align-items: flex-start; */
+    /* justify-content: center; */
     display: flex;
+    /* flex-direction: column; */
 `;
 
 const FormContainer = styled.div`
     display: flex;
-    padding: 50px 20px 50px 20px;
+    padding: 30px 20px;
     border-radius: 4px;
     width: 500px;
     box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.2);
@@ -322,7 +352,7 @@ const FormContainer = styled.div`
         padding: 5px 0px;
         text-indent: 6px;
         margin-top: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-size: 0.9rem;
         letter-spacing: 2px;
     }
@@ -359,7 +389,7 @@ const DuplicateCheckButton = styled.button`
     border-style: none;
     margin-left: 1rem;
     height: 40px;
-    /* cursor: pointer; */
+    cursor: pointer;
     width: 100px;
 `;
 
@@ -377,6 +407,11 @@ const EditButton = styled.button.attrs({ type: 'submit' })`
     cursor: pointer;
     &:hover {
         opacity: 0.8;
+    }
+
+    &:disabled {
+        background-color: #00000042;
+        cursor: not-allowed;
     }
 `;
 
@@ -459,4 +494,13 @@ const RowContainer = styled.div`
 
 const NicknameValidMessage = styled.div`
     font-size: 9px;
+`;
+
+const DeleteAccount = styled.div`
+    text-align: left;
+    align-self: flex-start;
+    margin-top: 1rem;
+    margin-left: 3rem;
+    font-size: 0.8rem;
+    cursor: pointer;
 `;
