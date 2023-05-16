@@ -21,7 +21,7 @@ const MainPage = () => {
         <div>
             {/* <LoadingView loading={loadingScreen}></LoadingView> */}
             <VideoContainer setIsClicked={setIsClicked} isClicked={isClicked}></VideoContainer>
-            {isClicked && <LoginModal setIsClicked={setIsClicked} />}
+            <LoginModal isModalView={isClicked} setIsModalView={setIsClicked} />
         </div>
     );
 };

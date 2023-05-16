@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetUserProfileQuery } from '../api/useGetUserProfileQuery';
 import styled from 'styled-components';
 
 import tempImg from './KakaoTalk_Photo_2023-05-15-20-09-53.png';
+import { Profile } from '../interface';
+import LoginModal from '../components/main/LoginModal';
 
 interface Props {
     onLogout: () => void;
+    isLogin: boolean;
 }
 
-const NavUserInfo = ({ onLogout }: Props) => {
-    const { data: profile, isLoading, isError } = useGetUserProfileQuery();
-    if (isLoading) {
-        return <div>Loading profile...</div>;
-    }
-    if (isError) {
-        return <div>Error loading profile</div>;
-    }
-
+const NavUserInfo = ({ onLogout, isLogin }: Props) => {
+    const { data: profile } = useGetUserProfileQuery();
+    const [modalView, setModalView] = useState<boolean>(false);
+    console.log(profile);
     return (
         <ProfileContainer>
             <ProfileImage src={tempImg} alt="profile" />
-            <ProfileNickname>"{profile?.nickname}"</ProfileNickname>
-            <LogoutButton onClick={onLogout}>LOGOUT</LogoutButton>
+            <ProfileNickname>"{isLogin ? profile?.nickname : 'Guest'}"</ProfileNickname>
+            {isLogin ? (
+                <LogoutButton onClick={onLogout}>LOGOUT</LogoutButton>
+            ) : (
+                <LoginButton onClick={() => setModalView(true)}>LOGIN</LoginButton>
+            )}
+            <LoginModal setIsModalView={setModalView} isModalView={modalView} />
         </ProfileContainer>
     );
 };
@@ -54,6 +57,10 @@ const ProfileNickname = styled.p`
     font-family: 'NanumSquareNeo';
 `;
 const LogoutButton = styled.button`
+    margin-top: 10px;
+`;
+
+const LoginButton = styled.button`
     margin-top: 10px;
 `;
 

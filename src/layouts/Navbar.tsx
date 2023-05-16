@@ -74,7 +74,7 @@ export default function NavBar() {
                             <IconWrapper>
                                 <CloseFontAwesomeIcon icon={faXmark} size="2xl" onClick={handleToggle} />
                             </IconWrapper>
-                            {state.userState.login ? <NavUserInfo onLogout={handleLogout} /> : <div>guest</div>}
+                            <NavUserInfo onLogout={handleLogout} isLogin={state.userState.login} />
                             <ul>
                                 {navLinks.map((navLink, index) => (
                                     <li key={index} onClick={() => setOpen(false)}>
