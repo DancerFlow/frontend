@@ -44,6 +44,7 @@ const LoginModal = ({ isModalView, setIsModalView }: Props) => {
     const { mutate: LoginMutate } = usePostLoginMutation({
         onSuccess: () => {
             verifyUser();
+            setIsModalView(false);
             navigate('/mode');
         },
         onError: (error: AxiosError) => {
