@@ -109,7 +109,7 @@ const SelectContainer = styled.div`
         border: solid #27fd1c;
         border-width: 0 0 1px 0;
         cursor: pointer;
-        padding: 5px;
+        padding: 5px !important;
     }
 `;
 

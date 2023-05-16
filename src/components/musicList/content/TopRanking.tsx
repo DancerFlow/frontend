@@ -33,15 +33,19 @@ const TopRankingUI = ({ rankingList }: any) => {
                     </div>
                 </Header>
                 <RankList>
-                    {rankingList.map((rank: any) => (
-                        <Rank
-                            key={rank.id}
-                            rank={rank.rank}
-                            musicName={rank.nickname}
-                            userAvatar={rank.profile_image_url}
-                            score={rank.score}
-                        />
-                    ))}
+                    {rankingList.length === 0 ? (
+                        <NoRanking>no ranking history...</NoRanking>
+                    ) : (
+                        rankingList.map((rank: any) => (
+                            <Rank
+                                key={rank.id}
+                                rank={rank.rank}
+                                musicName={rank.nickname}
+                                userAvatar={rank.profile_image_url}
+                                score={rank.score}
+                            />
+                        ))
+                    )}
                 </RankList>
             </div>
             <div className="arrow"> &#8595;</div>
@@ -62,7 +66,6 @@ const Header = styled.div`
         h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-left: 2rem;
         }
         position: absolute;
         top: 1.5rem;
@@ -145,6 +148,10 @@ const MusicModalRankContent = styled.div`
         align-items: center;
         position: relative;
     }
+`;
+
+const NoRanking = styled.div`
+    margin-top: 2rem;
 `;
 
 export default TopRankingUI;
