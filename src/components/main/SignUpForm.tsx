@@ -46,6 +46,11 @@ const SignUpForm = ({ setIsSignUp, onSubmit }: Props) => {
         onSubmit({ nickname, email, password });
     };
 
+    const handelReturn = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        setIsSignUp(false);
+    };
+
     return (
         <>
             <FieldContainer>
@@ -74,7 +79,7 @@ const SignUpForm = ({ setIsSignUp, onSubmit }: Props) => {
 
                 <LoginButton onClick={(e) => onClickSignup(e)}>SIGNUP</LoginButton>
                 <p>{formValid}</p>
-                <ReturnButton onClick={() => setIsSignUp(false)}>&larr;</ReturnButton>
+                <ReturnButton onClick={(e) => handelReturn(e)}>&larr;</ReturnButton>
             </FieldContainer>
         </>
     );

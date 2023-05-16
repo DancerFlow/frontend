@@ -84,7 +84,6 @@ export default function Player({ destinationPoint, playerAnimation, setPlayerAni
                     setArea(-1);
                 }
             } else {
-                console.log('no area');
                 setArea(-1);
             }
         }

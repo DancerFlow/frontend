@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
+import { useContext } from 'react';
+import { GlobalContext } from '../../../context/Context';
 
 export default function Room({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
+    const { state } = useContext(GlobalContext);
 
     const gltf = useGLTF('/models/house2.glb');
     gltf.scene.castShadow = true;
@@ -31,6 +34,11 @@ export default function Room({ area }) {
 
     const handleHouseClick = (e) => {
         e.stopPropagation();
+        if (!state.userState.login) {
+            window.alert('로그인이 필요한 서비스입니다.');
+            return;
+        }
+        navigate('/user');
     };
 
     return (

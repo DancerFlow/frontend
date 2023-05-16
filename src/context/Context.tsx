@@ -7,13 +7,18 @@ interface UserState {
     login: boolean;
     admin: boolean;
 }
+interface BgmState {
+    bgm: boolean;
+}
 interface State {
     userState: UserState;
+    bgmState: BgmState;
 }
-type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' };
+type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' } | { type: 'BGM_CONTROL'; payload: BgmState };
 
 const initialState: State = {
-    userState: { login: false, admin: false }
+    userState: { login: false, admin: false },
+    bgmState: { bgm: false }
 };
 
 const Reducer = (state: State, action: Action) => {
@@ -32,6 +37,11 @@ const Reducer = (state: State, action: Action) => {
                 userState: { login: false, admin: false }
             };
 
+        case 'BGM_CONTROL':
+            return {
+                ...state,
+                bgmState: action.payload
+            };
         default:
             return state;
     }
@@ -73,12 +83,20 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
         refetch();
     };
 
+    const bgmControl = (bgmState: BgmState) => {
+        dispatch({
+            type: 'BGM_CONTROL',
+            payload: bgmState
+        });
+    };
+
     return (
         <GlobalContext.Provider
             value={{
                 logIn,
                 logOut,
                 verifyUser,
+                bgmControl,
                 state
             }}
         >
