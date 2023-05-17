@@ -31,11 +31,11 @@ export default function Challenge({ area }) {
     });
 
     return (
-        <group ref={ref} position={[-8, -1.3, -8]}>
+        <group ref={ref} position={[-8.2, -1.3, -8]}>
             <primitive
                 object={gltf.scene}
                 scale={1.0}
-                rotation={[0, 0.2 * Math.PI, 0]}
+                rotation={[0, 0.13 * Math.PI, 0]}
                 castShadow
                 receiveShadow
                 onPointerOver={() => setHovered(true)}

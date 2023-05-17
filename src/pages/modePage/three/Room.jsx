@@ -42,7 +42,7 @@ export default function Room({ area }) {
     };
 
     return (
-        <group ref={ref} scale={1} position={[-9, 1.1, 9]}>
+        <group ref={ref} scale={1} position={[-8, 1.1, 9]}>
             <primitive
                 object={gltf.scene}
                 scale={0.013}
