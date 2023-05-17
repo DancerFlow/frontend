@@ -9,7 +9,7 @@ import sheet from './keypoints.json';
 import { test } from './scoring';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, playTest, setPlayTest }, ref) => {
+const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementCorrected }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
@@ -144,8 +144,8 @@ const Pose = forwardRef(({ setKeypointsDetected, playTest, setPlayTest }, ref) =
                         const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
 
                         //^ 75점 이상이면 테스트 통과
-                        if (testResult > 75 && !playTest) {
-                            setPlayTest(true);
+                        if (testResult > 75 && !movementCorrected) {
+                            setMovementCorrected(true);
                         }
 
                         tf.disposeVariables(); // 메모리 누수 방지를 위한 tf.dispose() 호출
