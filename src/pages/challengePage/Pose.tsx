@@ -25,7 +25,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     const [lastSavedSecond, setLastSavedSecond] = useState(-1);
     const [savedKeypoints, setSavedKeypoints] = useState([]);
-    const [score, setScore] = useState('');
+    const [score, setScore] = useState({ feedback: '', color: '' });
     const navigate = useNavigate();
     const musicIdNumber = Number(musicId);
 
@@ -123,7 +123,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             const canvas: any = canvasRef.current;
             const ctx = canvas.getContext('2d');
 
-            const connect = (ctx, keypoints, start, end, color) => {
+            const connect = (ctx, keypoints, start, end) => {
                 const startKeypoint = keypoints.find((kpt, idx) => idx === start);
                 const endKeypoint = keypoints.find((kpt, idx) => idx === end);
 
@@ -131,12 +131,12 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                     (start === 6 && end === 5) ||
                     (start === 6 && end === 12) ||
                     (start === 5 && end === 11) ||
-                    (startKeypoint.score >= 0.4 && endKeypoint.score >= 0.4)
+                    (startKeypoint.score >= 0.4 && endKeypoint.score >= 0.3)
                 ) {
                     // 머리 좌표(3,4)
                     if (start === 3 && end === 4) {
                         ctx.beginPath();
-                        ctx.strokeStyle = color;
+                        ctx.strokeStyle = score.color;
                         ctx.lineWidth = 7;
                         const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                         const centerY = (startKeypoint.y + endKeypoint.y) / 2;
@@ -150,7 +150,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
                         // 왼쪽 눈 그리기
                         ctx.beginPath();
-                        ctx.strokeStyle = 'blue';
+                        ctx.strokeStyle = score.color;
                         ctx.lineWidth = 3;
                         ctx.moveTo(centerX - eyeDistance, centerY); // 왼쪽 눈의 중앙
                         ctx.lineTo(centerX - eyeDistance - eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 왼쪽 끝
@@ -167,7 +167,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                         ctx.stroke();
                     } else {
                         ctx.beginPath();
-                        ctx.strokeStyle = color;
+                        ctx.strokeStyle = score.color;
                         ctx.lineWidth = 7;
                         ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
                         ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
@@ -189,20 +189,20 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             // canvas 초기화
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                            const newTestResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
-                            setTestResult(newTestResult);
+                            // const newTestResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
+                            // setTestResult(newTestResult);
                             if (validKeypoints.length >= 5) {
-                                const { feedback, color } = getFeedback(newTestResult);
-                                setScore(feedback);
+                                // const { feedback, color } = getFeedback(newTestResult);
+                                // setScore(feedback);
                                 POSE_CONNECTIONS.forEach(([start, end]) => {
-                                    connect(ctx, pose.keypoints, start, end, color);
+                                    connect(ctx, pose.keypoints, start, end);
                                 });
                             }
                             // 점수에 따른 피드백 출력
                         });
                     });
                 }
-            }, 100); // 100밀리초 간격으로 setInterval 함수 실행
+            }, 100); // 50밀리초 간격으로 setInterval 함수 실행
 
             return () => {
                 clearInterval(intervalId); // Clear the interval
@@ -219,7 +219,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             };
         };
         runPoseEstimation();
-    }, []);
+    }, [score.color]);
 
     // * 유저 keypoints를 저장하는 함수
     useEffect(() => {
@@ -239,6 +239,8 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                                 time: currentSecond,
                                 keypoints: timedKeypoints
                             };
+                            const newTestResult = test(sheet_9th, currentSecond, validKeypoints);
+                            setTestResult(newTestResult);
                             setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
                         });
                         setLastSavedSecond(currentSecond); // 이 위치로 변경
@@ -249,6 +251,8 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             };
             estimatePoses();
         }
+        const { feedback, color } = getFeedback(testResult);
+        setScore({ feedback, color });
     }, [currentTime]);
 
     // * video가 끝나면 mutation을 호출하는 이펙트
@@ -272,10 +276,9 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             }
         };
     }, [scoreVideoRef.current]);
-
     return (
         <Container>
-            <Score score={testResult}>{score}</Score>
+            <Score color={score.color}>{score.feedback}</Score>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
             <canvas ref={canvasRef}></canvas>
         </Container>
@@ -290,28 +293,12 @@ const Container = styled.div`
     overflow: hidden;
 `;
 
-const getFeedbackColor = (score) => {
-    if (score >= 90) {
-        return COLOR_LIST[0]; // green
-    } else if (score >= 85) {
-        return COLOR_LIST[1]; // blue
-    } else if (score >= 80) {
-        return COLOR_LIST[2]; // magenta
-    } else if (score >= 60) {
-        return COLOR_LIST[3]; // yellow
-    } else {
-        return COLOR_LIST[4]; // red
-    }
-};
-
 const Score = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
-    color: ${({ score }) => getFeedbackColor(score)};
+    color: ${(props) => props.color};
 `;
 const HiddenVideo = styled.video`
-    height: 80%;
-    width: 100%;
     display: none;
 `;
 export default Pose;
