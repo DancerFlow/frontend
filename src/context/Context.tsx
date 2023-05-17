@@ -14,11 +14,28 @@ interface State {
     userState: UserState;
     bgmState: BgmState;
 }
+
+interface ContextType {
+    logIn: (userState: UserState) => void;
+    logOut: () => void;
+    verifyUser: () => void;
+    bgmControl: (bgmState: BgmState) => void;
+    state: State;
+}
+
 type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' } | { type: 'BGM_CONTROL'; payload: BgmState };
 
-const initialState: State = {
+const reducerInitialState: State = {
     userState: { login: false, admin: false },
     bgmState: { bgm: false }
+};
+
+const initialState: ContextType = {
+    logIn: () => {},
+    logOut: () => {},
+    verifyUser: () => {},
+    bgmControl: () => {},
+    state: reducerInitialState
 };
 
 const Reducer = (state: State, action: Action) => {
@@ -47,18 +64,11 @@ const Reducer = (state: State, action: Action) => {
     }
 };
 
-interface ContextType {
-    logIn?: (userState: UserState) => void;
-    logOut?: () => void;
-    verifyUser?: () => void;
-    bgmControl?: (bgmState: BgmState) => void;
-    state: State;
-}
-
-export const GlobalContext = createContext<ContextType | State>(initialState);
+export const GlobalContext = createContext<ContextType>(initialState);
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, dispatch] = useReducer(Reducer, initialState);
+    const [state, dispatch] = useReducer(Reducer, reducerInitialState);
+
     const { data, refetch } = useGetUserVerifyQuery({
         onSuccess: (data: UserVerify) => {
             console.log(data);
@@ -92,6 +102,7 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
     };
 
     const bgmControl = (bgmState: BgmState) => {
+        sessionStorage.setItem('noShowPopup', 'true');
         dispatch({
             type: 'BGM_CONTROL',
             payload: bgmState

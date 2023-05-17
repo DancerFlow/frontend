@@ -22,24 +22,25 @@ const BgmPlayer = () => {
 
     return (
         <>
-            {' '}
-            <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
-                <span>신나는 브금이랑 함께 하실래요?</span>
-                <div
-                    onClick={() => {
-                        bgmControl({ bgm: true });
-                    }}
-                >
-                    넹!
-                </div>
-                <div
-                    onClick={() => {
-                        bgmControl({ bgm: false });
-                    }}
-                >
-                    아뇨
-                </div>
-            </ConfirmSoundPlay>
+            {!sessionStorage.getItem('noShowPopup') && (
+                <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
+                    <span>신나는 브금이랑 함께 하실래요?</span>
+                    <div
+                        onClick={() => {
+                            bgmControl({ bgm: true });
+                        }}
+                    >
+                        넹!
+                    </div>
+                    <div
+                        onClick={() => {
+                            bgmControl({ bgm: false });
+                        }}
+                    >
+                        아뇨
+                    </div>
+                </ConfirmSoundPlay>
+            )}
             <ReactHowler src={[bgm]} playing={state.bgmState.bgm} volume={0.1} loop={true} />
             <BgmController onClick={handleSound}>
                 <Lottie lottieRef={lottieRef} animationData={bgmOnOff} loop={false} autoPlay={false}></Lottie>
