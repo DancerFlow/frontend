@@ -50,7 +50,7 @@ const router = createBrowserRouter([
                 element: <MusicListPage />
             },
             {
-                path: '/practice',
+                path: '/practice/:musicId',
                 element: <PracticePage />
             },
             {
