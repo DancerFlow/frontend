@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
-import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.tsx';
+import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.jsx';
 import Test from './pages/challengePage/Game.jsx';
 import ScoreExtraction from './pages/challengePage/Score/index.jsx';
 import { theme } from './theme.ts';
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
                 element: <MusicListPage />
             },
             {
-                path: '/practice/:musicId',
+                path: '/practice',
                 element: <PracticePage />
             },
             {
@@ -60,6 +60,11 @@ const router = createBrowserRouter([
             {
                 path: '/result',
                 element: <ResultPage />
+            },
+
+            {
+                path: '/practice/result/:musicId',
+                element: <div>종료!</div>
             }
         ]
     }
