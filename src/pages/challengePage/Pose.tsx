@@ -71,10 +71,12 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     //* 점수에 따른 피드백 문자열을 반환하는 함수
     const getFeedback = (score) => {
-        if (score >= 80) {
+        if (score >= 90) {
             return 'Perfect!';
-        } else if (score >= 70) {
+        } else if (score >= 80) {
             return 'Great!';
+        } else if (score >= 70) {
+            return 'Good!';
         } else if (score >= 40) {
             return 'Normal';
         } else {
