@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTexture } from '@react-three/drei';
-import grid from './material/grid.png';
+import grid from './material/grid2.jpeg';
 import * as THREE from 'three';
 
 export default function Floor({ setDestinatioPoint }) {

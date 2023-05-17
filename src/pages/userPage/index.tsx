@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import Profile from '../../components/user/Profile';
 import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
-
 const UserPage = () => {
+  
     return (
         <Container>
             <Profile />
