@@ -60,6 +60,11 @@ const router = createBrowserRouter([
             {
                 path: '/result',
                 element: <ResultPage />
+            },
+
+            {
+                path: '/practice/result/:musicId',
+                element: <div>종료!</div>
             }
         ]
     }
