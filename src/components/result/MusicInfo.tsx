@@ -11,7 +11,7 @@ export default function MusicInfo({ musicDetail }: { musicDetail: Music | undefi
                     <Img src={musicDetail.album_image_url}></Img>
                     <div>
                         <Title>{musicDetail.name}</Title>
-                        <div>{musicDetail.music_singer?.name}</div>
+                        <Singer>{musicDetail.music_singer?.name}</Singer>
                     </div>
                 </>
             )}
@@ -23,6 +23,7 @@ const Section = styled.section`
     display: flex;
     width: 400px;
     margin-top: 3rem;
+    align-items: center;
 
     div {
         text-align: start;
@@ -31,11 +32,18 @@ const Section = styled.section`
 `;
 
 const Img = styled.img`
-    width: 6rem;
+    width: 7rem;
     height: auto;
+    border-radius: 50%;
 `;
 
 const Title = styled.div`
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-top: 1rem;
     margin-bottom: 0.5rem;
+`;
+
+const Singer = styled.div`
+    font-size: 1rem;
+    margin-bottom: 3rem;
 `;

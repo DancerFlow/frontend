@@ -7,6 +7,7 @@ import { useGetMusicRankingQuery } from '../../api/useGetMusicRankingQuery';
 import { useGetMusicDetailQuery } from '../../api/useGetMusicDetailQuery';
 import { useGetGameResultQuery } from '../../api/useGetGameResult';
 import TopRankingUI from '../musicList/content/TopRanking';
+import { getPercentageToNextTier } from '../../utils/tierUtils';
 
 interface ResultData {
     guestData?: any;
@@ -22,7 +23,6 @@ export default function Main({ resultdata }: { resultdata: ResultData }) {
     const { data: gameResult, isLoading: resultLoading } = useGetGameResultQuery(resultdata?.scoreId);
 
     if (resultLoading || detailLoading || rankLoading) {
-        // Render loading state
         return <div>Loading...</div>;
     }
 
@@ -35,29 +35,29 @@ export default function Main({ resultdata }: { resultdata: ResultData }) {
             <ResultInfo>
                 <Lottie animationData={animationData} loop={true} />
                 <Score>{gameResult?.score}점</Score>
-                <MyRank>{gameResult?.rank}</MyRank>
-            </ResultInfo>
-            <ScoreDetail>
-                <Combo>
-                    <p>Perfect</p> <p>{gameResult?.perfect}</p>
-                </Combo>
-                <Combo>
-                    <p>Great</p> <p>{gameResult?.great}</p>
-                </Combo>
-                <Combo>
-                    <p>Good</p> <p>{gameResult?.good}</p>
-                </Combo>
-                <Combo>
-                    <p>Good</p> <p>{gameResult?.good}</p>
-                </Combo>
-                <Combo>
-                    <p>Bad</p> <p>7</p>
-                </Combo>
                 <XpContainer>
                     <p>Xp: </p>
-                    <ProgressBar progress={60} height={50}></ProgressBar>
-                    <p>+5</p>
+                    <ProgressBar progress={getPercentageToNextTier(gameResult ? gameResult?.xp : 0)} height={50}></ProgressBar>
+                    <p>+{gameResult?.delta_xp}</p>
                 </XpContainer>
+            </ResultInfo>
+            <ScoreDetail>
+                <MyRank>{gameResult?.rank}</MyRank>
+                <Combo>
+                    <p>Perfect {gameResult?.perfect}</p>
+                </Combo>
+                <Combo>
+                    <p>Great {gameResult?.great}</p>
+                </Combo>
+                <Combo>
+                    <p>Good {gameResult?.good}</p>
+                </Combo>
+                <Combo>
+                    <p>Normal {gameResult?.normal}</p>
+                </Combo>
+                <Combo>
+                    <p>Miss {gameResult?.miss}</p>
+                </Combo>
             </ScoreDetail>
         </Container>
     );
@@ -88,14 +88,15 @@ const Score = styled.div`
 const MyRank = styled.div`
     font-size: 2.5rem;
     margin-top: 2rem;
+    text-align: center;
+    font-style: italic;
 `;
 const ScoreDetail = styled.section`
     display: flex;
-    align-items: flex-start;
     width: 400px;
     font-size: 2rem;
     & > :first-child {
-        margin-top: 3rem;
+        margin: 4rem 0 3rem 0;
     }
 `;
 
@@ -106,10 +107,13 @@ const ColumnContainer = styled.div`
 `;
 const Combo = styled.div`
     display: flex;
+    align-items: flex-start;
+    font-size: 1.2rem;
     margin-bottom: 1rem;
 
     p {
         margin-right: 1rem;
+        margin-left: 3rem;
     }
 `;
 
@@ -121,4 +125,5 @@ const XpContainer = styled.div`
     & > * {
         margin-right: 1rem;
     }
+    margin-top: 2rem;
 `;

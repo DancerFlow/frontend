@@ -32,7 +32,7 @@ export default function Bottom() {
             <LikedContainer>
                 {maxPage > 1 && <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevPage} />}
                 <LikedList>
-                    {userLikes?.length ? (
+                    {userLikes && userLikes?.length ? (
                         userLikes.map((item) => (
                             <LikedItem key={item.id}>
                                 <LikedItemImg src={item.music.album_image_url} alt={item.music.name} />
@@ -46,9 +46,9 @@ export default function Bottom() {
                 </LikedList>
                 {maxPage > 1 && <ChevronIcon icon={faChevronRight} onClick={handleNextPage} />}
             </LikedContainer>
-            <div>
+            <PageNo>
                 {pageNo}/{maxPage}
-            </div>
+            </PageNo>
         </Container>
     );
 }
@@ -105,4 +105,9 @@ const LikedItemName = styled.div`
 const LikedItemSinger = styled.div`
     font-size: 0.6rem;
     text-align: left;
+`;
+
+const PageNo = styled.div`
+    font-size: 0.7rem;
+    color: ${(props) => props.theme.green};
 `;

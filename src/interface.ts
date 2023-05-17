@@ -31,8 +31,7 @@ export interface Profile {
     nickname: string;
     email: string;
     profile_image_url?: string;
-    current_tier: Tier;
-    // user_xp: number;
+    xp: number;
 }
 
 export interface UserRank {

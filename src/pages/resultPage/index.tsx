@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import LaserAnimation from '../../hooks/LazerAnimation';
 import Main from '../../components/result';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface ResultData {
     guestData?: any;
@@ -12,9 +13,6 @@ interface ResultData {
 export default function ResultPage() {
     const location = useLocation();
     const resultdata: ResultData | undefined = location?.state;
-
-    console.log('navData', resultdata);
-    console.log('Boolean', !resultdata);
 
     if (!resultdata) {
         // resultdata가 없을 때
@@ -36,9 +34,15 @@ export default function ResultPage() {
                     <Main resultdata={resultdata} />
                 </Body>
                 <Bottom>
-                    <Button>Back to music selection</Button>
-                    <Button>Retry</Button>
-                    <Button>Back to Home</Button>
+                    <Button>
+                        <Link to="/musiclist/challenge">Back to music</Link>
+                    </Button>
+                    <Button>
+                        <Link to={`/challenge/${resultdata?.musicId}`}>Retry</Link>
+                    </Button>
+                    <Button>
+                        <Link to="/">Home</Link>
+                    </Button>
                 </Bottom>
             </Container>
         </>
@@ -63,7 +67,6 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
-    /* background-color: rgba(255, 255, 255, 0.1); */
     h1 {
         font-size: 3rem;
     }
@@ -79,13 +82,15 @@ const Body = styled.div`
 const Bottom = styled.footer`
     border-radius: 10px;
     display: flex;
+    margin-top: 4rem;
 `;
 
 const Button = styled.button`
     display: flex;
     background-color: rgba(255, 255, 255, 0.1);
     color: ${(props) => props.theme.pink};
-    border-radius: 10px;
+    background-color: ${(props) => props.theme.blue};
+    /* border-radius: 10px; */
     border: none;
     flex-direction: column;
     justify-content: center;
@@ -93,5 +98,14 @@ const Button = styled.button`
     font-size: 1.5rem;
     &:hover {
         background-color: ${(props) => props.theme.green};
+    }
+
+    padding: 1rem;
+    margin: 1rem;
+    transform: skew(-20deg);
+
+    a {
+        text-decoration: none;
+        color: ${(props) => props.theme.pink};
     }
 `;

@@ -42,7 +42,7 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                     <BestScoreContainer>
                         <h1>Best Score</h1>
                         <ScoreDetail>
-                            <MyScoreRank>
+                            <MyScoreDetail>
                                 <div>
                                     My Best Score: {gamehistorydetail?.music_best_score_detail?.score}/
                                     {gamehistorydetail?.music_total_score}
@@ -50,9 +50,11 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                                 <div>
                                     <p>My Rank: {gamehistorydetail?.music_best_score_detail?.rank}</p>
                                 </div>
-                            </MyScoreRank>
+                            </MyScoreDetail>
                             <Scoring>Perfect: {gamehistorydetail?.music_best_score_detail?.perfect}</Scoring>
+                            <Scoring>Great: {gamehistorydetail?.music_best_score_detail?.great}</Scoring>
                             <Scoring>Good: {gamehistorydetail?.music_best_score_detail?.good}</Scoring>
+                            <Scoring>Normal: {gamehistorydetail?.music_best_score_detail?.normal}</Scoring>
                             <Scoring>Miss: {gamehistorydetail?.music_best_score_detail?.miss}</Scoring>
                         </ScoreDetail>
                     </BestScoreContainer>
@@ -104,7 +106,7 @@ const ScoreDetail = styled.div`
     align-items: flex-start;
 `;
 
-const MyScoreRank = styled.div`
+const MyScoreDetail = styled.div`
     margin: 1rem;
     text-align: start;
 

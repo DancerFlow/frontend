@@ -293,7 +293,10 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                         <p style={{ color: 'red' }}>{formValid}</p>
                         <EditButton
                             onClick={handleSubmit}
-                            disabled={changePasswordEnabled && formValues.new_password !== passwordConfirmRef?.current?.value}
+                            disabled={
+                                (changePasswordEnabled && formValues.new_password !== passwordConfirmRef?.current?.value) ||
+                                (!changePasswordEnabled && !changeNicknameEnabled && !file)
+                            }
                         >
                             Update
                         </EditButton>
