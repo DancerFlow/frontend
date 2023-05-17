@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import fearless from '../../assets/fearless.mp4';
-import 춤예시 from '../../assets/춤예시.mp4';
-import { useNavigate, useParams } from 'react-router-dom';
+import video_9th from '../../assets/fearless.mp4';
+import video_10th from '../../assets/춤예시.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 
 const Game = () => {
@@ -19,11 +18,7 @@ const Game = () => {
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
 
-    const navigate = useNavigate();
-    const { musicId } = useParams();
-
     const { data: gameData } = useGetGameDataQuery(9);
-
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
         let timerId; // 타이머 ID를 저장할 변수
@@ -88,7 +83,7 @@ const Game = () => {
                             <video
                                 className="answer-video"
                                 ref={videoRef}
-                                src={fearless}
+                                src={video_9th}
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
                                 style={{

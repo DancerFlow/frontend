@@ -4,10 +4,12 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import { forwardRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
+    const { musicId } = useParams();
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
@@ -15,9 +17,32 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     const [lastSavedSecond, setLastSavedSecond] = useState(-1);
     const [savedKeypoints, setSavedKeypoints] = useState([]);
-    const [videoEnded, setVideoEnded] = useState(false);
 
     const navigate = useNavigate();
+    const musicIdNumber = Number(musicId);
+
+    let isGuest = true;
+    const postPlayDataMutation = isGuest
+        ? usePostGuestPlayDataMutation(musicIdNumber, savedKeypoints, {
+              onSuccess: (data) => {
+                  console.log('scoreId: ', data);
+                  navigate('/result', { state: { guestData: data, musicId: musicIdNumber } });
+              },
+              onError: (error) => {
+                  console.log('scoreId: ', error);
+                  navigate('/result', { state: { error: error } });
+              }
+          })
+        : usePostUserPlayDataMutation(musicIdNumber, savedKeypoints, {
+              onSuccess: (data) => {
+                  console.log('scoreId: ', data);
+                  navigate('/result', { state: { scoreId: data, musicId: musicIdNumber } });
+              },
+              onError: (error) => {
+                  console.log('error: ', error);
+                  navigate('/result', { state: { error: error } });
+              }
+          });
 
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
@@ -166,7 +191,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                                 keypoints: timedKeypoints
                             };
                             setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
-                            console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
+                            // console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
                         });
                         setLastSavedSecond(currentSecond); // 이 위치로 변경
                     }
@@ -178,29 +203,27 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         }
     }, [currentTime]);
 
-    // * video 재생 종료 확인
+    // * video가 끝나면 mutation을 호출하는 이펙트
     useEffect(() => {
-        if (scoreVideoRef.current) {
-            scoreVideoRef.current.addEventListener('ended', () => {
-                setVideoEnded(true);
-            });
+        const video = scoreVideoRef.current;
+
+        const handleVideoEnded = () => {
+            // 비디오 재생이 끝나면 mutation을 호출하는 코드를 여기에 작성하세요.
+            console.log('video ended');
+            postPlayDataMutation.mutate();
+        };
+
+        if (video) {
+            video.addEventListener('ended', handleVideoEnded);
         }
+
         return () => {
-            if (scoreVideoRef.current) {
-                scoreVideoRef.current.removeEventListener('ended', () => {
-                    setVideoEnded(true);
-                });
+            // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거합니다.
+            if (video) {
+                video.removeEventListener('ended', handleVideoEnded);
             }
         };
-    }, []);
-
-    // * video 재생 종료 후 navigate, 데이터 전달
-    useEffect(() => {
-        if (videoEnded) {
-            console.log(savedKeypoints);
-            navigate('/result');
-        }
-    }, [videoEnded, navigate]);
+    }, [scoreVideoRef.current]);
 
     return (
         <Container>

@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import fearless from '../../assets/fearless.mp4';
-import 춤예시 from '../../assets/춤예시.mp4';
+import video_9th from '../../assets/fearless.mp4';
+import video_10th from '../../assets/춤예시.mp4';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 
@@ -115,7 +115,7 @@ const Game = () => {
                             <video
                                 className="answer-video"
                                 ref={videoRef}
-                                src={fearless} // ^ 비디오의 URL을 지정
+                                src={video_10th} // ^ 비디오의 URL을 지정
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
                                 style={{
