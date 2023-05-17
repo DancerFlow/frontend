@@ -4,45 +4,18 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import { forwardRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
+import { useNavigate } from 'react-router-dom';
+import sheet from './keypoints.json';
+import { test } from './scoring';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
-    const { musicId } = useParams();
+const Pose = forwardRef(({ setKeypointsDetected, playTest, setPlayTest }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const [lastSavedSecond, setLastSavedSecond] = useState(-1);
-    const [savedKeypoints, setSavedKeypoints] = useState([]);
-
     const navigate = useNavigate();
-    const musicIdNumber = Number(musicId);
-
-    let isGuest = true;
-    const postPlayDataMutation = isGuest
-        ? usePostGuestPlayDataMutation(musicIdNumber, savedKeypoints, {
-              onSuccess: (data) => {
-                  console.log('scoreId: ', data);
-                  navigate('/result', { state: { guestData: data, musicId: musicIdNumber } });
-              },
-              onError: (error) => {
-                  console.log('scoreId: ', error);
-                  navigate('/result', { state: { error: error } });
-              }
-          })
-        : usePostUserPlayDataMutation(musicIdNumber, savedKeypoints, {
-              onSuccess: (data) => {
-                  console.log('scoreId: ', data);
-                  navigate('/result', { state: { scoreId: data, musicId: musicIdNumber } });
-              },
-              onError: (error) => {
-                  console.log('error: ', error);
-                  navigate('/result', { state: { error: error } });
-              }
-          });
 
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
@@ -152,17 +125,27 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
-                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.4 이상인 keypoints만 valid로 가정
+
+                        //^ score가 0.4 이상인 keypoints만 valid로 가정
+                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score >= 0.4);
                         setKeypointsDetected(validKeypoints.length);
 
                         // canvas 초기화
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                        // validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        if (validKeypoints.length >= 5) {
+                        //^ validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
+                        if (validKeypoints.length >= 12) {
                             POSE_CONNECTIONS.forEach(([start, end]) => {
                                 connect(ctx, pose.keypoints, start, end);
                             });
+                        }
+                        console.log(Math.round(scoreVideoRef.current.currentTime));
+                        console.log(test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints));
+                        const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
+
+                        //^ 65점 이상이면 테스트 통과
+                        if (testResult > 65 && !playTest) {
+                            setPlayTest(true);
                         }
                     });
                 }
@@ -172,58 +155,6 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         };
         runPoseEstimation();
     }, []);
-
-    // * 유저 keypoints를 저장하는 함수
-    useEffect(() => {
-        const currentSecond = Math.floor(currentTime);
-        if (currentSecond !== lastSavedSecond) {
-            const estimatePoses = async () => {
-                try {
-                    if (videoRef.current && detectorRef.current) {
-                        const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
-                        poses.forEach((pose) => {
-                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0);
-                            // Add the time property to each keypoint
-                            const timedKeypoints = validKeypoints.map((keypoint) => ({ ...keypoint, time: currentSecond }));
-                            // 'time'과 'keypoints' 속성을 가진 객체로 저장
-                            const poseData = {
-                                time: currentSecond,
-                                keypoints: timedKeypoints
-                            };
-                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
-                            // console.log(timedKeypoints, 'keypoints', `노래${currentSecond}초`); // keypoints 출력
-                        });
-                        setLastSavedSecond(currentSecond); // 이 위치로 변경
-                    }
-                } catch (error) {
-                    console.error('Error in estimatePoses:', error);
-                }
-            };
-            estimatePoses();
-        }
-    }, [currentTime]);
-
-    // * video가 끝나면 mutation을 호출하는 이펙트
-    useEffect(() => {
-        const video = scoreVideoRef.current;
-
-        const handleVideoEnded = () => {
-            // 비디오 재생이 끝나면 mutation을 호출하는 코드를 여기에 작성하세요.
-            console.log('video ended');
-            postPlayDataMutation.mutate();
-        };
-
-        if (video) {
-            video.addEventListener('ended', handleVideoEnded);
-        }
-
-        return () => {
-            // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거합니다.
-            if (video) {
-                video.removeEventListener('ended', handleVideoEnded);
-            }
-        };
-    }, [scoreVideoRef.current]);
 
     return (
         <Container>
