@@ -102,6 +102,7 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
     };
 
     const bgmControl = (bgmState: BgmState) => {
+        sessionStorage.setItem('noShowPopup', 'true');
         dispatch({
             type: 'BGM_CONTROL',
             payload: bgmState
