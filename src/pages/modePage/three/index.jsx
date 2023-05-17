@@ -41,10 +41,10 @@ const Three = () => {
                 far: 1000
             }}
         >
-            <ambientLight intensity={0.6} />
+            <ambientLight intensity={0.5} />
             <directionalLight
                 position={[10, 30, 10]}
-                intensity={2}
+                intensity={1}
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
