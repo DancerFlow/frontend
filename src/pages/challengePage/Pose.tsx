@@ -153,26 +153,38 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             const intervalId = setInterval(async () => {
                 if (videoRef.current && ctx) {
                     const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
-
                     poses.forEach((pose) => {
-                        // keypoint들을 선으로 연결
-                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.4 이상인 keypoints만 valid로 가정
-                        setKeypointsDetected(validKeypoints.length);
+                        tf.tidy(() => {
+                            // Wrap your code with tf.tidy()
+                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4);
+                            setKeypointsDetected(validKeypoints.length);
 
-                        // canvas 초기화
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            // canvas 초기화
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                        // validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        if (validKeypoints.length >= 5) {
-                            POSE_CONNECTIONS.forEach(([start, end]) => {
-                                connect(ctx, pose.keypoints, start, end);
-                            });
-                        }
+                            if (validKeypoints.length >= 5) {
+                                POSE_CONNECTIONS.forEach(([start, end]) => {
+                                    connect(ctx, pose.keypoints, start, end);
+                                });
+                            }
+                        });
                     });
                 }
-            }, 100); // 100ms 마다 실행
+            }, 50);
 
-            return () => clearInterval(intervalId); // 컴포넌트 unmount 시 interval 해제
+            return () => {
+                clearInterval(intervalId); // Clear the interval
+                if (videoRef.current && videoRef.current.srcObject) {
+                    let stream = videoRef.current.srcObject;
+                    let tracks = stream.getTracks();
+
+                    tracks.forEach(function (track) {
+                        track.stop();
+                    });
+
+                    videoRef.current.srcObject = null;
+                }
+            };
         };
         runPoseEstimation();
     }, []);

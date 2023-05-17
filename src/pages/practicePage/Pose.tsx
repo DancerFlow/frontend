@@ -143,15 +143,29 @@ const Pose = forwardRef(({ setKeypointsDetected, playTest, setPlayTest }, ref) =
                         console.log(test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints));
                         const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
 
-                        //^ 65점 이상이면 테스트 통과
-                        if (testResult > 65 && !playTest) {
+                        //^ 75점 이상이면 테스트 통과
+                        if (testResult > 75 && !playTest) {
                             setPlayTest(true);
                         }
+
+                        tf.disposeVariables(); // 메모리 누수 방지를 위한 tf.dispose() 호출
                     });
                 }
             }, 100); // 100ms 마다 실행
 
-            return () => clearInterval(intervalId); // 컴포넌트 unmount 시 interval 해제
+            return () => {
+                clearInterval(intervalId); // 컴포넌트 unmount 시 interval 해제
+                if (videoRef.current && videoRef.current.srcObject) {
+                    const stream = videoRef.current.srcObject;
+                    const tracks = stream.getTracks();
+                    tracks.forEach((track) => {
+                        track.stop();
+                    });
+                }
+                if (detectorRef.current) {
+                    detectorRef.current.dispose();
+                }
+            };
         };
         runPoseEstimation();
     }, []);
