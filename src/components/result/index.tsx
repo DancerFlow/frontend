@@ -2,30 +2,39 @@ import styled from 'styled-components';
 import Lottie from 'lottie-react';
 import animationData from '../../assets/star.json';
 import ProgressBar from '../../components/common/ProgressBar';
-import RankInfo from '../../pages/resultPage/RankInfo';
+import MusicInfo from './MusicInfo';
 import { useGetMusicRankingQuery } from '../../api/useGetMusicRankingQuery';
 import { useGetMusicDetailQuery } from '../../api/useGetMusicDetailQuery';
 import { useGetGameResultQuery } from '../../api/useGetGameResult';
+import TopRankingUI from '../musicList/content/TopRanking';
 
-export default function Main({ scoreId, musicId }: { scoreId: number; musicId: number }) {
-    const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(musicId, {
-        enabled: Boolean(musicId)
+interface ResultData {
+    guestData?: any;
+    scoreId?: any;
+    musicId: number;
+}
+
+export default function Main({ resultdata }: { resultdata: ResultData }) {
+    const { data: musicDetail, isLoading: detailLoading } = useGetMusicDetailQuery(resultdata?.musicId, {
+        enabled: Boolean(resultdata?.musicId)
     });
-    const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(musicId);
-    const { data: gameResult, isLoading: resultLoading } = useGetGameResultQuery(scoreId);
+    const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(resultdata?.musicId);
+    const { data: gameResult, isLoading: resultLoading } = useGetGameResultQuery(resultdata?.scoreId);
 
-    console.log('scoreId', scoreId);
-    console.log('musicId', musicId);
-    console.log('musicDetail', musicDetail);
-    console.log('musicRank', musicRank);
-    console.log('gameResult', gameResult);
+    if (resultLoading || detailLoading || rankLoading) {
+        // Render loading state
+        return <div>Loading...</div>;
+    }
 
     return (
         <Container>
-            <RankInfo musicDetail={musicDetail}></RankInfo>
+            <ColumnContainer>
+                <MusicInfo musicDetail={musicDetail}></MusicInfo>
+                <TopRankingUI rankingList={musicRank}></TopRankingUI>
+            </ColumnContainer>
             <ResultInfo>
                 <Lottie animationData={animationData} loop={true} />
-                <Score>{gameResult?.score}points</Score>
+                <Score>{gameResult?.score}점</Score>
                 <MyRank>{gameResult?.rank}</MyRank>
             </ResultInfo>
             <ScoreDetail>
@@ -82,7 +91,7 @@ const MyRank = styled.div`
 `;
 const ScoreDetail = styled.section`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     width: 400px;
     font-size: 2rem;
     & > :first-child {
@@ -90,7 +99,7 @@ const ScoreDetail = styled.section`
     }
 `;
 
-const ComboContainer = styled.div`
+const ColumnContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

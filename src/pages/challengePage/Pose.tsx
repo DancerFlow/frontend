@@ -21,7 +21,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const navigate = useNavigate();
     const musicIdNumber = Number(musicId);
 
-    let isGuest = true;
+    let isGuest = false;
     const postPlayDataMutation = isGuest
         ? usePostGuestPlayDataMutation(musicIdNumber, savedKeypoints, {
               onSuccess: (data) => {

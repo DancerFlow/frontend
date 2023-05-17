@@ -1,21 +1,30 @@
 import styled from 'styled-components';
 import LaserAnimation from '../../hooks/LazerAnimation';
-import { useParams } from 'react-router-dom';
 import Main from '../../components/result';
-import { ReusultRouteParams } from '../../interface';
 import { useLocation } from 'react-router-dom';
+
+interface ResultData {
+    guestData?: any;
+    scoreId?: any;
+    musicId: number;
+}
 
 export default function ResultPage() {
     const location = useLocation();
-    const data = location.state;
+    const resultdata: ResultData | undefined = location?.state;
 
-    console.log('navData', data);
+    console.log('navData', resultdata);
+    console.log('Boolean', !resultdata);
 
-    // const { musicId, scoreId } = useParams<ReusultRouteParams>();
-
-    // const parsedScoreId = Number(scoreId);
-    // const parsedMusicId = Number(musicId);
-
+    if (!resultdata) {
+        // resultdata가 없을 때
+        return (
+            <>
+                <LaserAnimation />
+                <Container>데이터를 찾을 수 없습니다.</Container>
+            </>
+        );
+    }
     return (
         <>
             <LaserAnimation />
@@ -24,8 +33,7 @@ export default function ResultPage() {
                     <h1>Play Result</h1>
                 </Header>
                 <Body>
-                    {/* <Main scoreId={parsedScoreId} musicId={parsedMusicId} /> */}
-                    {/* <Main scoreId={parsedScoreId} musicId={parsedMusicId} /> */}
+                    <Main resultdata={resultdata} />
                 </Body>
                 <Bottom>
                     <Button>Back to music selection</Button>
@@ -46,8 +54,12 @@ const Container = styled.div`
     color: #fff;
     padding: 1rem;
     box-sizing: border-box;
-    padding: 3rem 5rem;
     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 `;
 
 const Header = styled.header`

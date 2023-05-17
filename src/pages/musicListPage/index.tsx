@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Filter from '../../components/musicList/filter/Filter';
-import Content from '../../components/musicList/content/';
+import Content from '../../components/musicList/content';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
