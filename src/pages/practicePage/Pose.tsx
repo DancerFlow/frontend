@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import sheet from './keypoints.json';
-import { test } from './scoring';
+import sheet_9th from './keypoints_9th.json';
+import { test } from '../../hooks/scoring';
 // 색상 리스트를 정의합니다.
 const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#FF0000'];
 
@@ -149,9 +150,9 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
                         // canvas 초기화
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                        //^ validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
+                        const testResult = test(sheet_9th, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
 
+                        //^ validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
                         if (validKeypoints.length >= 12) {
                             const color =
                                 testResult >= 80
@@ -166,9 +167,9 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
                             });
                         }
 
-                        //^ 75점 이상이면 테스트 통과
-                        if (testResult > 75) {
-                            setMovementCorrected(true);
+                        //^ 60점 이상이면 테스트 통과
+                        if (testResult >= 60) {
+                            setMovementCorrected((prev) => !prev);
                         }
 
                         // 점수에 따른 피드백 출력

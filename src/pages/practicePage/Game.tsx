@@ -70,14 +70,14 @@ const Game = () => {
     useEffect(() => {
         if (movementCorrected) {
             playVideoInChunks();
-            setMovementCorrected(false);
+            setMovementCorrected((prev) => !prev);
         }
     }, [movementCorrected]);
 
     useEffect(() => {
         let timerId;
 
-        timerId = setInterval(playVideoInChunks, 1500); // 1초마다 playVideoInChunks 함수를 실행합니다.
+        timerId = setInterval(playVideoInChunks, 500); // 1초마다 playVideoInChunks 함수를 실행합니다.
 
         return () => {
             if (timerId) {
@@ -149,7 +149,7 @@ const Game = () => {
                             <video
                                 className="answer-video"
                                 ref={videoRef}
-                                src={video_10th} // ^ 비디오의 URL을 지정
+                                src={video_9th} // ^ 비디오의 URL을 지정
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
                                 onEnded={() => navigate('/practice/result/:musicId')} // 비디오가 끝나면 '/path'로 이동
