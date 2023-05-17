@@ -9,15 +9,11 @@ import sheet from './keypoints.json';
 import { test } from './scoring';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, currentTime, answerTime }, ref) => {
+const Pose = forwardRef(({ setKeypointsDetected, playTest, setPlayTest }, ref) => {
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    const [lastSavedSecond, setLastSavedSecond] = useState(-1);
-    const [savedKeypoints, setSavedKeypoints] = useState([]);
-    const [videoEnded, setVideoEnded] = useState(false);
 
     const navigate = useNavigate();
 
@@ -130,20 +126,27 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime, answerTime }, ref)
                     poses.forEach((pose) => {
                         // keypoint들을 선으로 연결
 
-                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0.4); // score가 0.4 이상인 keypoints만 valid로 가정
+                        //^ score가 0.4 이상인 keypoints만 valid로 가정
+                        const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score >= 0.4);
                         setKeypointsDetected(validKeypoints.length);
 
                         // canvas 초기화
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                        // validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        if (validKeypoints.length >= 5) {
+                        //^ validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
+                        if (validKeypoints.length >= 12) {
                             POSE_CONNECTIONS.forEach(([start, end]) => {
                                 connect(ctx, pose.keypoints, start, end);
                             });
                         }
                         console.log(Math.round(scoreVideoRef.current.currentTime));
                         console.log(test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints));
+                        const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
+
+                        //^ 65점 이상이면 테스트 통과
+                        if (testResult > 65 && !playTest) {
+                            setPlayTest(true);
+                        }
                     });
                 }
             }, 100); // 100ms 마다 실행

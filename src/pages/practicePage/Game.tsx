@@ -16,7 +16,6 @@ const Game = () => {
     const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
     const [playTest, setPlayTest] = useState(false); // 테스트용
 
-    const [answerTime, setAnswerTime] = useState(0); // 정답을 저장할 상태
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
@@ -36,10 +35,8 @@ const Game = () => {
                 if (videoRef.current) {
                     videoRef.current.pause(); // 비디오 일시정지
                     setPlayTest(false);
-                    console.log(videoRef.current.currentTime, '동영상이 멈췄을때 재생시간'); // 동영상이 멈췄을 때의 재생시간
-                    setAnswerTime(Math.round(videoRef.current.currentTime)); // 정답을 저장
                 }
-            }, 1000);
+            }, 1000); // ^ 일정 재생 시간지나면 비디오를 일시정지
         }
     };
 
@@ -118,7 +115,7 @@ const Game = () => {
                             <video
                                 className="answer-video"
                                 ref={videoRef}
-                                src={fearless}
+                                src={fearless} // ^ 비디오의 URL을 지정
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
                                 style={{
@@ -146,7 +143,13 @@ const Game = () => {
                     <AreaHeader>
                         <CountDown>{`${message}`}</CountDown>
                     </AreaHeader>
-                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} answerTime={answerTime} />
+                    <Pose
+                        setKeypointsDetected={setKeypointsDetected}
+                        currentTime={currentTime}
+                        ref={videoRef}
+                        playTest={playTest}
+                        setPlayTest={setPlayTest}
+                    />
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
