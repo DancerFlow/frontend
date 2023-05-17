@@ -7,9 +7,12 @@ import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import sheet from './keypoints.json';
 import { test } from './scoring';
+// 색상 리스트를 정의합니다.
+const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#FF0000'];
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementCorrected }, ref) => {
+    const [score, setScore] = useState('');
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
@@ -33,6 +36,19 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
         [14, 16],
         [13, 15]
     ];
+
+    //* 점수에 따른 피드백 문자열을 반환하는 함수
+    const getFeedback = (score) => {
+        if (score >= 80) {
+            return 'Perfect!';
+        } else if (score >= 70) {
+            return 'Great!';
+        } else if (score >= 40) {
+            return 'Normal';
+        } else {
+            return 'Miss';
+        }
+    };
 
     // * canvas에 연결할 keypoints를 그리는 함수
     useEffect(() => {
@@ -73,14 +89,14 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
             const canvas: any = canvasRef.current;
             const ctx = canvas.getContext('2d');
 
-            const connect = (ctx, keypoints, start, end) => {
+            const connect = (ctx, keypoints, start, end, color) => {
                 const startKeypoint = keypoints.find((kpt, idx) => idx === start);
                 const endKeypoint = keypoints.find((kpt, idx) => idx === end);
 
                 // 머리 좌표(3,4)
                 if (start === 3 && end === 4) {
                     ctx.beginPath();
-                    ctx.strokeStyle = '#FE23FF';
+                    ctx.strokeStyle = color;
                     ctx.lineWidth = 7;
                     const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                     const centerY = (startKeypoint.y + endKeypoint.y) / 2;
@@ -111,7 +127,7 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
                     ctx.stroke();
                 } else {
                     ctx.beginPath();
-                    ctx.strokeStyle = '#FE23FF';
+                    ctx.strokeStyle = color;
                     ctx.lineWidth = 7;
                     ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
                     ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
@@ -134,19 +150,29 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                         //^ validKeypoints의 개수가 12개 이상일 경우에만 선을 그림
-                        if (validKeypoints.length >= 12) {
-                            POSE_CONNECTIONS.forEach(([start, end]) => {
-                                connect(ctx, pose.keypoints, start, end);
-                            });
-                        }
-                        console.log(Math.round(scoreVideoRef.current.currentTime));
-                        console.log(test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints));
                         const testResult = test(sheet, Math.round(scoreVideoRef.current.currentTime), pose.keypoints);
 
+                        if (validKeypoints.length >= 12) {
+                            const color =
+                                testResult >= 80
+                                    ? COLOR_LIST[0]
+                                    : testResult >= 70
+                                    ? COLOR_LIST[1]
+                                    : testResult >= 40
+                                    ? COLOR_LIST[2]
+                                    : COLOR_LIST[3];
+                            POSE_CONNECTIONS.forEach(([start, end]) => {
+                                connect(ctx, pose.keypoints, start, end, color);
+                            });
+                        }
+
                         //^ 75점 이상이면 테스트 통과
-                        if (testResult > 75 && !movementCorrected) {
+                        if (testResult > 75) {
                             setMovementCorrected(true);
                         }
+
+                        // 점수에 따른 피드백 출력
+                        setScore(getFeedback(testResult));
 
                         tf.disposeVariables(); // 메모리 누수 방지를 위한 tf.dispose() 호출
                     });
@@ -172,6 +198,7 @@ const Pose = forwardRef(({ setKeypointsDetected, movementCorrected, setMovementC
 
     return (
         <Container>
+            <Score>{score}</Score>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
             <canvas ref={canvasRef}></canvas>
         </Container>
@@ -184,6 +211,12 @@ const Container = styled.div`
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     overflow: hidden;
+`;
+
+const Score = styled.div`
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: red;
 `;
 
 const HiddenVideo = styled.video`

@@ -55,5 +55,6 @@ export function test(sheet, timestamp, p_kp) {
         }
     }
     // COLOR_LIST=['g','g','g','g','g','g','g',...] <=state화 해서 하면 된다.
-    return score*10;
+
+    return score * 10;
 }

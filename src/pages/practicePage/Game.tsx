@@ -66,10 +66,18 @@ const Game = () => {
         }
     };
 
+    // * 동작을 맞았을때 실행되는 이펙트
+    useEffect(() => {
+        if (movementCorrected) {
+            playVideoInChunks();
+            setMovementCorrected(false);
+        }
+    }, [movementCorrected]);
+
     useEffect(() => {
         let timerId;
 
-        timerId = setInterval(playVideoInChunks, 1000); // 1초마다 playVideoInChunks 함수를 실행합니다.
+        timerId = setInterval(playVideoInChunks, 1500); // 1초마다 playVideoInChunks 함수를 실행합니다.
 
         return () => {
             if (timerId) {
@@ -144,6 +152,7 @@ const Game = () => {
                                 src={video_10th} // ^ 비디오의 URL을 지정
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
+                                onEnded={() => navigate('/practice/result/:musicId')} // 비디오가 끝나면 '/path'로 이동
                                 style={{
                                     maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
                                     maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
