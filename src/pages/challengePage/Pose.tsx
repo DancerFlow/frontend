@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
@@ -6,9 +6,13 @@ import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
+import { GlobalContext } from '../../context/Context';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
+    const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
+    const isLoggedIn = context.state.userState.login;
+
     const { musicId } = useParams();
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,7 +25,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const navigate = useNavigate();
     const musicIdNumber = Number(musicId);
 
-    let isGuest = true;
+    const isGuest = !isLoggedIn;
     const postPlayDataMutation = isGuest
         ? usePostGuestPlayDataMutation(musicIdNumber, savedKeypoints, {
               onSuccess: (data) => {
