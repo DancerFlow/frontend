@@ -4,15 +4,14 @@ import { UserGameHistorywithMaxPage } from '../interface';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const getUserGameHistory = async (pageNo: number): Promise<UserGameHistorywithMaxPage> => {
+const getUserGameHistory = async (pageNo?: number): Promise<UserGameHistorywithMaxPage> => {
+    const params = pageNo ? { pageno: pageNo } : {};
     const response = await axios.get(`${baseUrl}/user/game/history`, {
         withCredentials: true,
-        params: {
-            pageno: pageNo // 원하는 페이지 번호
-        }
+        params
     });
     return response.data;
 };
 
-export const useGetGameHistoryQuery = (pageNo: number) =>
+export const useGetGameHistoryQuery = (pageNo?: number) =>
     useQuery({ queryKey: ['usergamehistory', pageNo], queryFn: () => getUserGameHistory(pageNo) });
