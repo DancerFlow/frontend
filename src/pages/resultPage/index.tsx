@@ -84,7 +84,7 @@ const Body = styled.div`
 const Bottom = styled.footer`
     border-radius: 10px;
     display: flex;
-    margin-top: 4rem;
+    margin-top: 2rem;
 `;
 
 const Button = styled.button`
