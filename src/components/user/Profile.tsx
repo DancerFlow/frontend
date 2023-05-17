@@ -71,7 +71,8 @@ export default function Profile() {
                             <div>
                                 <ProgressBarContainer>
                                     <ProgressBar progress={getPercentageToNextTier(profile?.xp)} height={20}></ProgressBar>
-                                    <div>{getPercentageToNextTier(profile?.xp)}</div>
+                                    <div>{getPercentageToNextTier(profile?.xp)}%</div>
+                                    {/* <div>{profile?.xp}</div> */}
                                 </ProgressBarContainer>
                                 <NextTierImg src={tierImages[getNextTier(profile?.xp)]} alt="NextTier" />
                             </div>

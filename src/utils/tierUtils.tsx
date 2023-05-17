@@ -87,5 +87,10 @@ export function getPercentageToNextTier(xp: number): number {
     const xpMin: number = tierThresholds[prevTier];
     const xpMax: number = tierThresholds[currentTier];
 
+    if (xpMin == xpMax) {
+        //Bronze 인 경우,
+        return (xp / xpMin) * 100;
+    }
+
     return ((xp - xpMin) / (xpMax - xpMin)) * 100;
 }

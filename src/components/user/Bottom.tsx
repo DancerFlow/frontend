@@ -46,9 +46,11 @@ export default function Bottom() {
                 </LikedList>
                 {maxPage > 1 && <ChevronIcon icon={faChevronRight} onClick={handleNextPage} />}
             </LikedContainer>
-            <PageNo>
-                {pageNo}/{maxPage}
-            </PageNo>
+            {userLikes?.length > 0 && (
+                <PageNo>
+                    {pageNo}/{maxPage}
+                </PageNo>
+            )}
         </Container>
     );
 }
