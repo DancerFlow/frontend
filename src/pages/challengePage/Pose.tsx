@@ -16,7 +16,7 @@ const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#FF0000'];
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
     const isLoggedIn = context.state.userState.login;
-
+    const [testResult, setTestResult] = useState(0);
     const { musicId } = useParams();
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -179,15 +179,16 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             // canvas 초기화
 
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            const testResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
 
+                            const newTestResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
+                            setTestResult(newTestResult);
                             if (validKeypoints.length >= 5) {
                                 const color =
-                                    testResult >= 80
+                                    newTestResult >= 80
                                         ? COLOR_LIST[0]
-                                        : testResult >= 70
+                                        : newTestResult >= 70
                                         ? COLOR_LIST[1]
-                                        : testResult >= 40
+                                        : newTestResult >= 40
                                         ? COLOR_LIST[2]
                                         : COLOR_LIST[3];
                                 POSE_CONNECTIONS.forEach(([start, end]) => {
@@ -195,11 +196,11 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                                 });
                             }
                             // 점수에 따른 피드백 출력
-                            setScore(getFeedback(testResult));
+                            setScore(getFeedback(newTestResult));
                         });
                     });
                 }
-            }, 50);
+            }, 100);
 
             return () => {
                 clearInterval(intervalId); // Clear the interval
@@ -272,7 +273,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     return (
         <Container>
-            <Score>{score}</Score>
+            <Score score={testResult}>{score}</Score>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
             <canvas ref={canvasRef}></canvas>
         </Container>
@@ -289,7 +290,7 @@ const Container = styled.div`
 const Score = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
-    color: red;
+    color: ${({ score }) => (score >= 80 ? COLOR_LIST[0] : score >= 70 ? COLOR_LIST[1] : score >= 40 ? COLOR_LIST[2] : COLOR_LIST[3])};
 `;
 const HiddenVideo = styled.video`
     height: 80%;
