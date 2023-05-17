@@ -7,6 +7,10 @@ import { forwardRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 import { GlobalContext } from '../../context/Context';
+import sheet_9th from '../practicePage/keypoints_9th.json';
+import { test } from '../../hooks/scoring';
+
+const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#FF0000'];
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
@@ -21,7 +25,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     const [lastSavedSecond, setLastSavedSecond] = useState(-1);
     const [savedKeypoints, setSavedKeypoints] = useState([]);
-
+    const [score, setScore] = useState('');
     const navigate = useNavigate();
     const musicIdNumber = Number(musicId);
 
@@ -65,6 +69,19 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         [13, 15]
     ];
 
+    //* 점수에 따른 피드백 문자열을 반환하는 함수
+    const getFeedback = (score) => {
+        if (score >= 80) {
+            return 'Perfect!';
+        } else if (score >= 70) {
+            return 'Great!';
+        } else if (score >= 40) {
+            return 'Normal';
+        } else {
+            return 'Miss';
+        }
+    };
+
     // * canvas에 연결할 keypoints를 그리는 함수
     useEffect(() => {
         const runPoseEstimation = async () => {
@@ -104,14 +121,14 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             const canvas: any = canvasRef.current;
             const ctx = canvas.getContext('2d');
 
-            const connect = (ctx, keypoints, start, end) => {
+            const connect = (ctx, keypoints, start, end, color) => {
                 const startKeypoint = keypoints.find((kpt, idx) => idx === start);
                 const endKeypoint = keypoints.find((kpt, idx) => idx === end);
 
                 // 머리 좌표(3,4)
                 if (start === 3 && end === 4) {
                     ctx.beginPath();
-                    ctx.strokeStyle = '#FE23FF';
+                    ctx.strokeStyle = color;
                     ctx.lineWidth = 7;
                     const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                     const centerY = (startKeypoint.y + endKeypoint.y) / 2;
@@ -142,7 +159,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                     ctx.stroke();
                 } else {
                     ctx.beginPath();
-                    ctx.strokeStyle = '#FE23FF';
+                    ctx.strokeStyle = color;
                     ctx.lineWidth = 7;
                     ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
                     ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
@@ -160,13 +177,25 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             setKeypointsDetected(validKeypoints.length);
 
                             // canvas 초기화
+
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            const testResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
 
                             if (validKeypoints.length >= 5) {
+                                const color =
+                                    testResult >= 80
+                                        ? COLOR_LIST[0]
+                                        : testResult >= 70
+                                        ? COLOR_LIST[1]
+                                        : testResult >= 40
+                                        ? COLOR_LIST[2]
+                                        : COLOR_LIST[3];
                                 POSE_CONNECTIONS.forEach(([start, end]) => {
-                                    connect(ctx, pose.keypoints, start, end);
+                                    connect(ctx, pose.keypoints, start, end, color);
                                 });
                             }
+                            // 점수에 따른 피드백 출력
+                            setScore(getFeedback(testResult));
                         });
                     });
                 }
@@ -243,6 +272,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 
     return (
         <Container>
+            <Score>{score}</Score>
             <HiddenVideo ref={videoRef} autoPlay></HiddenVideo>
             <canvas ref={canvasRef}></canvas>
         </Container>
@@ -256,7 +286,11 @@ const Container = styled.div`
     border-radius: 10px;
     overflow: hidden;
 `;
-
+const Score = styled.div`
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: red;
+`;
 const HiddenVideo = styled.video`
     height: 80%;
     width: 100%;
