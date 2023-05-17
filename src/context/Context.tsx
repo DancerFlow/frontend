@@ -47,7 +47,15 @@ const Reducer = (state: State, action: Action) => {
     }
 };
 
-export const GlobalContext = createContext(initialState);
+interface ContextType {
+    logIn?: (userState: UserState) => void;
+    logOut?: () => void;
+    verifyUser?: () => void;
+    bgmControl?: (bgmState: BgmState) => void;
+    state: State;
+}
+
+export const GlobalContext = createContext<ContextType | State>(initialState);
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);

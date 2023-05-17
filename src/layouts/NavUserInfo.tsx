@@ -17,8 +17,8 @@ const NavUserInfo = ({ onLogout, isLogin }: Props) => {
     console.log(profile);
     return (
         <ProfileContainer>
-            <ProfileImage src={tempImg} alt="profile" />
-            <ProfileNickname>"{isLogin ? profile?.nickname : 'Guest'}"</ProfileNickname>
+            <ProfileImage src={isLogin ? profile?.profile_image_url : tempImg} alt="profile" />
+            <ProfileNickname>"{isLogin ? profile?.nickname : 'guest'}"</ProfileNickname>
             {isLogin ? (
                 <LogoutButton onClick={onLogout}>LOGOUT</LogoutButton>
             ) : (

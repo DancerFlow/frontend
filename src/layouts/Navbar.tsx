@@ -121,7 +121,7 @@ const SideNav = styled.aside`
     left: 0;
     bottom: 0;
     width: 310px;
-
+    border-right: 1.5px solid ${(props) => props.theme.green};
     button {
         border: none;
         background-color: none;
