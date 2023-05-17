@@ -9,11 +9,12 @@ import { useState } from 'react';
 import ScoreInfo from './ScoreInfo';
 
 export default function Main() {
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState<number>();
     const [pageNo, setPageNo] = useState(1);
     const { data, isLoading, isError } = useGetGameHistoryQuery(pageNo);
     console.log('gamehistory', data);
 
+    // historyList가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
     useEffect(() => {
         if (data && data.historyList && data.historyList.length > 0) {
             setSelected(data.historyList[0].music_id);
@@ -34,14 +35,12 @@ export default function Main() {
         setSelected(music_id);
     };
 
-    // gamehistory가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
-
     return (
         <Container>
             <SectionTitle>Play History</SectionTitle>
             <Section>
                 <CardContainer>
-                    {historyList?.length ? (
+                    {data && historyList?.length ? (
                         historyList.map((game: UserGameHistory) => (
                             <MusicCard
                                 key={game.music_id}

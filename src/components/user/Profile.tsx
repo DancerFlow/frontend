@@ -2,18 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import styled, { keyframes } from 'styled-components';
 import Calendar from 'react-calendar';
-import Bronze from '../../assets/ranks/bronze.png';
-import Silver from '../../assets/ranks/silver.png';
-import Gold from '../../assets/ranks/gold.png';
-import Platinum from '../../assets/ranks/platinum.png';
-import Diamond from '../../assets/ranks/diamond.png';
-import { Tier, Profile } from '../../interface';
+import { Profile } from '../../interface';
 import ProgressBar from '../common/ProgressBar';
 import { useGetUserProfileQuery } from '../../api/useGetUserProfileQuery';
 import { useState } from 'react';
 import { useGetGameStamps } from '../../api/useGetGameStamps';
 import smileSvg from '../../assets/smile.svg';
-
+import { Tier, getTier, getNextTier, tierThresholds, tierImages, getPercentageToNextTier } from '../../utils/tierUtils';
 import ReactDOM from 'react-dom';
 import EditModal from './EditModal';
 
@@ -68,16 +63,19 @@ export default function Profile() {
                         </UserInfo>
                     </Header>
                     <Sidebar>
-                        <RankImgWrapper>
-                            <img src={getTierImage(profile?.current_tier)} alt="Rank" />
-                        </RankImgWrapper>
-                        <RankContainer>
-                            <div>Tier: {rank[profile?.current_tier - 1]}</div>
+                        <TierImgWrapper>
+                            <img src={tierImages[getTier(profile?.xp)]} alt="Tier" />
+                        </TierImgWrapper>
+                        <TierContainer>
+                            <div>Tier: {getTier(profile?.xp)} </div>
                             <div>
-                                <ProgressBar progress={60} height={20}></ProgressBar>
-                                <NextRankImg src={getNextTierImage(profile?.current_tier)} alt="nextRank" />
+                                <ProgressBarContainer>
+                                    <ProgressBar progress={getPercentageToNextTier(profile?.xp)} height={20}></ProgressBar>
+                                    <div>{getPercentageToNextTier(profile?.xp)}</div>
+                                </ProgressBarContainer>
+                                <NextTierImg src={tierImages[getNextTier(profile?.xp)]} alt="NextTier" />
                             </div>
-                        </RankContainer>
+                        </TierContainer>
                         <CalendarContainer>
                             <CalendarTitle>
                                 <ThisMonth>{activeMonth}</ThisMonth> <p>월 출석체크 </p>
@@ -147,42 +145,6 @@ const EditProfile = styled.p`
 
 // Sidebar
 
-const rank: string[] = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
-
-function getTierImage(tier: Tier): string {
-    switch (tier - 1) {
-        case Tier.Bronze:
-            return Bronze;
-        case Tier.Silver:
-            return Silver;
-        case Tier.Gold:
-            return 'Gold';
-        case Tier.Platinum:
-            return Platinum;
-        case Tier.Diamond:
-            return Diamond;
-        default:
-            return '';
-    }
-}
-
-function getNextTierImage(tier: Tier): string {
-    switch (tier - 1) {
-        case Tier.Bronze:
-            return Silver;
-        case Tier.Silver:
-            return Gold;
-        case Tier.Gold:
-            return Platinum;
-        case Tier.Platinum:
-            return Diamond;
-        case Tier.Diamond:
-            return Diamond;
-        default:
-            return '';
-    }
-}
-
 const Sidebar = styled.aside`
     grid-area: sidebar;
     background-color: rgba(255, 255, 255, 0.1);
@@ -196,7 +158,7 @@ const spin = keyframes`
     transform: rotate(360deg);
   }
 `;
-const RankImgWrapper = styled.div`
+const TierImgWrapper = styled.div`
     display: inline-block;
     position: relative;
     width: 80px;
@@ -218,7 +180,7 @@ const RankImgWrapper = styled.div`
     margin: 1rem 0;
 `;
 
-const RankContainer = styled.div`
+const TierContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -230,7 +192,12 @@ const RankContainer = styled.div`
     }
 `;
 
-const NextRankImg = styled.img`
+const ProgressBarContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`;
+const NextTierImg = styled.img`
     width: 40px;
     height: 40px;
     margin-left: 10px;
