@@ -1,15 +1,19 @@
 import styled from 'styled-components';
 import { Music } from '../../interface';
 
-export default function RankInfo() {
+export default function RankInfo(musicDetail: Music | undefined) {
     return (
         <Section>
             <MusicInfo>
-                <Img src={data.album_image_url}></Img>
-                <div>
-                    <Title>{data.name}</Title>
-                    <div>{data.music_singer.name}</div>
-                </div>
+                {musicDetail && (
+                    <>
+                        <Img src={musicDetail?.album_image_url}></Img>
+                        <div>
+                            <Title>{musicDetail?.name}</Title>
+                            <div>{musicDetail?.music_singer?.name}</div>
+                        </div>
+                    </>
+                )}
             </MusicInfo>
         </Section>
     );
@@ -25,7 +29,10 @@ const RankingList = ({ rankers }) => {
     );
 };
 
-const Section = styled.section``;
+const Section = styled.section`
+    display: flex;
+    width: 400px;
+`;
 
 const MusicInfo = styled.div`
     display: flex;

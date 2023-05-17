@@ -108,3 +108,21 @@ export interface UserGameHistoryDetail {
     music_total_score: number;
     music_score_list: { music_score: number; music_score_created_at: String }[];
 }
+
+export interface ReusultRouteParams {
+    musicId: string;
+    scoreId: string;
+    [key: string]: string | undefined;
+}
+
+export interface UserGameResult {
+    score: number;
+    rank: string;
+    perfect: string;
+    great: number;
+    good: number;
+    normal: number;
+    miss: number;
+    delta_xp: number;
+    xp: number;
+}
