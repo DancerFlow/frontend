@@ -8,7 +8,7 @@ import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
 import { UserLikes } from '../../interface';
 import LaserAnimation from '../../hooks/LazerAnimation';
-import ModeBackground from '../../components/musicList/content/ModeBackGround';
+import ModeBackground from '../../components/musicList/content/ModeBackground';
 import { useParams } from 'react-router-dom';
 
 export enum FilterType {
