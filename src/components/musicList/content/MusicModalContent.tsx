@@ -7,7 +7,8 @@ import LikeBtn from './LikeBtn';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-
+import { SpeedSetting } from './SpeedSetting';
+import { useState } from 'react';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
@@ -19,13 +20,17 @@ interface ModalFrameProps {
 
 const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked, mode }: ModalFrameProps) => {
     const navigate = useNavigate();
+    const [speed, setSpeed] = useState(1);
+
+    const onSpeedChange = (newSpeed: number) => {
+        setSpeed(newSpeed);
+        // TODO: speed를 처리하는 로직 추가
+    };
+    const isPracticeMode = mode === 'practice';
 
     const onStartClick = () => {
-        navigate(`/challenge/${musicDetailInfo.id}`);
+        navigate(`/${mode}/${musicDetailInfo.id}`);
     };
-    console.log(mode, 'mode');
-
-    console.log(musicDetailInfo, 'musicDetailInfo');
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
@@ -55,16 +60,20 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                     </GameStartBtn>
                 </MusicModalInfoContent>
             </MusicModalInfo>
-            <MusicModalRank>
-                <MusicModalRankHeader>
-                    <Tropy />
-                </MusicModalRankHeader>
-                <MusicModalRankContent>
-                    <div className="rankList">
-                        <TopRanking rankingList={musicRankInfo} />
-                    </div>
-                </MusicModalRankContent>
-            </MusicModalRank>
+            {isPracticeMode ? (
+                <SpeedSetting onSpeedChange={onSpeedChange} answer={musicDetailInfo.answer} />
+            ) : (
+                <MusicModalRank>
+                    <MusicModalRankHeader>
+                        <Tropy />
+                    </MusicModalRankHeader>
+                    <MusicModalRankContent>
+                        <div className="rankList">
+                            <TopRanking rankingList={musicRankInfo} />
+                        </div>
+                    </MusicModalRankContent>
+                </MusicModalRank>
+            )}
         </ModalFrame>
     ) : null;
 };
