@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import video_9th from '../../assets/fearless.mp4';
+import video_9th from '../../assets/AfterLIKE_IVE(아이브)_안유진.mp4';
 import countdownVideo from '../../assets/countdown.mp4';
-import video_10th from '../../assets/춤예시.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 import Marquee from 'react-fast-marquee';
 
@@ -104,7 +103,6 @@ const Game = () => {
                                     onLoadedMetadata={handleLoadedMetadata}
                                     onTimeUpdate={handleTimeUpdate}
                                     loop={false}
-                                    style={{}}
                                 />
                             </div>
                         )}
@@ -121,32 +119,34 @@ const Game = () => {
                         />
                     </AreaFooter> */}
                 </VideoArea>
-                <AreaHeader>
+                <GameInformation>
                     {!gameStart && <KeyPointPercent>({keypointsPercent.toFixed(1)}%)</KeyPointPercent>}
-                    {!startCountdown && <Marquee autoFill={true}>{`전신이 나오도록 위치해주세요!`}&nbsp; &nbsp; &nbsp; &nbsp;</Marquee>}
-                    <GameManual className={startCountdown ? 'hidden' : 'show'}>
-                        <p>! Game Manual !</p>
-                        <div>
-                            <div>1 </div>
-                            <span>
-                                웹캠이 정상적으로 연결되었는지
-                                <br /> 확인해주세요
-                            </span>
-                            <div>2 </div>
-                            <span>
-                                웹캠 화면에 한명만 있어야 정확한
-                                <br /> 인식이 가능합니다
-                            </span>
-                            <div>3 </div>
-                            <span>
-                                머리부터 발끝까지 전부 나올 수 있을
-                                <br /> 만큼 거리를 벌려주세요
-                            </span>
-                        </div>
-                    </GameManual>
-                </AreaHeader>
+                    {!startCountdown && <Marquee autoFill={true}>{`! 전신이 나오도록 위치해주세요 !`}&nbsp; &nbsp; &nbsp; &nbsp;</Marquee>}
+                    <div className={startCountdown ? 'hidden black' : 'show black'}>
+                        <GameManual>
+                            <p>! Game Manual !</p>
+                            <div>
+                                <div>1 </div>
+                                <span>
+                                    웹캠이 정상적으로 연결되었는지
+                                    <br /> 확인해주세요
+                                </span>
+                                <div>2 </div>
+                                <span>
+                                    웹캠 화면에 한명만 있어야 정확한
+                                    <br /> 인식이 가능합니다
+                                </span>
+                                <div>3 </div>
+                                <span>
+                                    머리부터 발끝까지 전부 나올 수 있을
+                                    <br /> 만큼 거리를 벌려주세요
+                                </span>
+                            </div>
+                        </GameManual>
+                    </div>
+                </GameInformation>
                 <DancingArea>
-                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
+                    <Pose setKeypointsDetected={setKeypointsDetected} gameStart={gameStart} currentTime={currentTime} ref={videoRef} />
                 </DancingArea>
             </Main>
             <Bottom style={{ width: getBottomWidth(), transition: 'width 0.5s ease' }}></Bottom>
@@ -176,7 +176,6 @@ const CountDown = styled.div`
 const DancingArea = styled.div`
     position: absolute;
     top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
     z-index: 3;
@@ -195,6 +194,10 @@ const VideoWrapper = styled.div`
         width: 100%;
         height: 100%;
         object-fit: contain; // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
+        position: absolute;
+        top: 50%;
+        left: 30%;
+        transform: translate(-50%, -50%) rotateY(180deg);
     }
 
     .countdown-video {
@@ -208,7 +211,7 @@ const VideoWrapper = styled.div`
         z-index: 1;
     }
 `;
-const AreaHeader = styled.div`
+const GameInformation = styled.div`
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -224,6 +227,18 @@ const AreaHeader = styled.div`
         transform: skew(-6deg);
         font-size: 1.6rem;
         color: #fefd1e;
+    }
+    .hidden {
+        opacity: 0;
+    }
+    .show {
+        opacity: 1;
+    }
+    .black {
+        background-color: #000000be;
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s ease-out;
     }
 `;
 
@@ -248,11 +263,11 @@ const Bottom = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    bottom: 0;
     width: 100%;
-    height: 50px; // 필요한 높이로 조정하세요.
-    background: linear-gradient(270deg, yellow, lime, blue, magenta);
-    background-size: 200% 200%;
+    height: 20px;
+    background-color: ${(props) => props.theme.green};
     animation: ${progress} 10s ease-in-out infinite;
     border-radius: 20px;
     transition: transform 0.5s ease; // width 대신 transform 속성에 전환 효과 적용
@@ -269,13 +284,11 @@ const GameManual = styled.div`
     height: 180px;
     padding: 0 20px 0 20px;
     background-color: ${(props) => props.theme.green};
-    top: 15%;
+    top: 12%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: all 0.3s ease-out;
     align-items: center;
     font-family: 'NanumSquareNeoBold';
-    transition: 0.5s ease-out;
     p {
         font-size: 30px;
         padding: 30px 0px;
@@ -300,12 +313,6 @@ const GameManual = styled.div`
             border-radius: 40px;
             justify-content: center;
         }
-    }
-    &.hidden {
-        opacity: 0;
-    }
-    &.show {
-        opacity: 1;
     }
 `;
 

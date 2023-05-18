@@ -6,7 +6,6 @@ import { UnrealBloomPass } from 'three-stdlib';
 
 import Model from './Model';
 import Floor from './Floor';
-import Spot from './Spot';
 import Player from './Player';
 import Logo from './Logo';
 import Background from './Background';
@@ -14,7 +13,6 @@ import Practice from './Practice';
 import Challenge from './Challenge';
 import Construction from './Construction';
 import Room from './Room';
-import DanceFloor from './DanceFloor';
 import LoadingView from '../../../components/common/LoadingView';
 
 extend({ UnrealBloomPass });

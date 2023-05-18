@@ -12,7 +12,7 @@ export default function Room({ area }) {
     const ref = useRef();
     const { state } = useContext(GlobalContext);
 
-    const gltf = useGLTF('/models/house2.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/house2.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
