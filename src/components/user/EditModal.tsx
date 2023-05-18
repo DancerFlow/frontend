@@ -46,11 +46,12 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
                 },
                 withCredentials: true
             });
-
+            console.log('file', response.data);
             return response.data;
         },
         {
             onSuccess: (data) => {
+                console.log('fileupload', data);
                 alert(data);
             },
             onError: (error: AxiosError<Status>) => {

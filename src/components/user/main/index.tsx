@@ -22,14 +22,6 @@ export default function Main() {
         }
     }, [data]);
 
-    if (isLoading) {
-        return <ClipLoader color="#FE23FF"></ClipLoader>;
-    }
-
-    if (isError) {
-        return <div>Error loading history</div>;
-    }
-
     const { historyList } = data || { historyList: [] };
 
     const handleClick = (music_id: number) => {
@@ -41,7 +33,11 @@ export default function Main() {
             <SectionTitle>Play History</SectionTitle>
             <Section>
                 <CardContainer>
-                    {data && historyList?.length ? (
+                    {isLoading ? (
+                        <ClipLoader color="#FE23FF" />
+                    ) : isError ? (
+                        <div>Error loading history</div>
+                    ) : data && historyList?.length ? (
                         historyList.map((game: UserGameHistory) => (
                             <MusicCard
                                 key={game.music_id}
@@ -106,7 +102,7 @@ const UserGameHistoryPieCharts = ({ game }: { game: UserGameHistory }) => {
                     stroke="none"
                 >
                     <Label
-                        value={`${game.user_music_best_score}`}
+                        value={`${game.user_music_best_score.toFixed(0)}`}
                         position="center"
                         fill="#fff"
                         fontSize={12}
