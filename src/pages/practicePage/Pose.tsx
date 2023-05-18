@@ -8,7 +8,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import sheet_9th from '../practicePage/keypoints_9th.json';
 import { test } from '../../hooks/scoring';
 
-const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#FF0000'];
+const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#1f9ce0', '#FF0000'];
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
@@ -43,15 +43,15 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     //* 점수에 따른 피드백 문자열을 반환하는 함수
     const getFeedback = (score) => {
         if (score >= 90) {
-            return 'Perfect!';
+            return { feedback: 'Perfect!', color: COLOR_LIST[0] };
+        } else if (score >= 85) {
+            return { feedback: 'Great!', color: COLOR_LIST[1] };
         } else if (score >= 80) {
-            return 'Great!';
-        } else if (score >= 70) {
-            return 'Good!';
-        } else if (score >= 40) {
-            return 'Normal';
+            return { feedback: 'Good!', color: COLOR_LIST[2] };
+        } else if (score >= 60) {
+            return { feedback: 'Normal', color: COLOR_LIST[3] };
         } else {
-            return 'Miss';
+            return { feedback: 'Miss', color: COLOR_LIST[4] };
         }
     };
 
@@ -97,48 +97,55 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             const connect = (ctx, keypoints, start, end, color) => {
                 const startKeypoint = keypoints.find((kpt, idx) => idx === start);
                 const endKeypoint = keypoints.find((kpt, idx) => idx === end);
+                if (
+                    (start === 6 && end === 5) ||
+                    (start === 6 && end === 12) ||
+                    (start === 5 && end === 11) ||
+                    (startKeypoint.score >= 0.4 && endKeypoint.score >= 0.4)
+                ) {
+                    // 머리 좌표(3,4)
+                    if (start === 3 && end === 4) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 7;
+                        const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
+                        const centerY = (startKeypoint.y + endKeypoint.y) / 2;
+                        ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+                        ctx.stroke();
 
-                // 머리 좌표(3,4)
-                if (start === 3 && end === 4) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 7;
-                    const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
-                    const centerY = (startKeypoint.y + endKeypoint.y) / 2;
-                    ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
-                    ctx.stroke();
+                        // 눈 그리기
+                        const eyeLength = 10; // 눈의 길이 설정
+                        const eyeDistance = 15; // 눈 사이의 거리 설정
+                        const eyeHeight = -5; // 눈의 높이 설정
 
-                    // 눈 그리기
-                    const eyeLength = 10; // 눈의 길이 설정
-                    const eyeDistance = 15; // 눈 사이의 거리 설정
-                    const eyeHeight = -5; // 눈의 높이 설정
+                        // 왼쪽 눈 그리기
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'blue';
+                        ctx.lineWidth = 3;
+                        ctx.moveTo(centerX - eyeDistance, centerY); // 왼쪽 눈의 중앙
+                        ctx.lineTo(centerX - eyeDistance - eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 왼쪽 끝
+                        ctx.lineTo(centerX - eyeDistance + eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 오른쪽 끝
+                        ctx.closePath(); // 선의 시작점과 끝점을 연결
+                        ctx.stroke();
 
-                    // 왼쪽 눈 그리기
-                    ctx.beginPath();
-                    ctx.strokeStyle = 'blue';
-                    ctx.lineWidth = 3;
-                    ctx.moveTo(centerX - eyeDistance, centerY); // 왼쪽 눈의 중앙
-                    ctx.lineTo(centerX - eyeDistance - eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 왼쪽 끝
-                    ctx.lineTo(centerX - eyeDistance + eyeLength / 2, centerY + eyeHeight); // 왼쪽 눈의 오른쪽 끝
-                    ctx.closePath(); // 선의 시작점과 끝점을 연결
-                    ctx.stroke();
-
-                    // 오른쪽 눈 그리기
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + eyeDistance, centerY); // 오른쪽 눈의 중앙
-                    ctx.lineTo(centerX + eyeDistance - eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 왼쪽 끝
-                    ctx.lineTo(centerX + eyeDistance + eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 오른쪽 끝
-                    ctx.closePath(); // 선의 시작점과 끝점을 연결
-                    ctx.stroke();
-                } else {
-                    ctx.beginPath();
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 7;
-                    ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
-                    ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
-                    ctx.stroke();
+                        // 오른쪽 눈 그리기
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + eyeDistance, centerY); // 오른쪽 눈의 중앙
+                        ctx.lineTo(centerX + eyeDistance - eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 왼쪽 끝
+                        ctx.lineTo(centerX + eyeDistance + eyeLength / 2, centerY + eyeHeight); // 오른쪽 눈의 오른쪽 끝
+                        ctx.closePath(); // 선의 시작점과 끝점을 연결
+                        ctx.stroke();
+                    } else {
+                        ctx.beginPath();
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 7;
+                        ctx.moveTo(canvas.width - startKeypoint.x, startKeypoint.y); // x 좌표 반전
+                        ctx.lineTo(canvas.width - endKeypoint.x, endKeypoint.y); // x 좌표 반전
+                        ctx.stroke();
+                    }
                 }
             };
+
             // pose 추정 실행
             const intervalId = setInterval(async () => {
                 if (videoRef.current && ctx) {
@@ -150,30 +157,22 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             setKeypointsDetected(validKeypoints.length);
 
                             // canvas 초기화
-
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                             const newTestResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
                             setTestResult(newTestResult);
                             if (validKeypoints.length >= 5) {
-                                const color =
-                                    newTestResult >= 80
-                                        ? COLOR_LIST[0]
-                                        : newTestResult >= 70
-                                        ? COLOR_LIST[1]
-                                        : newTestResult >= 40
-                                        ? COLOR_LIST[2]
-                                        : COLOR_LIST[3];
+                                const { feedback, color } = getFeedback(newTestResult);
+                                setScore(feedback);
                                 POSE_CONNECTIONS.forEach(([start, end]) => {
                                     connect(ctx, pose.keypoints, start, end, color);
                                 });
                             }
                             // 점수에 따른 피드백 출력
-                            setScore(getFeedback(newTestResult));
                         });
                     });
                 }
-            }, 100);
+            }, 100); // 100밀리초 간격으로 setInterval 함수 실행
 
             return () => {
                 clearInterval(intervalId); // Clear the interval
@@ -230,10 +229,25 @@ const Container = styled.div`
     border-radius: 10px;
     overflow: hidden;
 `;
+
+const getFeedbackColor = (score) => {
+    if (score >= 90) {
+        return COLOR_LIST[0]; // green
+    } else if (score >= 85) {
+        return COLOR_LIST[1]; // blue
+    } else if (score >= 80) {
+        return COLOR_LIST[2]; // magenta
+    } else if (score >= 60) {
+        return COLOR_LIST[3]; // yellow
+    } else {
+        return COLOR_LIST[4]; // red
+    }
+};
+
 const Score = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
-    color: ${({ score }) => (score >= 80 ? COLOR_LIST[0] : score >= 70 ? COLOR_LIST[1] : score >= 40 ? COLOR_LIST[2] : COLOR_LIST[3])};
+    color: ${({ score }) => getFeedbackColor(score)};
 `;
 const HiddenVideo = styled.video`
     height: 80%;
