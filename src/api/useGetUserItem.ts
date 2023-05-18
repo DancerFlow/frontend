@@ -7,7 +7,7 @@ const getUserItem = async (): Promise<any> => {
     const response = await axios.get(`${baseUrl}/user/item`, {
         withCredentials: true
     });
-    console.log('getusreItem', response.data);
+
     return response.data;
 };
 

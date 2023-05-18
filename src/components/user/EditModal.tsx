@@ -34,25 +34,26 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const mutationAvatar = useMutation(
         async (file: File | undefined) => {
             if (!file) {
-                return;
+                console.log('!file', !file);
+                return null;
             }
             const formData = new FormData();
 
             formData.append('file', file);
 
+            console.log('file upload mutation called');
             const response = await axios.post(`${baseUrl}/user/profile/image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
                 withCredentials: true
             });
-            console.log('file', response.data);
+
             return response.data;
         },
         {
             onSuccess: (data) => {
-                console.log('fileupload', data);
-                alert(data);
+                data && alert('image updated');
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
@@ -121,7 +122,15 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
 
     const handleSubmit = () => {
         mutationAvatar.mutate(file);
+        setFile(undefined);
 
+        if (!changeNicknameEnabled && !changePasswordEnabled) {
+            onCloseModal();
+
+            return;
+        }
+
+        console.log('mutation profile');
         if (!changeNicknameEnabled) {
             const emptyNicknameFormValues = {
                 ...formValues,
@@ -131,6 +140,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         } else {
             mutationProfile.mutate(formValues);
         }
+        onCloseModal();
     };
 
     const handleInputFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
