@@ -3,15 +3,16 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie, Cell, Label } from 'recharts';
-import { UserGameHistory, UserGameHistorywithMaxPage } from '../../../interface';
+import { UserGameHistory } from '../../../interface';
 import { useGetGameHistoryQuery } from '../../../api/useGetGameHistoryQuery';
 import { useState } from 'react';
 import ScoreInfo from './ScoreInfo';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function Main() {
     const [selected, setSelected] = useState<number>();
-    const [pageNo, setPageNo] = useState(1);
-    const { data, isLoading, isError } = useGetGameHistoryQuery(pageNo);
+    // const [pageNo, setPageNo] = useState(1);
+    const { data, isLoading, isError } = useGetGameHistoryQuery(1);
     console.log('gamehistory', data);
 
     // historyList가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
@@ -23,14 +24,14 @@ export default function Main() {
     }, [data]);
 
     if (isLoading) {
-        return <div>Loading history...</div>;
+        return <ClipLoader color="#FE23FF"></ClipLoader>;
     }
 
     if (isError) {
         return <div>Error loading history</div>;
     }
 
-    const { historyList, maxPage } = data;
+    const { historyList } = data || { historyList: [] };
 
     const handleClick = (music_id: number) => {
         setSelected(music_id);
@@ -102,16 +103,16 @@ const UserGameHistoryPieCharts = ({ game }: { game: UserGameHistory }) => {
                     outerRadius={20}
                     startAngle={90}
                     endAngle={-270}
-                    fill="rgba(255, 255, 255, 0.5)"
+                    // fill="#27FD1C"
                     stroke="none"
                 >
                     <Label
                         value={`${game.user_music_best_score}`}
                         position="center"
-                        fill="#000"
+                        fill="#fff"
                         fontSize={12}
                         fontWeight={600}
-                        color={'#fff'}
+                        // color={'#27FD1C'}
                     />
                     <Cell key={`cell-0`} fill={COLORS[0]} />
                     <Cell key={`cell-1`} fill={COLORS[1]} />
@@ -121,7 +122,7 @@ const UserGameHistoryPieCharts = ({ game }: { game: UserGameHistory }) => {
     );
 };
 
-const COLORS = ['rgba(255, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.5)'];
+const COLORS = ['#27FD1C', 'rgba(255, 255, 255, 0.5)'];
 
 const Section = styled.section`
     display: flex;
