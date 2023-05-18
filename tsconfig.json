@@ -23,5 +23,6 @@
         "allowJs": true
     },
     "include": ["src"],
+    "exclude": ["src/pages/modePage/three/*.jsx", "src/components/main/ThreeIntro.jsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
