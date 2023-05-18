@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import video_9th from '../../assets/lovemelikethis.mp4';
+import video_9th from '../../assets/fearless.mp4';
 import countdownVideo from '../../assets/countdown.mp4';
 import video_10th from '../../assets/춤예시.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
@@ -27,14 +27,19 @@ const Game = () => {
         if (!countDownVideoRef.current) return;
         if (!videoRef.current) return;
         if (gameStart) return;
-
+        let countdownTimer;
         if (keypointsDetected < minKeypointsCount) {
+            clearTimeout(countdownTimer);
             countDownVideoRef.current.currentTime = 0;
             countDownVideoRef.current.pause();
             setStartCountdown(false);
         } else if (keypointsDetected >= minKeypointsCount) {
-            setStartCountdown(true); // Start the countdown
-            countDownVideoRef.current.play();
+            if (startCountdown) return;
+            countdownTimer = setTimeout(() => {
+                setStartCountdown(true); // Start the countdown
+                countDownVideoRef.current.volume = 0.15;
+                countDownVideoRef.current?.play();
+            }, 2000);
         }
     }, [keypointsDetected, startCountdown]);
 
@@ -117,32 +122,28 @@ const Game = () => {
                     </AreaFooter> */}
                 </VideoArea>
                 <AreaHeader>
-                    {!gameStart && (
-                        <>
-                            <GameManual>
-                                <p>! Game Manual !</p>
-                                <div>
-                                    <div>1 </div>
-                                    <span>
-                                        웹캠이 정상적으로 연결되었는지
-                                        <br /> 확인해주세요
-                                    </span>
-                                    <div>2 </div>
-                                    <span>
-                                        웹캠 화면에 한명만 있어야 정확한
-                                        <br /> 인식이 가능합니다
-                                    </span>
-                                    <div>3 </div>
-                                    <span>
-                                        머리부터 발끝까지 전부 나올 수 있을
-                                        <br /> 만큼 거리를 벌려주세요
-                                    </span>
-                                </div>
-                            </GameManual>
-                            <KeyPointPercent>({keypointsPercent.toFixed(1)}%)</KeyPointPercent>
-                        </>
-                    )}
+                    {!gameStart && <KeyPointPercent>({keypointsPercent.toFixed(1)}%)</KeyPointPercent>}
                     {!startCountdown && <Marquee autoFill={true}>{`전신이 나오도록 위치해주세요!`}&nbsp; &nbsp; &nbsp; &nbsp;</Marquee>}
+                    <GameManual className={startCountdown ? 'hidden' : 'show'}>
+                        <p>! Game Manual !</p>
+                        <div>
+                            <div>1 </div>
+                            <span>
+                                웹캠이 정상적으로 연결되었는지
+                                <br /> 확인해주세요
+                            </span>
+                            <div>2 </div>
+                            <span>
+                                웹캠 화면에 한명만 있어야 정확한
+                                <br /> 인식이 가능합니다
+                            </span>
+                            <div>3 </div>
+                            <span>
+                                머리부터 발끝까지 전부 나올 수 있을
+                                <br /> 만큼 거리를 벌려주세요
+                            </span>
+                        </div>
+                    </GameManual>
                 </AreaHeader>
                 <DancingArea>
                     <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
@@ -259,18 +260,6 @@ const Bottom = styled.div`
     transform: ${({ width }) => `translateX(-${100 - width}%)`}; // translateX를 사용하여 수평 위치 조절
 `;
 
-const ConfirmKeyframes = keyframes`
-    0%{
-        top: 90%;
-        transform: translate(-50%, -50%);
-    }
-
-    100%{
-        top: 20%;
-        transform: translate(-50%, -50%);
-    }
-`;
-
 const GameManual = styled.div`
     z-index: 99;
     display: flex;
@@ -283,10 +272,10 @@ const GameManual = styled.div`
     top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation: ${ConfirmKeyframes} 0.5s ease-out 0s 1;
+    transition: all 0.3s ease-out;
     align-items: center;
     font-family: 'NanumSquareNeoBold';
-    transition: 0.3s ease-out;
+    transition: 0.5s ease-out;
     p {
         font-size: 30px;
         padding: 30px 0px;
@@ -309,10 +298,14 @@ const GameManual = styled.div`
             line-height: 40px;
             margin-left: 30px;
             border-radius: 40px;
-            transition: transform 0.5s;
             justify-content: center;
-            cursor: pointer;
         }
+    }
+    &.hidden {
+        opacity: 0;
+    }
+    &.show {
+        opacity: 1;
     }
 `;
 

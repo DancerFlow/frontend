@@ -317,10 +317,10 @@ const Container = styled.div`
 
 const Score = styled.div`
     position: absolute;
-    top: 10%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 5;
+    z-index: 1;
     font-size: 1.5rem;
     font-weight: bold;
     color: ${(props) => props.color};
