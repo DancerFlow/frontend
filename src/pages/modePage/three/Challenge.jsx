@@ -8,7 +8,7 @@ export default function Challenge({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('/models/challenge.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/challenge.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
@@ -47,8 +47,8 @@ export default function Challenge({ area }) {
 
             {area === 1 && (
                 <group>
-                    <spotLight position={[-4, 8, -1]} intensity={1} color="pink" castShadow />
-                    <spotLight position={[0, 8, -4]} intensity={1} color="pink" castShadow />
+                    <spotLight position={[-4, 4, -1]} intensity={1} color="pink" />
+                    <spotLight position={[0, 4, -3]} intensity={1} color="pink" />
                 </group>
             )}
         </group>
