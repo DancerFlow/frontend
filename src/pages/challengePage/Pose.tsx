@@ -13,7 +13,7 @@ import { test } from '../../hooks/scoring';
 const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#1f9ce0', '#FF0000'];
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
+const Pose = forwardRef(({ setKeypointsDetected }, ref) => {
     const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
     const isLoggedIn = context.state.userState.login;
     const [testResult, setTestResult] = useState(0);
@@ -23,9 +23,9 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
     const detectorRef = useRef(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const [lastSavedSecond, setLastSavedSecond] = useState(-1);
-    const [savedKeypoints, setSavedKeypoints] = useState([]);
+    const [savedKeypoints, setSavedKeypoints] = useState<Array<object>>([]);
     const [score, setScore] = useState({ feedback: '', color: '' });
+    const [gameEnd, setGameEnd] = useState(false);
     const navigate = useNavigate();
     const musicIdNumber = Number(musicId);
 
@@ -106,7 +106,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             videoRef.current.srcObject = stream;
                         }
                     })
-                    .catch((error) => console.log('getUserMedia error:', error));
+                    .catch((error) => console.error('getUserMedia error:', error));
             }
 
             // canvas 요소의 너비와 높이를 비디오 요소의 실제 크기와 일치
@@ -131,7 +131,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                     (start === 6 && end === 5) ||
                     (start === 6 && end === 12) ||
                     (start === 5 && end === 11) ||
-                    (startKeypoint.score >= 0.4 && endKeypoint.score >= 0.3)
+                    (startKeypoint.score >= 0.4 && endKeypoint.score >= 0.4)
                 ) {
                     // 머리 좌표(3,4)
                     if (start === 3 && end === 4) {
@@ -140,6 +140,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                         ctx.lineWidth = 7;
                         const centerX = canvas.width - (startKeypoint.x + endKeypoint.x) / 2; // x 좌표 반전
                         const centerY = (startKeypoint.y + endKeypoint.y) / 2;
+
                         ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
                         ctx.stroke();
 
@@ -175,11 +176,16 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                     }
                 }
             };
+            let lastSavedSecond = 0;
+            const testArr = [];
+            let gameEndDirect = false;
             // pose 추정 실행
             const intervalId = setInterval(async () => {
-                if (videoRef.current && ctx) {
-                    const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
+                if (!(videoRef.current && ctx && scoreVideoRef)) return;
+                const currentSecond = Math.floor(scoreVideoRef.current.currentTime);
 
+                try {
+                    const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
                     poses.forEach((pose) => {
                         tf.tidy(() => {
                             // Wrap your code with tf.tidy()
@@ -189,23 +195,40 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
                             // canvas 초기화
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                            // const newTestResult = test(sheet_9th, Math.round(currentTime), pose.keypoints);
-                            // setTestResult(newTestResult);
                             if (validKeypoints.length >= 5) {
-                                // const { feedback, color } = getFeedback(newTestResult);
-                                // setScore(feedback);
                                 POSE_CONNECTIONS.forEach(([start, end]) => {
                                     connect(ctx, pose.keypoints, start, end);
                                 });
                             }
-                            // 점수에 따른 피드백 출력
                         });
                     });
+                    //1초마다 한번씩 저장 (버림이 더 가까운 시간을 반환)
+                    if (currentSecond === lastSavedSecond) {
+                        // 특정 함수의 실행 로직
+                        lastSavedSecond += 1;
+                        const poseAddedTime = {
+                            keypoints: poses[0].keypoints,
+                            time: currentSecond
+                        };
+
+                        testArr.push(poseAddedTime);
+
+                        const newTestResult = test(sheet_9th, currentSecond, poses[0].keypoints);
+                        setTestResult(newTestResult);
+                    }
+                    if (!gameEndDirect && !gameEnd && scoreVideoRef.current.ended) {
+                        setSavedKeypoints(testArr);
+                        gameEndDirect = true;
+                        setGameEnd(true);
+                        console.log(gameEnd);
+                    }
+                } catch (error) {
+                    console.error('Error in estimatePoses:', error);
                 }
             }, 100); // 50밀리초 간격으로 setInterval 함수 실행
 
             return () => {
-                clearInterval(intervalId); // Clear the interval
+                // clearInterval(intervalId); // Clear the interval
                 if (videoRef.current && videoRef.current.srcObject) {
                     let stream = videoRef.current.srcObject;
                     let tracks = stream.getTracks();
@@ -219,41 +242,7 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             };
         };
         runPoseEstimation();
-    }, [score.color]);
-
-    // * 유저 keypoints를 저장하는 함수
-    useEffect(() => {
-        const currentSecond = Math.round(currentTime);
-
-        if (currentSecond !== lastSavedSecond) {
-            const estimatePoses = async () => {
-                try {
-                    if (videoRef.current && detectorRef.current) {
-                        const poses = await detectorRef.current.estimatePoses(videoRef.current, { maxPoses: 1 });
-                        poses.forEach((pose) => {
-                            const validKeypoints = pose.keypoints.filter((keypoint) => keypoint.score > 0);
-                            // Add the time property to each keypoint
-                            const timedKeypoints = validKeypoints.map((keypoint) => ({ ...keypoint, time: currentSecond }));
-                            // 'time'과 'keypoints' 속성을 가진 객체로 저장
-                            const poseData = {
-                                time: currentSecond,
-                                keypoints: timedKeypoints
-                            };
-                            const newTestResult = test(sheet_9th, currentSecond, validKeypoints);
-                            setTestResult(newTestResult);
-                            setSavedKeypoints((prevKeypoints) => [...prevKeypoints, poseData]);
-                        });
-                        setLastSavedSecond(currentSecond); // 이 위치로 변경
-                    }
-                } catch (error) {
-                    console.error('Error in estimatePoses:', error);
-                }
-            };
-            estimatePoses();
-        }
-        const { feedback, color } = getFeedback(testResult);
-        setScore({ feedback, color });
-    }, [currentTime]);
+    }, []);
 
     // * video가 끝나면 mutation을 호출하는 이펙트
     useEffect(() => {
@@ -262,7 +251,8 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
         const handleVideoEnded = () => {
             // 비디오 재생이 끝나면 mutation을 호출하는 코드를 여기에 작성하세요.
             console.log('video ended');
-            postPlayDataMutation.mutate();
+            console.log('savedKeypoints: ', savedKeypoints);
+            // postPlayDataMutation.mutate();
         };
 
         if (video) {
@@ -276,6 +266,32 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
             }
         };
     }, [scoreVideoRef.current]);
+
+    //동영상이 끝나고 저장된 키포인트를 전송
+    useEffect(() => {
+        if (savedKeypoints.length > 0) {
+            console.log('savedKeypoints: ', savedKeypoints);
+        }
+    }, [savedKeypoints]);
+
+    //스코어링 결과에 따라 피드백을 설정
+    useEffect(() => {
+        const getFeedback = (score: number) => {
+            if (score >= 90) {
+                return { feedback: 'Perfect!', color: COLOR_LIST[0] };
+            } else if (score >= 85) {
+                return { feedback: 'Great!', color: COLOR_LIST[1] };
+            } else if (score >= 80) {
+                return { feedback: 'Good!', color: COLOR_LIST[2] };
+            } else if (score >= 60) {
+                return { feedback: 'Normal', color: COLOR_LIST[3] };
+            } else {
+                return { feedback: 'Miss', color: COLOR_LIST[4] };
+            }
+        };
+        setScore(getFeedback(testResult));
+    }, [testResult]);
+
     return (
         <Container>
             <Score color={score.color}>{score.feedback}</Score>
@@ -286,14 +302,25 @@ const Pose = forwardRef(({ setKeypointsDetected, currentTime }, ref) => {
 });
 
 const Container = styled.div`
-    height: 70vh;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     overflow: hidden;
+    canvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 `;
 
 const Score = styled.div`
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
     font-size: 1.5rem;
     font-weight: bold;
     color: ${(props) => props.color};
