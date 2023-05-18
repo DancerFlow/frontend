@@ -6,8 +6,11 @@ import MusicInfo from './MusicInfo';
 import { useGetMusicRankingQuery } from '../../api/useGetMusicRankingQuery';
 import { useGetMusicDetailQuery } from '../../api/useGetMusicDetailQuery';
 import { useGetGameResultQuery } from '../../api/useGetGameResult';
-import TopRankingUI from '../musicList/content/TopRanking';
+import TopRanking from './TopRanking';
 import { getPercentageToNextTier } from '../../utils/tierUtils';
+import { useState, useEffect } from 'react';
+import RiseLoader from 'react-spinners/RiseLoader';
+import { keyframes } from 'styled-components';
 
 interface ResultData {
     guestData?: any;
@@ -16,6 +19,8 @@ interface ResultData {
 }
 
 export default function Main({ resultdata }: { resultdata: ResultData }) {
+    const [loading, setLoading] = useState(true);
+
     let gameResultQuery;
 
     if (Boolean(resultdata?.scoreId)) {
@@ -37,30 +42,41 @@ export default function Main({ resultdata }: { resultdata: ResultData }) {
     });
     const { data: musicRank, isLoading: rankLoading } = useGetMusicRankingQuery(resultdata?.musicId);
 
-    // const { data: gameResult, isLoading: resultLoading } = useGetGameResultQuery(resultdata?.scoreId);
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setLoading(false);
+        }, 2500); //게임 끝나고 고의적으로 2초정도 로딩 걸어줌
 
-    if (detailLoading || rankLoading || resultLoading) {
-        return <div>Loading...</div>;
+        return () => clearTimeout(timeoutId);
+    }, []);
+
+    if (detailLoading || rankLoading || resultLoading || loading) {
+        return (
+            <LoadingContainer>
+                <RiseLoader color={'#FE23FF'} size={50}></RiseLoader>
+            </LoadingContainer>
+        );
     }
 
     return (
         <Container>
-            <ColumnContainer>
+            <MusicContainer>
                 <MusicInfo musicDetail={musicDetail}></MusicInfo>
-                <TopRankingUI rankingList={musicRank}></TopRankingUI>
-            </ColumnContainer>
-            <ResultInfo>
+                <RankingContainer>
+                    <TopRanking rankingList={musicRank}></TopRanking>
+                </RankingContainer>
+                <div className="arrow"> &#8595;</div>
+            </MusicContainer>
+            <ResultContainer>
                 <Lottie animationData={animationData} loop={true} />
                 <Score>{gameResult?.score?.toFixed(2)}점</Score>
-                {gameResultQuery.data.xp && (
+                {gameResult.xp !== undefined && (
                     <XpContainer>
-                        <p>Xp: </p>
                         <ProgressBar progress={getPercentageToNextTier(gameResult ? gameResult?.xp : 0)} height={50}></ProgressBar>
-                        <p>+{gameResult?.delta_xp}</p>
                     </XpContainer>
                 )}
-            </ResultInfo>
-            <ScoreDetail>
+            </ResultContainer>
+            <ScoreContainer>
                 <MyRank>{gameResult?.rank}</MyRank>
                 <Combo>
                     <p>Perfect</p>
@@ -82,26 +98,66 @@ export default function Main({ resultdata }: { resultdata: ResultData }) {
                     <p>Miss</p>
                     <p> {gameResult?.miss}</p>
                 </Combo>
-            </ScoreDetail>
+                {gameResult.xp !== undefined && <DeltaXp>XP +{gameResult?.delta_xp}</DeltaXp>}
+            </ScoreContainer>
         </Container>
     );
 }
 
+const LoadingContainer = styled.div`
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+`;
 const Container = styled.section`
     display: flex;
+
     section {
         border-radius: 10px;
         padding: 2rem;
         display: flex;
         flex-direction: column;
+        margin: 0 1rem;
+        justify-content: flex-start;
+        /* background-color: red; */
+        flex-shrink: 0;
+        width: 25%;
     }
-    overflow-y: auto;
+    margin: 0 3rem;
+    justify-content: center;
 `;
 
-const ResultInfo = styled.section`
+const RankingContainer = styled.div`
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ScoreAnimation = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const ResultContainer = styled.section`
     display: flex;
     align-items: center;
-    width: 400px;
+    animation: ${ScoreAnimation} 0.5s ease-in-out forwards;
+`;
+
+const XpContainer = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 4rem;
 `;
 
 const Score = styled.div`
@@ -109,27 +165,51 @@ const Score = styled.div`
     margin-top: 1rem;
 `;
 
-const MyRank = styled.div`
-    font-size: 4rem;
-    margin-top: 2rem;
-    text-align: center;
-    font-style: italic;
-`;
-const ScoreDetail = styled.section`
+const MusicContainer = styled.section`
     display: flex;
-    width: 400px;
+    align-items: center;
+    animation: ${ScoreAnimation} 0.5s ease-in-out forwards;
+`;
+
+const ScoreContainer = styled.section`
+    display: flex;
     font-size: 2rem;
     & > :first-child {
         margin: 4rem 0 3rem 0;
     }
+
+    & > div {
+        opacity: 0;
+        animation: ${ScoreAnimation} 0.5s ease-in-out forwards;
+    }
+    & > div:nth-child(1) {
+        animation-delay: 0s;
+    }
+    & > div:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    & > div:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    & > div:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+    & > div:nth-child(5) {
+        animation-delay: 0.8s;
+    }
+    & > div:nth-child(6) {
+        animation-delay: 1s;
+    }
+    & > div:nth-child(7) {
+        animation-delay: 1.2s;
+    }
 `;
 
-const ColumnContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+const MyRank = styled.div`
+    font-size: 4rem;
+    text-align: center;
+    font-style: italic;
 `;
-
 const Combo = styled.div`
     display: flex;
     align-items: flex-start;
@@ -137,20 +217,11 @@ const Combo = styled.div`
     font-size: 1.5rem;
     margin-bottom: 1rem;
     padding: 0 3rem;
-
-    p {
-        margin-right: 1rem;
-        margin-left: 3rem;
-    }
 `;
 
-const XpContainer = styled.div`
+const DeltaXp = styled.div`
     display: flex;
-    align-items: center;
-    width: 100%;
-
-    & > * {
-        margin-right: 1rem;
-    }
-    margin-top: 2rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+    padding: 0 3rem;
 `;

@@ -3,7 +3,6 @@ import Profile from '../../components/user/Profile';
 import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
 const UserPage = () => {
-  
     return (
         <Container>
             <Profile />
@@ -27,8 +26,9 @@ const Container = styled.body`
         'sidebar main  '
         'sidebar bottom ';
     padding: 1rem;
-    grid-auto-rows: minmax(80px, auto);
-    grid-auto-columns: minmax(60px, auto);
+    grid-template-rows: 1fr 3fr 1fr;
+    /* grid-auto-rows: minmax(80px, auto);
+    grid-auto-columns: minmax(60px, auto); */
     color: #fff;
     & > * {
         padding: 10px;

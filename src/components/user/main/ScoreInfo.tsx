@@ -44,7 +44,7 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                         <ScoreDetail>
                             <MyScoreDetail>
                                 <div>
-                                    My Best Score: {gamehistorydetail?.music_best_score_detail?.score}/
+                                    My Best Score: {gamehistorydetail?.music_best_score_detail?.score.toFixed(0)}/
                                     {gamehistorydetail?.music_total_score}
                                 </div>
                                 <div>
@@ -79,7 +79,7 @@ const GraphContainer = styled.div`
     flex: 1.3;
     /* justify-content: center; */
     align-items: center;
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
     padding-right: 1.2rem;
 `;
 
