@@ -31,7 +31,7 @@ export default function Practice({ area }) {
     const onPointerOut = useCallback(() => setHovered(false), []);
 
     return (
-        <group ref={ref} position={[8, -0.94, -10]}>
+        <group ref={ref} position={[7.8, -0.94, -10]}>
             <primitive
                 object={gltf.scene}
                 scale={1.4}
@@ -42,7 +42,6 @@ export default function Practice({ area }) {
                 onPointerOver={onPointerOver}
                 onClick={() => navigate('/musiclist/practice')}
             ></primitive>
-            {area === 0 && <spotLight position={[5, 5, -1]} color="blue" castShadow></spotLight>}
         </group>
     );
 }

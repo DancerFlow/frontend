@@ -33,10 +33,10 @@ const TopRankingUI = ({ rankingList }: any) => {
                     </div>
                 </Header>
                 <RankList>
-                    {rankingList.length === 0 ? (
+                    {rankingList && rankingList.length === 0 ? (
                         <NoRanking>no ranking history...</NoRanking>
                     ) : (
-                        rankingList.map((rank: any) => (
+                        rankingList?.map((rank: any) => (
                             <Rank
                                 key={rank.id}
                                 rank={rank.rank}

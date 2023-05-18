@@ -73,10 +73,24 @@ const BackgroundContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 2;
 `;
+
+// const BackgroundContainer = styled.div`
+//     width: 334px;
+//     height: 216px;
+//     background-color: black;
+//     overflow: hidden;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     z-index: 2;
+// `;
 
 const VideoS = styled.video`
     width: 900px;
+
     margin: 50px;
 `;
 export default VideoContainer;

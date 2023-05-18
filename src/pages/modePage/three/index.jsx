@@ -1,7 +1,9 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
+import { Canvas, extend } from '@react-three/fiber';
+import { Environment, Effects } from '@react-three/drei';
+import { UnrealBloomPass } from 'three-stdlib';
+
 import Model from './Model';
 import Floor from './Floor';
 import Spot from './Spot';
@@ -14,6 +16,8 @@ import Construction from './Construction';
 import Room from './Room';
 import DanceFloor from './DanceFloor';
 import LoadingView from '../../../components/common/LoadingView';
+
+extend({ UnrealBloomPass });
 
 const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
@@ -37,10 +41,10 @@ const Three = () => {
                 far: 1000
             }}
         >
-            <ambientLight intensity={0.6} />
+            <ambientLight intensity={0.5} />
             <directionalLight
                 position={[10, 30, 10]}
-                intensity={2}
+                intensity={1}
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
@@ -51,12 +55,12 @@ const Three = () => {
                 color="white"
             />
             <Background></Background>
-            {/* <Floor setDestinatioPoint={setDestinatioPoint}></Floor> */}
-            <DanceFloor
+            <Floor setDestinatioPoint={setDestinatioPoint}></Floor>
+            {/* <DanceFloor
                 setDestinatioPoint={setDestinatioPoint}
                 destinationPoint={destinationPoint}
                 playerAnimation={playerAnimation}
-            ></DanceFloor>
+            ></DanceFloor> */}
             <Construction area={area}></Construction>
             <Practice area={area}></Practice>
             <Room area={area}></Room>
@@ -69,6 +73,9 @@ const Three = () => {
                 setArea={setArea}
                 area={area}
             ></Player>
+            {/* <Effects disableGamma>
+                <unrealBloomPass exposure={1.6} threshold={10} strength={10} radius={0} />
+            </Effects> */}
         </Canvas>
     );
 };

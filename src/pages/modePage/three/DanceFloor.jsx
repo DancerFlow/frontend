@@ -10,7 +10,7 @@ export default function DanceFloor({ setDestinatioPoint, destinationPoint, playe
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('/models/floor.glb');
+    const gltf = useGLTF('/models/floor2.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
