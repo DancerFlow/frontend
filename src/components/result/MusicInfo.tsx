@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { Music } from '../../interface';
 
 export default function MusicInfo({ musicDetail }: { musicDetail: Music | undefined }) {
-    console.log('RankInfoMusic', musicDetail);
-
     return (
         <Section>
             {musicDetail && (
@@ -19,9 +17,8 @@ export default function MusicInfo({ musicDetail }: { musicDetail: Music | undefi
     );
 }
 
-const Section = styled.section`
+const Section = styled.div`
     display: flex;
-    width: 400px;
     margin-top: 3rem;
     align-items: center;
 
@@ -38,12 +35,10 @@ const Img = styled.img`
 `;
 
 const Title = styled.div`
-    font-size: 1.5rem;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
 `;
 
 const Singer = styled.div`
-    font-size: 1rem;
-    margin-bottom: 3rem;
+    font-size: 0.9rem;
+    margin-top: 8px;
 `;

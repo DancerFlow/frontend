@@ -20,7 +20,7 @@ const Game = () => {
 
     const { data: gameData } = useGetGameDataQuery(9);
 
-    // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
+    // * videoRef의 실행되는 이펙트
     useEffect(() => {
         if (keypointsDetected < minKeypointsCount && !startCountdown) {
             setMessage('전신이 나오도록 위치해주세요.');

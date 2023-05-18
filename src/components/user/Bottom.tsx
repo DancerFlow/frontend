@@ -3,20 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 import { useState } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function Bottom() {
     const [pageNo, setPageNo] = useState(1);
     const { data, isLoading, isError } = useGetUserLikesQuery(pageNo);
 
     if (isLoading) {
-        return <>loading...</>;
+        return <ClipLoader color="#FE23FF"></ClipLoader>;
     }
 
     if (isError) {
         return <>Error loading liked playlists</>;
     }
 
-    const { userLikes, maxPage } = data;
+    const { userLikes, maxPage } = data || { userLikes: [], maxPage: 0 };
 
     const handlePrevPage = () => {
         setPageNo((prevPageNo) => Math.max(prevPageNo - 1, 1));
@@ -46,9 +47,11 @@ export default function Bottom() {
                 </LikedList>
                 {maxPage > 1 && <ChevronIcon icon={faChevronRight} onClick={handleNextPage} />}
             </LikedContainer>
-            <PageNo>
-                {pageNo}/{maxPage}
-            </PageNo>
+            {userLikes?.length > 0 && (
+                <PageNo>
+                    {pageNo}/{maxPage}
+                </PageNo>
+            )}
         </Container>
     );
 }

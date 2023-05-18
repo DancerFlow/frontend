@@ -3,8 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
 import video_9th from '../../assets/fearless.mp4';
 import video_10th from '../../assets/춤예시.mp4';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
+// import { useLocation } from 'react-router-dom';
 
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
@@ -14,102 +14,33 @@ const Game = () => {
     const [volume, setVolume] = useState(0.5); // 초기 볼륨을 100%로 설정
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
-    const [playVideo, setPlayVideo] = useState(false); // 카운트다운이 0이 되면 true로 설정
-    const [movementCorrected, setMovementCorrected] = useState(false);
 
     const videoRef = useRef(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
 
-    const navigate = useNavigate();
-    const { musicId } = useParams();
-
+    // const location = useLocation();
+    // const speed = Number(new URLSearchParams(location.search).get('speed'));
+    const speed = 0.5;
     const { data: gameData } = useGetGameDataQuery(9);
-
-    useEffect(() => {
-        let timerId; // 타이머 ID를 저장할 변수
-
-        if (keypointsDetected < minKeypointsCount && !startCountdown) {
-            setMessage('전신이 나오도록 위치해주세요.');
-            setCountDown(3); // Reset the countdown
-        } else if (keypointsDetected >= minKeypointsCount) {
-            setStartCountdown(true); // Start the countdown
-            setMessage(countDown > 0 ? countDown : 'Dance!');
-            if (countDown > 0) {
-                timerId = setTimeout(() => setCountDown(countDown - 1), 1000); // 타이머 ID를 저장
-            }
-            if (countDown === 0 && videoRef.current) {
-                videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
-                setPlayVideo(true); // 카운트다운이 0이 되면 playTest를 true로 설정
-            }
-        }
-
-        return () => {
-            if (timerId) {
-                clearTimeout(timerId); // 컴포넌트가 언마운트되거나 의존성이 바뀔 때 타이머를 제거
-            }
-        };
-    }, [keypointsDetected, countDown, startCountdown]);
-
-    // * 비디오가 정지되었을 때 실행되는 이펙트
-    const playVideoInChunks = () => {
-        if (playVideo && videoRef.current) {
-            videoRef.current.play(); // 비디오 재생 시작
-
-            // 1초 후에 비디오 일시정지
-            setTimeout(() => {
-                if (videoRef.current) {
-                    videoRef.current.pause(); // 비디오 일시정지
-                    setPlayVideo(false);
-                }
-            }, 1000); // ^ 일정 재생 시간지나면 비디오를 일시정지
-        }
-    };
-
-    // * 동작을 맞았을때 실행되는 이펙트
-    useEffect(() => {
-        if (movementCorrected) {
-            playVideoInChunks();
-            setMovementCorrected((prev) => !prev);
-        }
-    }, [movementCorrected]);
-
-    useEffect(() => {
-        let timerId;
-
-        timerId = setInterval(playVideoInChunks, 500); // 1초마다 playVideoInChunks 함수를 실행합니다.
-
-        return () => {
-            if (timerId) {
-                clearInterval(timerId); // 컴포넌트가 언마운트되거나 의존성이 바뀔 때 타이머를 제거
-            }
-        };
-    }, [playVideo]); // 이 useEffect는 "조건"이 바뀔 때마다 다시 실행됩니다.
 
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
-        let timerId; // 타이머 ID를 저장할 변수
-
         if (keypointsDetected < minKeypointsCount && !startCountdown) {
             setMessage('전신이 나오도록 위치해주세요.');
-            setCountDown(3); // Reset the countdown
+            setCountDown(5); // Reset the countdown
         } else if (keypointsDetected >= minKeypointsCount) {
             setStartCountdown(true); // Start the countdown
             setMessage(countDown > 0 ? countDown : 'Dance!');
             if (countDown > 0) {
-                timerId = setTimeout(() => setCountDown(countDown - 1), 1000); // 타이머 ID를 저장
+                setTimeout(() => setCountDown(countDown - 1), 1000);
             }
             if (countDown === 0 && videoRef.current) {
                 videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
-                // videoRef.current.play();
+                videoRef.current.playbackRate = speed;
+                videoRef.current.play();
             }
         }
-
-        return () => {
-            if (timerId) {
-                clearTimeout(timerId); // 컴포넌트가 언마운트되거나 의존성이 바뀔 때 타이머를 제거
-            }
-        };
     }, [keypointsDetected, countDown, startCountdown]);
 
     // * volume이 바뀔 때마다 실행되는 이펙트
@@ -139,6 +70,7 @@ const Game = () => {
         const percentage = (currentTime / duration) * 100;
         return `${percentage}%`;
     };
+
     return (
         <>
             <Main>
@@ -149,10 +81,9 @@ const Game = () => {
                             <video
                                 className="answer-video"
                                 ref={videoRef}
-                                src={video_9th} // ^ 비디오의 URL을 지정
+                                src={video_9th}
                                 onLoadedMetadata={handleLoadedMetadata}
                                 onTimeUpdate={handleTimeUpdate}
-                                onEnded={() => navigate('/practice/result/:musicId')} // 비디오가 끝나면 '/path'로 이동
                                 style={{
                                     maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
                                     maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
@@ -178,23 +109,10 @@ const Game = () => {
                     <AreaHeader>
                         <CountDown>{`${message}`}</CountDown>
                     </AreaHeader>
-                    <Pose
-                        setKeypointsDetected={setKeypointsDetected}
-                        currentTime={currentTime}
-                        ref={videoRef}
-                        movementCorrected={movementCorrected}
-                        setMovementCorrected={setMovementCorrected}
-                    />
+                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
                     <AreaFooter>
                         <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
                         <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
-                        <button
-                            onClick={() => {
-                                setPlayVideo(!playVideo);
-                            }}
-                        >
-                            테스트
-                        </button>
                     </AreaFooter>
                 </DancingArea>
             </Main>
