@@ -35,7 +35,14 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                                     formatter={(value, name) => (name === 'music_score_created_at' ? formatDate(String(value)) : value)}
                                 />
                                 <Legend />
-                                <Line type="monotone" dataKey="music_score" name="Score" stroke="#ff69b4" activeDot={{ r: 8 }} />
+                                <Line
+                                    type="monotone"
+                                    dataKey="music_score"
+                                    name="Score"
+                                    stroke="#ff69b4"
+                                    dot={gamehistorydetail?.music_score_list.length > 10 ? false : true}
+                                    // dot={gamehistorydetail?.music_score_list.length < 10 ? { r: 3 } : undefined}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </GraphContainer>

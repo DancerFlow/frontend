@@ -13,7 +13,6 @@ export default function Main() {
     const [selected, setSelected] = useState<number>();
     // const [pageNo, setPageNo] = useState(1);
     const { data, isLoading, isError } = useGetGameHistoryQuery(1);
-    console.log('gamehistory', data);
 
     // historyList가 로딩되면 첫 번째 카드의 music_id를 selected로 설정
 

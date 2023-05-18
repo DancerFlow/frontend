@@ -31,15 +31,13 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const [formValid, setFormValid] = useState<string>('');
     const [file, setFile] = useState<File | undefined>(undefined);
 
-    console.log('modal rerendered');
-
     const mutationAvatar = useMutation(
         async (file: File | undefined) => {
             if (!file) {
                 return;
             }
             const formData = new FormData();
-            console.log('file', file);
+
             formData.append('file', file);
 
             const response = await axios.post(`${baseUrl}/user/profile/image`, formData, {
@@ -53,12 +51,10 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         },
         {
             onSuccess: (data) => {
-                // alert(data);
-                console.log('file upload api', data);
+                alert(data);
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('file error  upload api', error);
             }
         }
     );
@@ -85,7 +81,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const mutationProfile = useMutation(
         async (formValues: object | undefined) => {
             const response = await axios.patch(`${baseUrl}/user/profile`, formValues, { withCredentials: true });
-            console.log('profile response', response.data);
+
             return response.data;
         },
         {
@@ -94,7 +90,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('profile error', error);
             }
         }
     );
@@ -102,7 +97,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const mutationDeleteAccount = useMutation(
         async () => {
             const response = await axios.delete(`${baseUrl}/auth/leave`, { withCredentials: true });
-            console.log('account delete', response.data);
+
             return response.data;
         },
         {
@@ -111,7 +106,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('delete error', error);
             }
         }
     );

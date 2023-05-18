@@ -13,7 +13,7 @@ interface ResultData {
 export default function ResultPage() {
     const location = useLocation();
     const resultdata: ResultData | undefined = location?.state;
-    console.log('resultdata', resultdata);
+
     if (!resultdata) {
         // resultdata가 없을 때
         return (
