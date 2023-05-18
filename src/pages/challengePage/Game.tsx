@@ -1,20 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import video_9th from '../../assets/fearless.mp4';
-import video_10th from '../../assets/춤예시.mp4';
+import video_9th from '../../assets/AfterLIKE_IVE(아이브)_안유진.mp4';
+import countdownVideo from '../../assets/countdown.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
+import Marquee from 'react-fast-marquee';
 
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
-    const [countDown, setCountDown] = useState(5);
-    const [message, setMessage] = useState('전신이 나오도록 위치해주세요.');
     const [startCountdown, setStartCountdown] = useState(false);
-    const [volume, setVolume] = useState(0.5); // 초기 볼륨을 100%로 설정
+    const [gameStart, setGameStart] = useState(false);
+    const [volume, setVolume] = useState(0.2); // 초기 볼륨을 100%로 설정
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0); // 비디오의 총 길이를 저장할 상태
 
-    const videoRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const countDownVideoRef = useRef<HTMLVideoElement>(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
 
@@ -22,21 +23,24 @@ const Game = () => {
 
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
-        if (keypointsDetected < minKeypointsCount && !startCountdown) {
-            setMessage('전신이 나오도록 위치해주세요.');
-            setCountDown(5); // Reset the countdown
+        if (!countDownVideoRef.current) return;
+        if (!videoRef.current) return;
+        if (gameStart) return;
+        let countdownTimer;
+        if (keypointsDetected < minKeypointsCount) {
+            clearTimeout(countdownTimer);
+            countDownVideoRef.current.currentTime = 0;
+            countDownVideoRef.current.pause();
+            setStartCountdown(false);
         } else if (keypointsDetected >= minKeypointsCount) {
-            setStartCountdown(true); // Start the countdown
-            setMessage(countDown > 0 ? countDown : 'Dance!');
-            if (countDown > 0) {
-                setTimeout(() => setCountDown(countDown - 1), 1000);
-            }
-            if (countDown === 0 && videoRef.current) {
-                videoRef.current.loop = false; // 동영상이 한 번만 재생되도록 loop를 false로 설정
-                videoRef.current.play();
-            }
+            if (startCountdown) return;
+            countdownTimer = setTimeout(() => {
+                setStartCountdown(true); // Start the countdown
+                countDownVideoRef.current.volume = 0.15;
+                countDownVideoRef.current?.play();
+            }, 2000);
         }
-    }, [keypointsDetected, countDown, startCountdown]);
+    }, [keypointsDetected, startCountdown]);
 
     // * volume이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {
@@ -57,6 +61,16 @@ const Game = () => {
         setDuration(e.target.duration); // 비디오의 총 길이를 갱신
     };
 
+    const handleCountdownTimeUpdate = (e) => {
+        if (!countDownVideoRef.current) return;
+        if (!videoRef.current) return;
+        if (countDownVideoRef.current.ended && videoRef.current.currentTime === 0) {
+            console.log('gamestart');
+            videoRef.current.play();
+            setGameStart(true);
+        }
+    };
+
     // Bottom의 width를 계산하는 함수
     const getBottomWidth = () => {
         if (!duration) {
@@ -70,24 +84,30 @@ const Game = () => {
         <>
             <Main>
                 <VideoArea>
-                    <AreaHeader></AreaHeader>
                     <VideoWrapper>
                         {gameData && (
-                            <video
-                                className="answer-video"
-                                ref={videoRef}
-                                src={video_9th}
-                                onLoadedMetadata={handleLoadedMetadata}
-                                onTimeUpdate={handleTimeUpdate}
-                                style={{
-                                    maxWidth: '100%', // 비디오가 VideoWrapper의 너비를 넘지 않도록 합니다.
-                                    maxHeight: '100%', // 비디오가 VideoWrapper의 높이를 넘지 않도록 합니다.
-                                    objectFit: 'contain' // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
-                                }}
-                            />
+                            <div>
+                                {!gameStart && (
+                                    <video
+                                        className="countdown-video"
+                                        src={countdownVideo}
+                                        onTimeUpdate={handleCountdownTimeUpdate}
+                                        loop={false}
+                                        ref={countDownVideoRef}
+                                    />
+                                )}
+                                <video
+                                    className="answer-video"
+                                    ref={videoRef}
+                                    src={video_9th}
+                                    onLoadedMetadata={handleLoadedMetadata}
+                                    onTimeUpdate={handleTimeUpdate}
+                                    loop={false}
+                                />
+                            </div>
                         )}
                     </VideoWrapper>
-                    <AreaFooter>
+                    {/* <AreaFooter>
                         볼륨:
                         <input
                             type="range"
@@ -97,18 +117,36 @@ const Game = () => {
                             value={volume}
                             onChange={handleVolumeChange}
                         />
-                    </AreaFooter>
+                    </AreaFooter> */}
                 </VideoArea>
-
+                <GameInformation>
+                    {!gameStart && <KeyPointPercent>({keypointsPercent.toFixed(1)}%)</KeyPointPercent>}
+                    {!startCountdown && <Marquee autoFill={true}>{`! 전신이 나오도록 위치해주세요 !`}&nbsp; &nbsp; &nbsp; &nbsp;</Marquee>}
+                    <div className={startCountdown ? 'hidden black' : 'show black'}>
+                        <GameManual>
+                            <p>! Game Manual !</p>
+                            <div>
+                                <div>1 </div>
+                                <span>
+                                    웹캠이 정상적으로 연결되었는지
+                                    <br /> 확인해주세요
+                                </span>
+                                <div>2 </div>
+                                <span>
+                                    웹캠 화면에 한명만 있어야 정확한
+                                    <br /> 인식이 가능합니다
+                                </span>
+                                <div>3 </div>
+                                <span>
+                                    머리부터 발끝까지 전부 나올 수 있을
+                                    <br /> 만큼 거리를 벌려주세요
+                                </span>
+                            </div>
+                        </GameManual>
+                    </div>
+                </GameInformation>
                 <DancingArea>
-                    <AreaHeader>
-                        <CountDown>{`${message}`}</CountDown>
-                    </AreaHeader>
-                    <Pose setKeypointsDetected={setKeypointsDetected} currentTime={currentTime} ref={videoRef} />
-                    <AreaFooter>
-                        <KeyPointCount>신뢰도0.4이상 keypoints:{keypointsDetected}개</KeyPointCount>
-                        <KeyPointPercent>({keypointsPercent.toFixed(2)}%)</KeyPointPercent>
-                    </AreaFooter>
+                    <Pose setKeypointsDetected={setKeypointsDetected} gameStart={gameStart} currentTime={currentTime} ref={videoRef} />
                 </DancingArea>
             </Main>
             <Bottom style={{ width: getBottomWidth(), transition: 'width 0.5s ease' }}></Bottom>
@@ -135,38 +173,73 @@ const CountDown = styled.div`
     animation: ${pulse} 1s linear infinite;
 `;
 
-const VideoArea = styled.div`
-    flex: 1;
-    margin-left: 10px;
-`;
-
 const DancingArea = styled.div`
-    flex: 1;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+`;
+const VideoArea = styled.div`
+    background-color: black;
 `;
 const VideoWrapper = styled.div`
-    height: 70vh;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
     overflow: hidden;
-`;
-const AreaHeader = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100px; // 필요한 높이로 조정하세요.
-`;
+    .answer-video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; // 비디오의 비율을 유지하면서 VideoWrapper에 맞게 조절합니다.
+        position: absolute;
+        top: 50%;
+        left: 30%;
+        transform: translate(-50%, -50%) rotateY(180deg);
+    }
 
-const AreaFooter = styled.div`
+    .countdown-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100vw;
+        height: 100vh;
+        object-fit: fill;
+        z-index: 1;
+    }
+`;
+const GameInformation = styled.div`
+    z-index: 2;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100px; // 필요한 높이로 조정하세요.
+    position: absolute;
+    width: 100vw;
+    height: 100vh; // 필요한 높이로 조정하세요.
+    .marquee-container {
+        position: absolute;
+        bottom: 50px;
+        background-color: ${(props) => props.theme.blue};
+        padding: 24px 0;
+        transform: skew(-6deg);
+        font-size: 1.6rem;
+        color: #fefd1e;
+    }
+    .hidden {
+        opacity: 0;
+    }
+    .show {
+        opacity: 1;
+    }
+    .black {
+        background-color: #000000be;
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s ease-out;
+    }
 `;
 
 const KeyPointCount = styled.div`
@@ -174,8 +247,12 @@ const KeyPointCount = styled.div`
     font-size: 30px;
 `;
 const KeyPointPercent = styled.div`
-    color: green;
-    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: ${(props) => props.theme.green};
+    font-size: 60px;
 `;
 // 게이지 차는 효과를 보이게 하기 위한 애니메이션
 const progress = keyframes`
@@ -186,16 +263,57 @@ const Bottom = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    bottom: 0;
     width: 100%;
-    height: 50px; // 필요한 높이로 조정하세요.
-    background: linear-gradient(270deg, yellow, lime, blue, magenta);
-    background-size: 200% 200%;
+    height: 20px;
+    background-color: ${(props) => props.theme.green};
     animation: ${progress} 10s ease-in-out infinite;
     border-radius: 20px;
     transition: transform 0.5s ease; // width 대신 transform 속성에 전환 효과 적용
 
     transform: ${({ width }) => `translateX(-${100 - width}%)`}; // translateX를 사용하여 수평 위치 조절
+`;
+
+const GameManual = styled.div`
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 1030px;
+    height: 180px;
+    padding: 0 20px 0 20px;
+    background-color: ${(props) => props.theme.green};
+    top: 12%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    font-family: 'NanumSquareNeoBold';
+    p {
+        font-size: 30px;
+        padding: 30px 0px;
+        font-family: 'NanumSquareNeoHeavy';
+    }
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        span {
+            width: 270px;
+            margin-right: 10px;
+            line-height: 1.4;
+        }
+        div {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            line-height: 40px;
+            margin-left: 30px;
+            border-radius: 40px;
+            justify-content: center;
+        }
+    }
 `;
 
 export default Game;

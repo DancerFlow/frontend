@@ -7,8 +7,8 @@ import { easing } from 'maath';
 
 export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area }) {
     const ref = useRef();
-    const gltf = useGLTF('/models/girl2.glb');
-    const { scene, animations } = useGLTF('/models/girl2.glb');
+    const gltf = useGLTF('/models/boy16.glb');
+    const { scene, animations } = useGLTF('/models/boy16.glb');
     const [animationTime, setAnimationTime] = useState(0);
 
     gltf.scene.castShadow = true;

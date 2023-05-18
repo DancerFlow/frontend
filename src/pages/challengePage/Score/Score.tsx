@@ -24,7 +24,7 @@ const Score = () => {
             if (videoRef.current) {
                 videoRef.current.addEventListener('timeupdate', async () => {
                     if (videoRef.current) {
-                        const currentTime = Math.round(videoRef.current.currentTime * 2) / 2;
+                        const currentTime = Math.floor(videoRef.current.currentTime * 2) / 2;
 
                         if (currentTime > lastTime) {
                             lastTime = currentTime;

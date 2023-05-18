@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import Marquee from 'react-fast-marquee';
 
 interface Props {
-    mode: string;
+    mode: string | undefined;
 }
 
 const ModeBackground = ({ mode }: Props) => {
@@ -41,9 +41,6 @@ const BackgroundContainer = styled.div`
         font-family: 'Pixel Power', sans-serif;
         font-weight: 400;
         overflow: visible;
-    }
-    .marquee-container {
-        position: relative;
     }
 `;
 
