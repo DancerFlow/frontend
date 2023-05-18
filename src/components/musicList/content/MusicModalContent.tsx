@@ -20,17 +20,17 @@ interface ModalFrameProps {
 
 const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked, mode }: ModalFrameProps) => {
     const navigate = useNavigate();
-    const [speed, setSpeed] = useState(1);
+    const [speed, setSpeed] = useState(0.5);
 
     const onSpeedChange = (newSpeed: number) => {
         setSpeed(newSpeed);
-        // TODO: speed를 처리하는 로직 추가
     };
     const isPracticeMode = mode === 'practice';
 
     const onStartClick = () => {
-        navigate(`/${mode}/${musicDetailInfo.id}`);
+        navigate(`/${mode}/${musicDetailInfo.id}`, { state: { speed } });
     };
+    
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
