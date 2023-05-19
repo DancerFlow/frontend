@@ -31,17 +31,17 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const [formValid, setFormValid] = useState<string>('');
     const [file, setFile] = useState<File | undefined>(undefined);
 
-    console.log('modal rerendered');
-
     const mutationAvatar = useMutation(
         async (file: File | undefined) => {
             if (!file) {
-                return;
+                console.log('!file', !file);
+                return null;
             }
             const formData = new FormData();
-            console.log('file', file);
+
             formData.append('file', file);
 
+            console.log('file upload mutation called');
             const response = await axios.post(`${baseUrl}/user/profile/image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -53,12 +53,10 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         },
         {
             onSuccess: (data) => {
-                // alert(data);
-                console.log('file upload api', data);
+                data && alert('image updated');
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('file error  upload api', error);
             }
         }
     );
@@ -85,7 +83,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const mutationProfile = useMutation(
         async (formValues: object | undefined) => {
             const response = await axios.patch(`${baseUrl}/user/profile`, formValues, { withCredentials: true });
-            console.log('profile response', response.data);
+
             return response.data;
         },
         {
@@ -94,7 +92,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('profile error', error);
             }
         }
     );
@@ -102,7 +99,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
     const mutationDeleteAccount = useMutation(
         async () => {
             const response = await axios.delete(`${baseUrl}/auth/leave`, { withCredentials: true });
-            console.log('account delete', response.data);
+
             return response.data;
         },
         {
@@ -111,7 +108,6 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
             },
             onError: (error: AxiosError<Status>) => {
                 alert(error.response?.data.message);
-                console.log('delete error', error);
             }
         }
     );
@@ -126,7 +122,15 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
 
     const handleSubmit = () => {
         mutationAvatar.mutate(file);
+        setFile(undefined);
 
+        if (!changeNicknameEnabled && !changePasswordEnabled) {
+            onCloseModal();
+
+            return;
+        }
+
+        console.log('mutation profile');
         if (!changeNicknameEnabled) {
             const emptyNicknameFormValues = {
                 ...formValues,
@@ -136,6 +140,7 @@ export default function EditModal({ profile, onCloseModal }: { profile: Profile;
         } else {
             mutationProfile.mutate(formValues);
         }
+        onCloseModal();
     };
 
     const handleInputFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {

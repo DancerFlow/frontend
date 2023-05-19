@@ -24,8 +24,6 @@ export default function Profile() {
         setIsEditClicked(false);
     };
 
-    console.log('profile is rendered');
-
     //calendar
     const currDate = new Date();
     const [activeMonth, setActiveMonth] = useState(currDate.getMonth() + 1);
