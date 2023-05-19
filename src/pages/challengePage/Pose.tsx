@@ -284,9 +284,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
 
     //동영상이 끝나고 저장된 키포인트를 전송
     useEffect(() => {
-        console.log('savedKeypoints: ', savedKeypoints);
         if (savedKeypoints.length > 0) {
-            console.log('savedKeypoints: ', savedKeypoints);
             postPlayDataMutation.mutate();
         }
     }, [savedKeypoints]);

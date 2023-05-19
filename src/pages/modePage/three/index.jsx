@@ -2,7 +2,6 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, extend } from '@react-three/fiber';
 import { Environment, Effects, useGLTF } from '@react-three/drei';
-import { UnrealBloomPass } from 'three-stdlib';
 
 import Model from './Model';
 import Floor from './Floor';
@@ -15,8 +14,6 @@ import Construction from './Construction';
 import Room from './Room';
 import LoadingView from '../../../components/common/LoadingView';
 import { useGetUserItemQuery } from '../../../api/useGetUserItem';
-
-extend({ UnrealBloomPass });
 
 const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
@@ -80,9 +77,6 @@ const Three = () => {
                 area={area}
                 playerModel={playerModel}
             ></Player>
-            {/* <Effects disableGamma>
-                <unrealBloomPass exposure={1.6} threshold={10} strength={10} radius={0} />
-            </Effects> */}
         </Canvas>
     );
 };

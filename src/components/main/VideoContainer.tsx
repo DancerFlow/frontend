@@ -92,5 +92,8 @@ const VideoS = styled.video`
     width: 900px;
 
     margin: 50px;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 export default VideoContainer;

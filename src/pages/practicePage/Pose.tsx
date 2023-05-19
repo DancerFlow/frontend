@@ -4,7 +4,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import styled from 'styled-components';
 import { forwardRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 
 import { test } from '../../hooks/scoring';
@@ -26,6 +26,8 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
     const [savedKeypoints, setSavedKeypoints] = useState<Array<object>>([]);
     const [score, setScore] = useState('Good');
     const [gameEnd, setGameEnd] = useState(false);
+
+    const navigate = useNavigate();
 
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
@@ -253,12 +255,10 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
         };
     }, [scoreVideoRef.current]);
 
-    //동영상이 끝나고 저장된 키포인트를 전송
+    //동영상이 끝나고 모드선택으로 이동
     useEffect(() => {
-        console.log('savedKeypoints: ', savedKeypoints);
-        if (savedKeypoints.length > 0) {
-            console.log('savedKeypoints: ', savedKeypoints);
-        }
+        if (!gameEnd) return;
+        navigate('/mode');
     }, [savedKeypoints]);
 
     return (

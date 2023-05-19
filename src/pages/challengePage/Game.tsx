@@ -79,6 +79,8 @@ const Game = () => {
         return `${percentage}%`;
     };
 
+    if (isLoading) return <div>로딩중</div>;
+
     return (
         <>
             <Main>
@@ -150,7 +152,7 @@ const Game = () => {
                         gameStart={gameStart}
                         currentTime={currentTime}
                         ref={videoRef}
-                        answerSheet={gameData?.sheet}
+                        answerSheet={gameData.sheet}
                     />
                 </DancingArea>
             </Main>
