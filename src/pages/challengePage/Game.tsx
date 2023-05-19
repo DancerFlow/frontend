@@ -20,7 +20,6 @@ const Game = () => {
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
     const { musicId } = useParams();
     const { data: gameData, isLoading } = useGetGameDataQuery(musicId);
-    console.log(gameData);
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
         if (!countDownVideoRef.current) return;
@@ -79,6 +78,8 @@ const Game = () => {
         const percentage = (currentTime / duration) * 100;
         return `${percentage}%`;
     };
+
+    if (isLoading) return <div>로딩중</div>;
 
     return (
         <>
@@ -151,7 +152,7 @@ const Game = () => {
                         gameStart={gameStart}
                         currentTime={currentTime}
                         ref={videoRef}
-                        answerSheet={gameData?.sheet}
+                        answerSheet={gameData.sheet}
                     />
                 </DancingArea>
             </Main>

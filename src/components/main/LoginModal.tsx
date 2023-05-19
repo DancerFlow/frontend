@@ -48,10 +48,8 @@ const LoginModal = ({ isModalView, setIsModalView }: Props) => {
             navigate('/mode');
         },
         onError: (error: AxiosError) => {
-            if (error.response?.status === 500) window.alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-            else {
-                window.alert(`오류가 발생했습니다: ${error}`);
-            }
+            console.error(error.response?.data.message);
+            window.alert('아이디/비밀번호를 확인해주세요.');
         }
     });
 

@@ -14,7 +14,6 @@ interface Props {
 const NavUserInfo = ({ onLogout, isLogin }: Props) => {
     const { data: profile } = useGetUserProfileQuery();
     const [modalView, setModalView] = useState<boolean>(false);
-    console.log(profile);
     return (
         <ProfileContainer>
             <ProfileImage src={isLogin ? profile?.profile_image_url : tempImg} alt="profile" />

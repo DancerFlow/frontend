@@ -1,15 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useContext } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { SkeletonUtils } from 'three-stdlib';
 import * as THREE from 'three';
 import { easing } from 'maath';
+import { useGetUserItemQuery } from '../../../api/useGetUserItem';
+import { GlobalContext } from '../../../context/Context';
+import LoadingView from '../../../components/common/LoadingView';
 
-export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area }) {
+export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area, playerModel }) {
+    const { state } = useContext(GlobalContext);
+
     const ref = useRef();
-    const gltf = useGLTF('/models/boy16.glb');
-    const { scene, animations } = useGLTF('/models/boy16.glb');
     const [animationTime, setAnimationTime] = useState(0);
+
+    const gltf = useGLTF(playerModel);
+    const { scene, animations } = gltf;
 
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
@@ -29,7 +35,7 @@ export default function Player({ destinationPoint, playerAnimation, setPlayerAni
         return () => {
             actions[playerAnimation].fadeOut(0.1);
         };
-    }, [playerAnimation, destinationPoint, area]);
+    }, [playerAnimation, destinationPoint, area, playerModel]);
 
     useEffect(() => {
         if (!destinationPoint) return;
@@ -88,6 +94,7 @@ export default function Player({ destinationPoint, playerAnimation, setPlayerAni
             }
         }
     });
+
     return (
         <primitive
             ref={ref}

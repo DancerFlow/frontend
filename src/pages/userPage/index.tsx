@@ -4,11 +4,13 @@ import Main from '../../components/user/main';
 import Bottom from '../../components/user/Bottom';
 const UserPage = () => {
     return (
-        <Container>
-            <Profile />
-            <Main />
-            <Bottom />
-        </Container>
+        <Wrap>
+            <Container>
+                <Profile />
+                <Main />
+                <Bottom />
+            </Container>
+        </Wrap>
     );
 };
 
@@ -33,4 +35,10 @@ const Container = styled.body`
         padding: 10px;
         border-radius: 20px;
     }
+`;
+
+const Wrap = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
 `;
