@@ -174,7 +174,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart }, ref) => {
             let gameEndDirect = false;
             // pose 추정 실행
             const intervalId = setInterval(async () => {
-                if (!(videoRef.current && ctx && scoreVideoRef)) return;
+                if (!(videoRef.current && ctx && scoreVideoRef.current)) return;
                 const currentSecond = Math.floor(scoreVideoRef.current.currentTime);
 
                 try {
