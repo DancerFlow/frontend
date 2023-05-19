@@ -5,6 +5,7 @@ import video_9th from '../../assets/AfterLIKE_IVE(아이브)_안유진.mp4';
 import countdownVideo from '../../assets/countdown.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 import Marquee from 'react-fast-marquee';
+import { useParams } from 'react-router-dom';
 
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
@@ -18,8 +19,8 @@ const Game = () => {
     const countDownVideoRef = useRef<HTMLVideoElement>(null);
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
-
-    const { data: gameData } = useGetGameDataQuery(9);
+    const { musicId } = useParams();
+    const { data: gameData } = useGetGameDataQuery(musicId);
 
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
@@ -85,27 +86,25 @@ const Game = () => {
             <Main>
                 <VideoArea>
                     <VideoWrapper>
-                        {gameData && (
-                            <div>
-                                {!gameStart && (
-                                    <video
-                                        className="countdown-video"
-                                        src={countdownVideo}
-                                        onTimeUpdate={handleCountdownTimeUpdate}
-                                        loop={false}
-                                        ref={countDownVideoRef}
-                                    />
-                                )}
+                        <div>
+                            {!gameStart && (
                                 <video
-                                    className="answer-video"
-                                    ref={videoRef}
-                                    src={video_9th}
-                                    onLoadedMetadata={handleLoadedMetadata}
-                                    onTimeUpdate={handleTimeUpdate}
+                                    className="countdown-video"
+                                    src={countdownVideo}
+                                    onTimeUpdate={handleCountdownTimeUpdate}
                                     loop={false}
+                                    ref={countDownVideoRef}
                                 />
-                            </div>
-                        )}
+                            )}
+                            <video
+                                className="answer-video"
+                                ref={videoRef}
+                                src={video_9th}
+                                onLoadedMetadata={handleLoadedMetadata}
+                                onTimeUpdate={handleTimeUpdate}
+                                loop={false}
+                            />
+                        </div>
                     </VideoWrapper>
                     {/* <AreaFooter>
                         볼륨:
@@ -146,7 +145,13 @@ const Game = () => {
                     </div>
                 </GameInformation>
                 <DancingArea>
-                    <Pose setKeypointsDetected={setKeypointsDetected} gameStart={gameStart} currentTime={currentTime} ref={videoRef} />
+                    <Pose
+                        setKeypointsDetected={setKeypointsDetected}
+                        gameStart={gameStart}
+                        currentTime={currentTime}
+                        ref={videoRef}
+                        answerSheet={gameData?.sheet}
+                    />
                 </DancingArea>
             </Main>
             <Bottom style={{ width: getBottomWidth(), transition: 'width 0.5s ease' }}></Bottom>
