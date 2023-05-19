@@ -16,7 +16,6 @@ export default UserPage;
 
 const Container = styled.body`
     box-sizing: border-box;
-    height: 100vh;
     background-color: #000;
     display: grid;
     gap: 1rem;

@@ -106,10 +106,9 @@ const Container = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* align-items: flex-start; */
-    /* justify-content: center; */
     display: flex;
-    /* flex-direction: column; */
+    width: 700px;
+    height: 450px;
 `;
 
 const Title = styled.h1`
@@ -122,6 +121,7 @@ const Section = styled.div`
     display: flex;
     background-color: #000;
     width: 500px;
+    height: 400px;
     flex-direction: column;
     align-items: center;
     border: 3px solid ${(props) => props.theme.green};
