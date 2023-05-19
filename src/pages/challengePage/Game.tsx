@@ -20,7 +20,6 @@ const Game = () => {
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
     const { musicId } = useParams();
     const { data: gameData, isLoading } = useGetGameDataQuery(musicId);
-    console.log(gameData);
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
         if (!countDownVideoRef.current) return;

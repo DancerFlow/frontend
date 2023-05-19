@@ -5,6 +5,7 @@ import countdownVideo from '../../assets/countdown.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 import Marquee from 'react-fast-marquee';
 import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
@@ -19,8 +20,8 @@ const Game = () => {
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
     const { musicId } = useParams();
+    const { state } = useLocation();
     const { data: gameData, isLoading } = useGetGameDataQuery(musicId);
-    console.log(gameData);
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
         if (!countDownVideoRef.current) return;
@@ -66,6 +67,7 @@ const Game = () => {
         if (!videoRef.current) return;
         if (countDownVideoRef.current.ended && videoRef.current.currentTime === 0) {
             console.log('gamestart');
+            videoRef.current.playbackRate = state.speed;
             videoRef.current.play();
             setGameStart(true);
         }
@@ -163,20 +165,6 @@ const Game = () => {
 const Main = styled.div`
     display: flex;
     flex: 1;
-`;
-
-// 강조 효과를 위한 스타일 컴포넌트와 애니메이션
-const pulse = keyframes`
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-`;
-
-const CountDown = styled.div`
-    transform: translate(-50%, -50%);
-    font-size: 3rem;
-    color: red;
-    animation: ${pulse} 1s linear infinite;
 `;
 
 const DancingArea = styled.div`

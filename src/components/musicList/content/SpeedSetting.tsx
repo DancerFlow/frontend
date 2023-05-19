@@ -4,21 +4,19 @@ import styled, { keyframes, css } from 'styled-components';
 interface SpeedSettingProps {
     onSpeedChange: (speed: number) => void;
     answer: boolean;
+    selectedSpeed: number;
 }
 
-export const SpeedSetting: React.FC<SpeedSettingProps> = ({ onSpeedChange, answer }) => {
-    const [selectedSpeed, setSelectedSpeed] = useState<number | null>(answer ? 0.5 : null);
-
+export const SpeedSetting: React.FC<SpeedSettingProps> = ({ onSpeedChange, answer, selectedSpeed }) => {
     const handleClick = (speed: number) => {
         if (selectedSpeed !== speed) {
-            setSelectedSpeed(speed);
             onSpeedChange(speed);
         }
     };
     return (
         <SpeedContainer>
             <div className="speed-header">
-                <h2>Level</h2>
+                <h2>PRACTICE SPEED</h2>
             </div>
             <div className="speed-options">
                 <SpeedOption onClick={() => handleClick(0.5)} selected={selectedSpeed === 0.5} disabled={!answer}>
@@ -53,7 +51,7 @@ const pulseAnimation = keyframes`
 const SpeedContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     width: 100%;
     padding: 20px;
@@ -62,10 +60,11 @@ const SpeedContainer = styled.div`
     .speed-header {
         width: 100%;
         display: flex;
+        padding: 30px;
         justify-content: center;
         align-items: center;
         h2 {
-            color: ${(props) => props.theme.modal.fontColorTwo};
+            color: #dddede;
             font-size: 28px;
             margin: 8px;
             font-family: 'NanumSquareNeoExtraBold';

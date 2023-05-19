@@ -21,7 +21,6 @@ interface ModalFrameProps {
 const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked, mode }: ModalFrameProps) => {
     const navigate = useNavigate();
     const [speed, setSpeed] = useState(0.5);
-    console.log(musicDetailInfo, 'musicDetailInfo');
     const onSpeedChange = (newSpeed: number) => {
         setSpeed(newSpeed);
     };
@@ -61,7 +60,7 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                 </MusicModalInfoContent>
             </MusicModalInfo>
             {isPracticeMode ? (
-                <SpeedSetting onSpeedChange={onSpeedChange} answer={musicDetailInfo.answer} />
+                <SpeedSetting onSpeedChange={onSpeedChange} answer={musicDetailInfo.answer} selectedSpeed={speed} />
             ) : (
                 <MusicModalRank>
                     <MusicModalRankHeader>

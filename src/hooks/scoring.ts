@@ -1,10 +1,8 @@
 export function test(sheet, timestamp, p_kp) {
     //const{sheet}=axios.get('')
 
-    const idx = sheet[0]['time'] === 0 ? timestamp * 2 : timestamp * 2 - 1;
-    // *  시트에서 해당 시간의 키포인트 찾기
-    const a_kp = sheet[timestamp]['keypoints'];
-
+    const a_kp = sheet.filter((obj) => obj.time === timestamp)[0]['keypoints'];
+    console.log(timestamp, a_kp);
     // * 2차원의 x, y 좌표를 받아서 해당 좌표에 해당하는 각도(세타)를 계산
     //p_kp 있다고 가정
     function cartesianToCylindrical(x, y) {

@@ -49,7 +49,7 @@ const LoginModal = ({ isModalView, setIsModalView }: Props) => {
         },
         onError: (error: AxiosError) => {
             console.error(error.response?.data.message);
-            window.alert(error.response?.data.message);
+            window.alert('아이디/비밀번호를 확인해주세요.');
         }
     });
 

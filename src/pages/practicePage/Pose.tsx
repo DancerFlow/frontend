@@ -7,10 +7,7 @@ import { forwardRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 
-import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
-import { GlobalContext } from '../../context/Context';
 import { test } from '../../hooks/scoring';
-import sheet_9th from '../practicePage/keypoints_9th.json';
 import PerfectLottie from '../../assets/lottie/perfect.json';
 import GreatLottie from '../../assets/lottie/great.json';
 import GoodLottie from '../../assets/lottie/good.json';
@@ -19,10 +16,7 @@ import MissLottie from '../../assets/lottie/miss.json';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) => {
-    const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
-    const isLoggedIn = context.state.userState.login;
     const [testResult, setTestResult] = useState(0);
-    const { musicId } = useParams();
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
     const detectorRef = useRef(null);
@@ -32,31 +26,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
     const [savedKeypoints, setSavedKeypoints] = useState<Array<object>>([]);
     const [score, setScore] = useState('Good');
     const [gameEnd, setGameEnd] = useState(false);
-    const navigate = useNavigate();
-    const musicIdNumber = Number(musicId);
 
-    const isGuest = !isLoggedIn;
-    const postPlayDataMutation = isGuest
-        ? usePostGuestPlayDataMutation(musicIdNumber, savedKeypoints, {
-              onSuccess: (data) => {
-                  console.log('scoreId: ', data);
-                  navigate('/result', { state: { guestData: data, musicId: musicIdNumber } });
-              },
-              onError: (error) => {
-                  console.log('scoreId: ', error);
-                  navigate('/result', { state: { error: error } });
-              }
-          })
-        : usePostUserPlayDataMutation(musicIdNumber, savedKeypoints, {
-              onSuccess: (data) => {
-                  console.log('scoreId: ', data);
-                  navigate('/result', { state: { scoreId: data, musicId: musicIdNumber } });
-              },
-              onError: (error) => {
-                  console.log('error: ', error);
-                  navigate('/result', { state: { error: error } });
-              }
-          });
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
         [3, 4],
@@ -214,7 +184,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                         testArr.push(poseAddedTime);
 
                         //실시간 채점 결과 추출 후 저장
-                        const newTestResult = test(sheet_9th, currentSecond, poses[0].keypoints);
+                        const newTestResult = test(answerSheet, currentSecond, poses[0].keypoints);
                         setTestResult(newTestResult);
                     }
                     if (!gameEndDirect && !gameEnd && scoreVideoRef.current.ended) {
@@ -288,7 +258,6 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
         console.log('savedKeypoints: ', savedKeypoints);
         if (savedKeypoints.length > 0) {
             console.log('savedKeypoints: ', savedKeypoints);
-            postPlayDataMutation.mutate();
         }
     }, [savedKeypoints]);
 
@@ -323,7 +292,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                 </LottieContainer>
                 {gameStart && (
                     <Score>
-                        <h2 className="text_shadows">{score}</h2>
+                        <h2 className="text_shadows"> {testResult.toFixed(2)}</h2>
                     </Score>
                 )}
             </PoseContainer>

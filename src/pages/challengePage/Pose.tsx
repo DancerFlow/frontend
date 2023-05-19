@@ -10,7 +10,6 @@ import Lottie from 'lottie-react';
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 import { GlobalContext } from '../../context/Context';
 import { test } from '../../hooks/scoring';
-import sheet_9th from '../practicePage/keypoints_9th.json';
 import PerfectLottie from '../../assets/lottie/perfect.json';
 import GreatLottie from '../../assets/lottie/great.json';
 import GoodLottie from '../../assets/lottie/good.json';
@@ -214,7 +213,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                         testArr.push(poseAddedTime);
 
                         //실시간 채점 결과 추출 후 저장
-                        const newTestResult = test(sheet_9th, currentSecond, poses[0].keypoints);
+                        const newTestResult = test(answerSheet, currentSecond, poses[0].keypoints);
                         setTestResult(newTestResult);
                     }
                     if (!gameEndDirect && !gameEnd && scoreVideoRef.current.ended) {
