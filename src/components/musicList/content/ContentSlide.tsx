@@ -134,8 +134,13 @@ const MusicListWrap = styled.div`
 
 const StyledSlider = styled(Slider)`
     // 슬라이더의 스타일을 정의합니다.
-    background-color: #ffffff1d;
-    border-radius: 0px;
+    /* background-color: #ffffff10;
+    box-shadow: 0 0 14px rgb(0, 0, 0);
+    border-radius: 0px; */
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: sepia(40%);
+    box-shadow: 1px 3px 7px 4px rgba(0, 0, 0, 0.3);
+    padding: 5px;
 `;
 
 const CustomArrow = styled.div`
@@ -145,7 +150,7 @@ const CustomArrow = styled.div`
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
-
+    cursor: pointer;
     &.prev {
         left: -40px;
     }

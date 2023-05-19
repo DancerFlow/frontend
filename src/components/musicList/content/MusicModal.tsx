@@ -7,9 +7,10 @@ interface ModalInfoProps {
     onClose: () => void;
     selected_music_id: number;
     likeMusicIds: number[];
+    mode: string | undefined;
 }
 
-const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds }: ModalInfoProps) => {
+const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds, mode }: ModalInfoProps) => {
     // 찜목록 유무
 
     const isLiked = likeMusicIds.includes(selected_music_id);
@@ -26,6 +27,7 @@ const MusicModal = ({ opened, selected_music_id, onClose, likeMusicIds }: ModalI
         <>
             {loading ? null : (
                 <MusicModalContent
+                    mode={mode}
                     onModalClose={onClose}
                     onModalOpen={opened}
                     musicDetailInfo={musicDetail}

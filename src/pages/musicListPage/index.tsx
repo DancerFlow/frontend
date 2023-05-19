@@ -6,8 +6,7 @@ import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
 import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
-import { UserLikes } from '../../interface';
-import LaserAnimation from '../../hooks/LazerAnimation';
+import { UserLike } from '../../interface';
 import ModeBackground from '../../components/musicList/content/ModeBackground';
 import { useParams } from 'react-router-dom';
 
@@ -49,7 +48,7 @@ const MusicListPage = () => {
         setSelectedFilter('');
     };
     // 찜한 목록 리스트를 musicList 형태로 변환
-    const musicListForm = (data: { userLikes: UserLikes[]; maxPage: number } | undefined) => {
+    const musicListForm = (data: { userLikes: UserLike[]; maxPage: number } | undefined) => {
         return (
             data?.userLikes.map((userLike) => {
                 return {
@@ -65,7 +64,7 @@ const MusicListPage = () => {
             }) ?? []
         );
     };
-    const musicIds = (data: { userLikes: UserLikes[]; maxPage: number } | undefined) => {
+    const musicIds = (data: { userLikes: UserLike[]; maxPage: number } | undefined) => {
         return data?.userLikes.map(({ music_id }) => music_id) ?? [];
     };
 
@@ -90,7 +89,6 @@ const MusicListPage = () => {
 
     return (
         <Wrapper>
-            {/* <LaserAnimation /> */}
             <ModeBackground mode={mode} />
             <Filter
                 onFilter={handleSort}
@@ -102,7 +100,7 @@ const MusicListPage = () => {
             {musicSearchLoading || isLoading ? null : error ? (
                 <div>Error</div>
             ) : (
-                <Content musicList={dataToShow} likeMusicIds={musicIds(userLikesList)} />
+                <Content musicList={dataToShow} likeMusicIds={musicIds(userLikesList)} mode={mode} />
             )}
         </Wrapper>
     );

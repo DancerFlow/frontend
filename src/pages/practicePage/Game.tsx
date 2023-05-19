@@ -4,7 +4,7 @@ import Pose from './Pose';
 import video_9th from '../../assets/fearless.mp4';
 import video_10th from '../../assets/춤예시.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Game = () => {
     const [keypointsDetected, setKeypointsDetected] = useState(0);
@@ -19,10 +19,14 @@ const Game = () => {
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
 
-    // const location = useLocation();
-    // const speed = Number(new URLSearchParams(location.search).get('speed'));
-    const speed = 0.5;
+    const location = useLocation();
+    const speed = location.state?.speed;
+
+    console.log(speed, 'speed');
+
     const { data: gameData } = useGetGameDataQuery(9);
+
+    console.log(gameData, 'gameData');
 
     // * videoRef의 currentTime이 바뀔 때마다 실행되는 이펙트
     useEffect(() => {

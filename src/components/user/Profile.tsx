@@ -8,9 +8,10 @@ import { useGetUserProfileQuery } from '../../api/useGetUserProfileQuery';
 import { useState } from 'react';
 import { useGetGameStamps } from '../../api/useGetGameStamps';
 import smileSvg from '../../assets/smile.svg';
-import { Tier, getTier, getNextTier, tierThresholds, tierImages, getPercentageToNextTier } from '../../utils/tierUtils';
+import { getTier, getNextTier, tierImages, getPercentageToNextTier } from '../../utils/tierUtils';
 import ReactDOM from 'react-dom';
 import EditModal from './EditModal';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function Profile() {
     //edit profile
@@ -22,8 +23,6 @@ export default function Profile() {
     const handleCloseModal = () => {
         setIsEditClicked(false);
     };
-
-    console.log('profile is rendered');
 
     //calendar
     const currDate = new Date();
@@ -41,7 +40,7 @@ export default function Profile() {
     };
 
     if (isLoading) {
-        return <div>Loading profile...</div>;
+        return <ClipLoader color="#FE23FF"></ClipLoader>;
     }
 
     if (isError) {
@@ -71,7 +70,7 @@ export default function Profile() {
                             <div>
                                 <ProgressBarContainer>
                                     <ProgressBar progress={getPercentageToNextTier(profile?.xp)} height={20}></ProgressBar>
-                                    <div>{getPercentageToNextTier(profile?.xp)}%</div>
+                                    {/* <div>{getPercentageToNextTier(profile?.xp).toFixed(0)}%</div> */}
                                     {/* <div>{profile?.xp}</div> */}
                                 </ProgressBarContainer>
                                 <NextTierImg src={tierImages[getNextTier(profile?.xp)]} alt="NextTier" />

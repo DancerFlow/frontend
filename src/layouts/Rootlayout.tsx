@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import { useState, useRef } from 'react';
 import NavBar from './Navbar';
 import BgmPlayer from './BgmPlayer';
 

@@ -9,19 +9,17 @@ import Lottie from 'lottie-react';
 
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 import { GlobalContext } from '../../context/Context';
-import sheet_9th from '../practicePage/keypoints_9th.json';
 import { test } from '../../hooks/scoring';
-
+import sheet_9th from '../practicePage/keypoints_9th.json';
 import PerfectLottie from '../../assets/lottie/perfect.json';
 import GreatLottie from '../../assets/lottie/great.json';
 import GoodLottie from '../../assets/lottie/good.json';
 import NormalLottie from '../../assets/lottie/normal.json';
 import MissLottie from '../../assets/lottie/miss.json';
 
-const COLOR_LIST = ['#00FF00', '#0000FF', '#FF00FF', '#1f9ce0', '#FF0000'];
-
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
-const Pose = forwardRef(({ setKeypointsDetected, gameStart }, ref) => {
+const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) => {
+    console.log(answerSheet, 'answerSheet');
     const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
     const isLoggedIn = context.state.userState.login;
     const [testResult, setTestResult] = useState(0);
@@ -60,7 +58,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart }, ref) => {
                   navigate('/result', { state: { error: error } });
               }
           });
-
+    console.log(answerSheet, 'answerSheet');
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
         [3, 4],

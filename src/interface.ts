@@ -58,6 +58,7 @@ export interface Music {
     music_genre?: string;
     played?: number;
     description?: string;
+    answer: boolean;
 }
 
 export interface MusicRank {
