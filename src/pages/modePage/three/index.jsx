@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, extend } from '@react-three/fiber';
-import { Environment, Effects } from '@react-three/drei';
+import { Environment, Effects, useGLTF } from '@react-three/drei';
 import { UnrealBloomPass } from 'three-stdlib';
 
 import Model from './Model';
@@ -14,6 +14,7 @@ import Challenge from './Challenge';
 import Construction from './Construction';
 import Room from './Room';
 import LoadingView from '../../../components/common/LoadingView';
+import { useGetUserItemQuery } from '../../../api/useGetUserItem';
 
 extend({ UnrealBloomPass });
 
@@ -21,7 +22,18 @@ const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
     const [playerAnimation, setPlayerAnimation] = useState(0);
     const [area, setArea] = useState(-1); // 0: practice, 1: challenge, 2: construction, 3: room
+    const [playerModel, setPlayerModel] = useState('/models/girl2.glb');
     const roomRef = useRef();
+
+    const { data: playerData } = useGetUserItemQuery({
+        onSuccess: (data) => {
+            if (data) {
+                console.log(data);
+                setPlayerModel(data.image_url);
+                useGLTF.preload(data.image_url);
+            }
+        }
+    });
 
     return (
         <Canvas
@@ -54,11 +66,7 @@ const Three = () => {
             />
             <Background></Background>
             <Floor setDestinatioPoint={setDestinatioPoint}></Floor>
-            {/* <DanceFloor
-                setDestinatioPoint={setDestinatioPoint}
-                destinationPoint={destinationPoint}
-                playerAnimation={playerAnimation}
-            ></DanceFloor> */}
+
             <Construction area={area}></Construction>
             <Practice area={area}></Practice>
             <Room area={area}></Room>
@@ -70,6 +78,7 @@ const Three = () => {
                 setPlayerAnimation={setPlayerAnimation}
                 setArea={setArea}
                 area={area}
+                playerModel={playerModel}
             ></Player>
             {/* <Effects disableGamma>
                 <unrealBloomPass exposure={1.6} threshold={10} strength={10} radius={0} />

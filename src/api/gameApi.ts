@@ -14,7 +14,7 @@ export const fetchGameData = async (musicId: number) => {
 
 export const PostMusicLikeTest = async (musicId: number) => {
     const response = await axios.patch(
-        `${BASE_URL}/music/like/${musicId}`,
+        `${baseUrl}/music/like/${musicId}`,
         {},
         {
             headers: {

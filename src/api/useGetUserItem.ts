@@ -11,4 +11,4 @@ const getUserItem = async (): Promise<any> => {
     return response.data;
 };
 
-export const useGetUserItemQuery = () => useQuery({ queryKey: ['useritem'], queryFn: () => getUserItem() });
+export const useGetUserItemQuery = (options?: object) => useQuery({ queryKey: ['useritem'], queryFn: () => getUserItem(), ...options });

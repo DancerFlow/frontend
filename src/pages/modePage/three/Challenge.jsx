@@ -44,13 +44,6 @@ export default function Challenge({ area }) {
             >
                 <meshStandardMaterial emissive={[0.5, 0.5, 0.5]} color={[0, 0, 0]} />
             </primitive>
-
-            {area === 1 && (
-                <group>
-                    <spotLight position={[-4, 4, -1]} intensity={1} color="pink" />
-                    <spotLight position={[0, 4, -3]} intensity={1} color="pink" />
-                </group>
-            )}
         </group>
     );
 }
