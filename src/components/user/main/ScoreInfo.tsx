@@ -29,9 +29,21 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                                 <Tooltip
                                     labelFormatter={(label) => `Date: ${formatDate(label)}`}
                                     contentStyle={{ color: '#ff69b4' }}
-                                    formatter={(value, name) => (name === 'music_score_created_at' ? formatDate(String(value)) : value)}
+                                    formatter={(value, name) =>
+                                        name === 'music_score_created_at'
+                                            ? formatDate(String(value))
+                                            : typeof value === 'number'
+                                            ? value.toFixed(0)
+                                            : value
+                                    }
                                 />
-                                <Legend />
+                                <Legend
+                                    align="center"
+                                    verticalAlign="top"
+                                    layout="vertical"
+                                    height={30}
+                                    wrapperStyle={{ position: 'absolute', left: 80 }}
+                                />
                                 <Line
                                     type="monotone"
                                     dataKey="music_score"
@@ -43,13 +55,10 @@ export default function ScoreInfo({ musicId }: { musicId?: number }) {
                         </ResponsiveContainer>
                     </GraphContainer>
                     <BestScoreContainer>
-                        <h1>Best Score</h1>
+                        <Title>Best Score</Title>
                         <ScoreDetail>
                             <MyScoreDetail>
-                                <div>
-                                    My Best Score: {gamehistorydetail?.music_best_score_detail?.score.toFixed(0)}/
-                                    {gamehistorydetail?.music_total_score}
-                                </div>
+                                <div>My Best Score: {gamehistorydetail?.music_best_score_detail?.score.toFixed(0)}</div>
                                 <div>
                                     <p>My Rank: {gamehistorydetail?.music_best_score_detail?.score_rank}</p>
                                 </div>
@@ -126,4 +135,8 @@ const Div = styled.div`
     padding: 1.5rem 1rem;
     margin: 0 auto;
     text-align: center;
+`;
+
+const Title = styled.h1`
+    padding-top: 1rem;
 `;

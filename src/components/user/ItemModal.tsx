@@ -6,9 +6,6 @@ import { Status } from '../../interface';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -52,32 +49,33 @@ export default function ItemModal({ onCloseModal, itemRefetch }: ItemModalProps)
 
     const [slideIndex, setSlideIndex] = useState<number>(0);
     const itemsPerPage = 6;
-    const totalPages = Math.ceil(images.length / itemsPerPage);
+    const totalPages = Math.ceil(images.length / itemsPerPage); //24.6 =>4page
 
     const handlePrevSlide = (): void => {
-        setSlideIndex((prevIndex) => Math.max(prevIndex - itemsPerPage, 0));
+        setSlideIndex((prevIndex) => (prevIndex - itemsPerPage < 0 ? prevIndex + images.length - itemsPerPage : prevIndex - itemsPerPage));
     };
 
     const handleNextSlide = (): void => {
-        setSlideIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, images.length - itemsPerPage));
+        setSlideIndex((prevIndex) => (prevIndex + itemsPerPage > images.length - itemsPerPage ? 0 : prevIndex + itemsPerPage));
     };
 
-    const visibleImages = images.slice(slideIndex, slideIndex + itemsPerPage);
+    const visibleImages = images.slice(slideIndex, slideIndex + itemsPerPage); //image를 0~6개로 자른다 // 6
+    console.log('visibleImages', visibleImages);
 
     return (
         <>
             <ModalBackground onClick={onCloseModal} />
             <Container>
                 <Section>
-                    <Title>Select an Item</Title>
+                    <Title>Select Your Character</Title>
                     <ImageContainer>
-                        <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" />
+                        <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" style={{ fontSize: '24px' }} />
                         <ImageGrid>
                             {visibleImages.map((image) => (
                                 <ImageItem key={image.id} src={image.url} alt="image" onClick={() => handleItemClick(image.id)} />
                             ))}
                         </ImageGrid>
-                        <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" />
+                        <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" style={{ fontSize: '24px' }} />
                     </ImageContainer>
                     <Pagination>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -145,8 +143,8 @@ const ImageGrid = styled.div`
 `;
 
 const ImageItem = styled.img`
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 140px;
     object-fit: cover;
 `;
 

@@ -26,7 +26,7 @@ const Container = styled.body`
         'sidebar main  '
         'sidebar bottom ';
     padding: 1rem;
-    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 4fr 2fr;
     /* grid-auto-rows: minmax(80px, auto);
     grid-auto-columns: minmax(60px, auto); */
     color: #fff;

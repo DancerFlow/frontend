@@ -21,7 +21,7 @@ for (let i = 1; i <= 24; i++) {
 
 export default function Bottom() {
     const [pageNo, setPageNo] = useState(1);
-    const { data: userLikeswithMaxPage, isLoading: isUserLikesLaoading, isError: isUserLikesError } = useGetUserLikesQuery(pageNo);
+    const { data: userLikeswithMaxPage, isLoading: isUserLikesLoading, isError: isUserLikesError } = useGetUserLikesQuery(pageNo);
     const { data: item, refetch: itemRefetch, isLoading: isItemLoading, isError: isItemError } = useGetUserItemQuery();
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const { userLikes, maxPage } = userLikeswithMaxPage || { userLikes: [], maxPage: 0 };
@@ -35,11 +35,11 @@ export default function Bottom() {
     };
 
     const handlePrevPage = () => {
-        setPageNo((prevPageNo) => Math.max(prevPageNo - 1, 1));
+        setPageNo((prevPageNo) => (prevPageNo - 1 <= 0 ? prevPageNo + maxPage - 1 : prevPageNo - 1));
     };
 
     const handleNextPage = () => {
-        setPageNo((prevPageNo) => Math.min(prevPageNo + 1, maxPage));
+        setPageNo((prevPageNo) => (prevPageNo + 1 > maxPage ? prevPageNo - maxPage + 1 : prevPageNo + 1));
     };
 
     return (
@@ -47,9 +47,11 @@ export default function Bottom() {
             <LikedMusic>
                 <SectionTitle>Liked Playlists</SectionTitle>
                 <LikedContainer>
-                    {maxPage > 1 && <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevPage} />}
+                    {!isUserLikesLoading && !isUserLikesError && maxPage > 1 && (
+                        <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevPage} />
+                    )}
                     <LikedList>
-                        {isUserLikesLaoading ? (
+                        {isUserLikesLoading ? (
                             <ClipLoader color="#FE23FF"></ClipLoader>
                         ) : isUserLikesError ? (
                             <div>Error loading liked playlists</div>
@@ -74,7 +76,7 @@ export default function Bottom() {
                 )}
             </LikedMusic>
             <ItemBox>
-                <ItemSelect onClick={handleModalOpen}>Select an Item</ItemSelect>
+                <ItemSelect onClick={handleModalOpen}>Select Your Character</ItemSelect>
 
                 {isItemLoading ? (
                     <ClipLoader color="#FE23FF" />
@@ -160,6 +162,8 @@ const LikedItem = styled.div`
     margin: 0.5rem 0 0 1rem;
     flex-basis: 10%;
     flex-grow: 0;
+    width: 5rem;
+    height: 7rem;
 `;
 
 const LikedItemImg = styled.img`
@@ -171,10 +175,9 @@ const LikedItemName = styled.div`
     margin-top: 0.5rem;
     font-size: 0.7rem;
     text-align: left;
-    min-height: 30px;
 `;
 const LikedItemSinger = styled.div`
-    font-size: 0.5rem;
+    font-size: 7px;
     text-align: left;
 `;
 
