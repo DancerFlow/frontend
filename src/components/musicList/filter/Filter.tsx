@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faFire, faMusic, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { GlobalContext } from '../../../context/Context';
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
@@ -14,6 +16,9 @@ interface FilterProps {
     setInputValue: (input: string) => void;
 }
 const Filter = ({ onFilter, selected, onSearch, inputValue, setInputValue }: FilterProps) => {
+    const { state } = useContext(GlobalContext);
+
+    console.log(state, 'state');
     return (
         <Wrapper>
             <FilterWrapper>
@@ -39,30 +44,34 @@ const Filter = ({ onFilter, selected, onSearch, inputValue, setInputValue }: Fil
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputIconWrapper>
                 </InputWrapper>
-                <ItemWrapper onClick={() => onFilter(FilterType.Popular)}>
-                    <BtnIconWrapper>
-                        <FontAwesomeIcon icon={faFire} />
-                    </BtnIconWrapper>
-                    <Item id="popular" selected={selected}>
-                        <H1>인기순</H1>
-                    </Item>
-                </ItemWrapper>
-                <ItemWrapper onClick={() => onFilter(FilterType.Latest)}>
-                    <BtnIconWrapper>
-                        <FontAwesomeIcon icon={faMusic} />
-                    </BtnIconWrapper>
-                    <Item id="latest" selected={selected}>
-                        <H1>최신순</H1>
-                    </Item>
-                </ItemWrapper>
-                <ItemWrapper onClick={() => onFilter(FilterType.Like)}>
-                    <BtnIconWrapper>
-                        <FontAwesomeIcon icon={faHeart} />
-                    </BtnIconWrapper>
-                    <Item id="isLiked" selected={selected}>
-                        <H1>찜한 목록</H1>
-                    </Item>
-                </ItemWrapper>
+                <SortWrapper>
+                    <ItemWrapper onClick={() => onFilter(FilterType.Popular)}>
+                        <BtnIconWrapper>
+                            <FontAwesomeIcon icon={faFire} />
+                        </BtnIconWrapper>
+                        <Item id="popular" selected={selected}>
+                            <H1>인기순</H1>
+                        </Item>
+                    </ItemWrapper>
+                    <ItemWrapper onClick={() => onFilter(FilterType.Latest)}>
+                        <BtnIconWrapper>
+                            <FontAwesomeIcon icon={faMusic} />
+                        </BtnIconWrapper>
+                        <Item id="latest" selected={selected}>
+                            <H1>최신순</H1>
+                        </Item>
+                    </ItemWrapper>
+                    {state.userState.login && ( // 로그인 시 찜한 목록 필터링
+                        <ItemWrapper onClick={() => onFilter(FilterType.Like)}>
+                            <BtnIconWrapper>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </BtnIconWrapper>
+                            <Item id="isLiked" selected={selected}>
+                                <H1>찜한 목록</H1>
+                            </Item>
+                        </ItemWrapper>
+                    )}
+                </SortWrapper>
             </FilterWrapper>
         </Wrapper>
     );
@@ -83,6 +92,12 @@ const FilterWrapper = styled.div`
     align-items: center;
     width: 25%;
     height: 100%;
+`;
+
+const SortWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 interface ItemProps {
