@@ -6,9 +6,6 @@ import { Status } from '../../interface';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -52,29 +49,43 @@ export default function ItemModal({ onCloseModal, itemRefetch }: ItemModalProps)
 
     const [slideIndex, setSlideIndex] = useState<number>(0);
     const itemsPerPage = 6;
+    const totalPages = Math.ceil(images.length / itemsPerPage); //24.6 =>4page
 
     const handlePrevSlide = (): void => {
-        setSlideIndex((prevIndex) => Math.max(prevIndex - itemsPerPage, 0));
+        setSlideIndex((prevIndex) => (prevIndex - itemsPerPage < 0 ? prevIndex + images.length - itemsPerPage : prevIndex - itemsPerPage));
     };
 
     const handleNextSlide = (): void => {
-        setSlideIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, images.length - itemsPerPage));
+        setSlideIndex((prevIndex) => (prevIndex + itemsPerPage > images.length - itemsPerPage ? 0 : prevIndex + itemsPerPage));
     };
 
-    const visibleImages = images.slice(slideIndex, slideIndex + itemsPerPage);
+    const visibleImages = images.slice(slideIndex, slideIndex + itemsPerPage); //image를 0~6개로 자른다 // 6
+    console.log('visibleImages', visibleImages);
 
     return (
         <>
             <ModalBackground onClick={onCloseModal} />
             <Container>
                 <Section>
-                    <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" />
-                    <ImageGrid>
-                        {visibleImages.map((image) => (
-                            <ImageItem key={image.id} src={image.url} alt="image" onClick={() => handleItemClick(image.id)} />
+                    <Title>Select Your Character</Title>
+                    <ImageContainer>
+                        <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" style={{ fontSize: '24px' }} />
+                        <ImageGrid>
+                            {visibleImages.map((image) => (
+                                <ImageItem key={image.id} src={image.url} alt="image" onClick={() => handleItemClick(image.id)} />
+                            ))}
+                        </ImageGrid>
+                        <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" style={{ fontSize: '24px' }} />
+                    </ImageContainer>
+                    <Pagination>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <PaginationIndicator
+                                key={index}
+                                active={index === Math.floor(slideIndex / itemsPerPage)}
+                                onClick={() => setSlideIndex(index * itemsPerPage)}
+                            />
                         ))}
-                    </ImageGrid>
-                    <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" />
+                    </Pagination>
                 </Section>
             </Container>
         </>
@@ -95,20 +106,32 @@ const Container = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* align-items: flex-start; */
-    /* justify-content: center; */
     display: flex;
-    /* flex-direction: column; */
+    width: 700px;
+    height: 450px;
 `;
 
+const Title = styled.h1`
+    display: flex;
+    color: ${(props) => props.theme.green};
+    margin-bottom: 2rem;
+    font-size: 2rem;
+`;
 const Section = styled.div`
     display: flex;
     background-color: #000;
     width: 500px;
+    height: 400px;
+    flex-direction: column;
     align-items: center;
     border: 3px solid ${(props) => props.theme.green};
     border-radius: 10px;
     padding: 2rem 4rem;
+`;
+
+const ImageContainer = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ImageGrid = styled.div`
@@ -120,7 +143,20 @@ const ImageGrid = styled.div`
 `;
 
 const ImageItem = styled.img`
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 140px;
     object-fit: cover;
+`;
+
+const Pagination = styled.div`
+    display: flex;
+    margin-top: 1rem;
+`;
+
+const PaginationIndicator = styled.div<{ active: boolean }>`
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background-color: ${(props) => (props.active ? props.theme.green : 'gray')};
 `;
