@@ -19,7 +19,6 @@ import MissLottie from '../../assets/lottie/miss.json';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) => {
-    console.log(answerSheet, 'answerSheet');
     const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
     const isLoggedIn = context.state.userState.login;
     const [testResult, setTestResult] = useState(0);
@@ -58,7 +57,6 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                   navigate('/result', { state: { error: error } });
               }
           });
-    console.log(answerSheet, 'answerSheet');
     // * 연결할 keypoints를 저장하는 배열
     const POSE_CONNECTIONS = [
         [3, 4],
