@@ -23,8 +23,8 @@ export default function Bottom() {
     const [pageNo, setPageNo] = useState(1);
     const { data: userLikeswithMaxPage, isLoading: isUserLikesLaoading, isError: isUserLikesError } = useGetUserLikesQuery(pageNo);
     const { data: item, refetch: itemRefetch, isLoading: isItemLoading, isError: isItemError } = useGetUserItemQuery();
-
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
+    const { userLikes, maxPage } = userLikeswithMaxPage || { userLikes: [], maxPage: 0 };
 
     const handleModalOpen = () => {
         setIsItemModalOpen(true);
@@ -33,8 +33,6 @@ export default function Bottom() {
     const handleModalClose = () => {
         setIsItemModalOpen(false);
     };
-
-    const { userLikes, maxPage } = userLikeswithMaxPage || { userLikes: [], maxPage: 0 };
 
     const handlePrevPage = () => {
         setPageNo((prevPageNo) => Math.max(prevPageNo - 1, 1));

@@ -52,6 +52,7 @@ export default function ItemModal({ onCloseModal, itemRefetch }: ItemModalProps)
 
     const [slideIndex, setSlideIndex] = useState<number>(0);
     const itemsPerPage = 6;
+    const totalPages = Math.ceil(images.length / itemsPerPage);
 
     const handlePrevSlide = (): void => {
         setSlideIndex((prevIndex) => Math.max(prevIndex - itemsPerPage, 0));
@@ -68,13 +69,25 @@ export default function ItemModal({ onCloseModal, itemRefetch }: ItemModalProps)
             <ModalBackground onClick={onCloseModal} />
             <Container>
                 <Section>
-                    <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" />
-                    <ImageGrid>
-                        {visibleImages.map((image) => (
-                            <ImageItem key={image.id} src={image.url} alt="image" onClick={() => handleItemClick(image.id)} />
+                    <Title>Select an Item</Title>
+                    <ImageContainer>
+                        <FontAwesomeIcon icon={faChevronLeft} onClick={handlePrevSlide} color="white" />
+                        <ImageGrid>
+                            {visibleImages.map((image) => (
+                                <ImageItem key={image.id} src={image.url} alt="image" onClick={() => handleItemClick(image.id)} />
+                            ))}
+                        </ImageGrid>
+                        <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" />
+                    </ImageContainer>
+                    <Pagination>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <PaginationIndicator
+                                key={index}
+                                active={index === Math.floor(slideIndex / itemsPerPage)}
+                                onClick={() => setSlideIndex(index * itemsPerPage)}
+                            />
                         ))}
-                    </ImageGrid>
-                    <FontAwesomeIcon icon={faChevronRight} onClick={handleNextSlide} color="white" />
+                    </Pagination>
                 </Section>
             </Container>
         </>
@@ -101,14 +114,26 @@ const Container = styled.div`
     /* flex-direction: column; */
 `;
 
+const Title = styled.h1`
+    display: flex;
+    color: ${(props) => props.theme.green};
+    margin-bottom: 2rem;
+    font-size: 2rem;
+`;
 const Section = styled.div`
     display: flex;
     background-color: #000;
     width: 500px;
+    flex-direction: column;
     align-items: center;
     border: 3px solid ${(props) => props.theme.green};
     border-radius: 10px;
     padding: 2rem 4rem;
+`;
+
+const ImageContainer = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ImageGrid = styled.div`
@@ -123,4 +148,17 @@ const ImageItem = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
+`;
+
+const Pagination = styled.div`
+    display: flex;
+    margin-top: 1rem;
+`;
+
+const PaginationIndicator = styled.div<{ active: boolean }>`
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background-color: ${(props) => (props.active ? props.theme.green : 'gray')};
 `;
