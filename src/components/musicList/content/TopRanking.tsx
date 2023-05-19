@@ -116,8 +116,9 @@ const Header = styled.div`
         justify-content: center;
         align-items: center;
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
+            margin: 10px;
         }
         position: absolute;
         top: 1.5rem;

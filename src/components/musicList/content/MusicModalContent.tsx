@@ -1,28 +1,36 @@
 import { Music } from '../../../interface';
 import ModalFrame from '../../common/ModalFrame';
 import styled from 'styled-components';
-import StartBtn from './StartBtn';
 import Tropy from './Tropy';
 import TopRanking from './TopRanking';
 import LikeBtn from './LikeBtn';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-
+import { SpeedSetting } from './SpeedSetting';
+import { useState } from 'react';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
     musicDetailInfo: Music;
     musicRankInfo: any;
     isLiked: boolean;
+    mode: string | undefined;
 }
 
-const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked }: ModalFrameProps) => {
+const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked, mode }: ModalFrameProps) => {
     const navigate = useNavigate();
+    const [speed, setSpeed] = useState(0.5);
+
+    const onSpeedChange = (newSpeed: number) => {
+        setSpeed(newSpeed);
+    };
+    const isPracticeMode = mode === 'practice';
 
     const onStartClick = () => {
-        navigate(`/challenge/${musicDetailInfo.id}`);
+        navigate(`/${mode}/${musicDetailInfo.id}`, { state: { speed } });
     };
+    
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
@@ -47,21 +55,25 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                             <p>{musicDetailInfo.played}</p>
                         </div>
                     </MusicModalFooter>
-                    <GameStartBtn onClick={onStartClick} aria-label="GAME START">
-                        GAME START
+                    <GameStartBtn onClick={onStartClick} disabled={!musicDetailInfo.answer} aria-label="GAME START">
+                        {musicDetailInfo.answer ? 'GAME START' : 'Coming Soon'}
                     </GameStartBtn>
                 </MusicModalInfoContent>
             </MusicModalInfo>
-            <MusicModalRank>
-                <MusicModalRankHeader>
-                    <Tropy />
-                </MusicModalRankHeader>
-                <MusicModalRankContent>
-                    <div className="rankList">
-                        <TopRanking rankingList={musicRankInfo} />
-                    </div>
-                </MusicModalRankContent>
-            </MusicModalRank>
+            {isPracticeMode ? (
+                <SpeedSetting onSpeedChange={onSpeedChange} answer={musicDetailInfo.answer} />
+            ) : (
+                <MusicModalRank>
+                    <MusicModalRankHeader>
+                        <Tropy />
+                    </MusicModalRankHeader>
+                    <MusicModalRankContent>
+                        <div className="rankList">
+                            <TopRanking rankingList={musicRankInfo} />
+                        </div>
+                    </MusicModalRankContent>
+                </MusicModalRank>
+            )}
         </ModalFrame>
     ) : null;
 };
@@ -186,14 +198,14 @@ const MusicModalFooter = styled.div`
     }
 `;
 
-const GameStartBtn = styled.button`
+const GameStartBtn = styled.button<{ disabled: boolean }>`
     width: 150px;
     height: 40px;
     margin-top: 20px;
     border: 0;
     border-radius: 5px;
     font-size: 18px;
-    background: ${(props) => props.theme.pink};
+    background: ${(props) => (props.disabled ? 'grey' : props.theme.pink)};
     color: white;
     position: relative;
     transition: all 0.3s;
@@ -202,8 +214,8 @@ const GameStartBtn = styled.button`
     font-family: 'NanumSquareNeoExtraBold';
     box-shadow: 0 0 16px rgb(0, 0, 0);
     &:hover {
-        color: ${(props) => props.theme.blue};
-        cursor: pointer;
+        color: ${(props) => (!props.disabled ? props.theme.blue : 'white')};
+        cursor: ${(props) => (!props.disabled ? 'pointer' : 'not-allowed')};
     }
 `;
 
