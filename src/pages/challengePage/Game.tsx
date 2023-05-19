@@ -20,11 +20,7 @@ const Game = () => {
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
     const { musicId } = useParams();
-
-    const { data: gameData, isLoading } = useGetGameDataQuery(musicId);
-    console.log(gameData, 'gameData');
-
-    if (isLoading) return <div>로딩중...</div>;
+    const { data: gameData } = useGetGameDataQuery(musicId);
 
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
@@ -90,27 +86,25 @@ const Game = () => {
             <Main>
                 <VideoArea>
                     <VideoWrapper>
-                        {gameData && (
-                            <div>
-                                {!gameStart && (
-                                    <video
-                                        className="countdown-video"
-                                        src={countdownVideo}
-                                        onTimeUpdate={handleCountdownTimeUpdate}
-                                        loop={false}
-                                        ref={countDownVideoRef}
-                                    />
-                                )}
+                        <div>
+                            {!gameStart && (
                                 <video
-                                    className="answer-video"
-                                    ref={videoRef}
-                                    src={video_9th}
-                                    onLoadedMetadata={handleLoadedMetadata}
-                                    onTimeUpdate={handleTimeUpdate}
+                                    className="countdown-video"
+                                    src={countdownVideo}
+                                    onTimeUpdate={handleCountdownTimeUpdate}
                                     loop={false}
+                                    ref={countDownVideoRef}
                                 />
-                            </div>
-                        )}
+                            )}
+                            <video
+                                className="answer-video"
+                                ref={videoRef}
+                                src={video_9th}
+                                onLoadedMetadata={handleLoadedMetadata}
+                                onTimeUpdate={handleTimeUpdate}
+                                loop={false}
+                            />
+                        </div>
                     </VideoWrapper>
                     {/* <AreaFooter>
                         볼륨:
