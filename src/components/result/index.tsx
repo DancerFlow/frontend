@@ -69,7 +69,7 @@ export default function Main({ resultdata }: { resultdata: ResultData }) {
             </MusicContainer>
             <ResultContainer>
                 <Lottie animationData={animationData} loop={true} />
-                <Score>{gameResult?.score?.toFixed(2)}점</Score>
+                <Score>{gameResult?.score?.toFixed(0)}점</Score>
                 {gameResult.xp !== undefined && (
                     <XpContainer>
                         <ProgressBar progress={getPercentageToNextTier(gameResult ? gameResult?.xp : 0)} height={50}></ProgressBar>

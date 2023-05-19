@@ -6,7 +6,7 @@ import { Vector3, MathUtils } from 'three';
 
 export default function Logo() {
     const ref = useRef();
-    const gltf = useGLTF('/models/dflogo.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/dflogo.glb');
 
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
