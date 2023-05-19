@@ -7,6 +7,7 @@ import { forwardRef } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 
+import { GlobalContext } from '../../context/Context';
 import { test } from '../../hooks/scoring';
 import PerfectLottie from '../../assets/lottie/perfect.json';
 import GreatLottie from '../../assets/lottie/great.json';
@@ -26,6 +27,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
     const [savedKeypoints, setSavedKeypoints] = useState<Array<object>>([]);
     const [score, setScore] = useState('Good');
     const [gameEnd, setGameEnd] = useState(false);
+    const context = useContext(GlobalContext);
 
     const navigate = useNavigate();
 
@@ -258,6 +260,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
     //동영상이 끝나고 모드선택으로 이동
     useEffect(() => {
         if (!gameEnd) return;
+        sessionStorage.getItem('bgmstate') === 'true' && context.bgmControl({ bgm: true });
         navigate('/mode');
     }, [savedKeypoints]);
 

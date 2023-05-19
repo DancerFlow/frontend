@@ -286,6 +286,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
     useEffect(() => {
         if (savedKeypoints.length > 0) {
             postPlayDataMutation.mutate();
+            sessionStorage.getItem('bgmstate') === 'true' && context.bgmControl({ bgm: true });
         }
     }, [savedKeypoints]);
 
