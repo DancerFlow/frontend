@@ -6,6 +6,9 @@ import { Status } from '../../interface';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -77,7 +80,6 @@ export default function ItemModal({ onCloseModal, itemRefetch }: ItemModalProps)
         </>
     );
 }
-
 const ModalBackground = styled.div`
     position: absolute;
     top: 0;

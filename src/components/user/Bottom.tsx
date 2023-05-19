@@ -147,9 +147,8 @@ const LikedContainer = styled.section`
 
 const LikedList = styled.section`
     display: flex;
-    /* justify-content: flex-start; */
-    /* margin: auto; */
-    margin-top: 1rem;
+    justify-content: space-between;
+    margin-top: 10px;
 `;
 
 const ChevronIcon = styled(FontAwesomeIcon)`
@@ -177,7 +176,7 @@ const LikedItemName = styled.div`
     min-height: 30px;
 `;
 const LikedItemSinger = styled.div`
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     text-align: left;
 `;
 
