@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import video_9th from '../../assets/AfterLIKE_IVE(아이브)_안유진.mp4';
 import countdownVideo from '../../assets/countdown.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 import Marquee from 'react-fast-marquee';
@@ -20,8 +19,8 @@ const Game = () => {
     const keypointsPercent = Math.min((keypointsDetected / 17) * 100, 100);
     const minKeypointsCount = 10; // 최소 검출되어야하는 keypoints의 수
     const { musicId } = useParams();
-    const { data: gameData } = useGetGameDataQuery(musicId);
-
+    const { data: gameData, isLoading } = useGetGameDataQuery(musicId);
+    console.log(gameData);
     // * videoRef의 실행되는 이펙트
     useEffect(() => {
         if (!countDownVideoRef.current) return;
@@ -96,14 +95,16 @@ const Game = () => {
                                     ref={countDownVideoRef}
                                 />
                             )}
-                            <video
-                                className="answer-video"
-                                ref={videoRef}
-                                src={video_9th}
-                                onLoadedMetadata={handleLoadedMetadata}
-                                onTimeUpdate={handleTimeUpdate}
-                                loop={false}
-                            />
+                            {!isLoading && (
+                                <video
+                                    className="answer-video"
+                                    ref={videoRef}
+                                    src={gameData.video_url}
+                                    onLoadedMetadata={handleLoadedMetadata}
+                                    onTimeUpdate={handleTimeUpdate}
+                                    loop={false}
+                                />
+                            )}
                         </div>
                     </VideoWrapper>
                     {/* <AreaFooter>
