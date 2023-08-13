@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Pose from './Pose';
-import countdownVideo from '../../assets/countdown.mp4';
 import { useGetGameDataQuery } from '../../api/useGetGameDataQuery';
 import Marquee from 'react-fast-marquee';
 import { useParams } from 'react-router-dom';
@@ -90,7 +89,7 @@ const Game = () => {
                             {!gameStart && (
                                 <video
                                     className="countdown-video"
-                                    src={countdownVideo}
+                                    src={'https://dancerflow.s3.us-east-2.amazonaws.com/1691922558103-countdown.mp4'}
                                     onTimeUpdate={handleCountdownTimeUpdate}
                                     loop={false}
                                     ref={countDownVideoRef}

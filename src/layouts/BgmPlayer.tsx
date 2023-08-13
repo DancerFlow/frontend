@@ -5,7 +5,6 @@ import styled, { keyframes } from 'styled-components';
 import { useContext } from 'react';
 
 import { GlobalContext } from '../context/Context';
-import bgm from '../assets/rukunetsu.mp3';
 import bgmOnOff from '../assets/bgmOnOff.json';
 
 const BgmPlayer = () => {
@@ -41,7 +40,12 @@ const BgmPlayer = () => {
                     </div>
                 </ConfirmSoundPlay>
             )}
-            <ReactHowler src={[bgm]} playing={state.bgmState.bgm} volume={0.1} loop={true} />
+            <ReactHowler
+                src={['https://dancerflow.s3.us-east-2.amazonaws.com/1691922549668-rukunetsu.mp3']}
+                playing={state.bgmState.bgm}
+                volume={0.1}
+                loop={true}
+            />
             <BgmController onClick={handleSound}>
                 <Lottie lottieRef={lottieRef} animationData={bgmOnOff} loop={false} autoPlay={false}></Lottie>
             </BgmController>

@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Three from './three';
 
 const ModePage = () => {
     return (
         <CanvasContainer>
-            <Three></Three>
+            <Three />
         </CanvasContainer>
     );
 };

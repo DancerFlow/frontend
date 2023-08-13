@@ -20,7 +20,6 @@ const MainPage = () => {
 
     return (
         <div>
-            {/* <LoadingView loading={loadingScreen}></LoadingView> */}
             <VideoContainer setIsClicked={setIsClicked} isClicked={isClicked}></VideoContainer>
 
             <LoginModal isModalView={isClicked} setIsModalView={setIsClicked} />

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import bgVideo from '../../assets/dancerflow.mp4';
 import { useContext } from 'react';
 import { GlobalContext } from '../../context/Context';
 
@@ -58,7 +57,7 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
                 onMouseOut={() => setIsHover(false)}
                 onClick={handleOnClick}
             >
-                <source src={bgVideo} type="video/mp4"></source>
+                <source src={'https://dancerflow.s3.us-east-2.amazonaws.com/1691922511539-dancerflow.mp4'} type="video/mp4"></source>
             </VideoS>
         </BackgroundContainer>
     );
