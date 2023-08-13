@@ -3,7 +3,7 @@ import { useTexture } from '@react-three/drei';
 import grid from './material/grid.jpg';
 import * as THREE from 'three';
 
-export default function Floor({ setDestinatioPoint }) {
+export default function Floor({ setDestinatioPoint, width, height, center }) {
     const texture = useTexture(grid);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
@@ -17,8 +17,13 @@ export default function Floor({ setDestinatioPoint }) {
     };
 
     return (
-        <mesh rotation={[-0.5 * Math.PI, 0, 0]} position={[0, -1, 0]} receiveShadow onClick={(e) => handleFloorClick(e)}>
-            <planeGeometry args={[30, 30, 1, 1]} />
+        <mesh
+            rotation={[-0.5 * Math.PI, 0, 0]}
+            position={[center[0], center[1], center[2]]}
+            receiveShadow
+            onClick={(e) => handleFloorClick(e)}
+        >
+            <planeGeometry args={[width, height, 1, 1]} />
             <shadowMaterial transparent opacity={0.2} />
             <meshStandardMaterial map={texture} />
         </mesh>
