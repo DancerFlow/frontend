@@ -12,7 +12,7 @@ export default function Pointer() {
 
     return (
         <mesh rotation={[-0.5 * Math.PI, 0, 0]} position={[1, -0.99, 1]} receiveShadow>
-            <planeBufferGeometry args={[2, 2, 1, 1]} />
+            <planeGeometry args={[2, 2, 1, 1]} />
             <shadowMaterial transparent opacity={0.2} />
             <meshStandardMaterial color="pink" transparent opacity={0.8} />
         </mesh>

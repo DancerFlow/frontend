@@ -69,14 +69,16 @@ const Three = () => {
             <Room area={area}></Room>
             <Challenge area={area}></Challenge>
             <Logo></Logo>
-            <Player
-                destinationPoint={destinationPoint}
-                playerAnimation={playerAnimation}
-                setPlayerAnimation={setPlayerAnimation}
-                setArea={setArea}
-                area={area}
-                playerModel={playerModel}
-            ></Player>
+            <Suspense fallback={<LoadingView />}>
+                <Player
+                    destinationPoint={destinationPoint}
+                    playerAnimation={playerAnimation}
+                    setPlayerAnimation={setPlayerAnimation}
+                    setArea={setArea}
+                    area={area}
+                    playerModel={playerModel}
+                ></Player>
+            </Suspense>
         </Canvas>
     );
 };

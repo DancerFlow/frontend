@@ -11,7 +11,7 @@ export default function Background() {
 
     return (
         <mesh rotation={[-0.5 * Math.PI, 0, 0]} position={[0, -10, -0]}>
-            <planeBufferGeometry args={[300, 300, 1, 1]} />
+            <planeGeometry args={[300, 300, 1, 1]} />
             <meshStandardMaterial color="#1460ed" />
         </mesh>
     );
