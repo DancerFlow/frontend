@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import {
-    AdminPage,
-    ChallengePage,
-    MainPage,
-    ModePage,
-    MusicListPage,
-    PracticePage,
-    UserPage,
-    ResultPage,
-    PracticeResultPage
-} from './pages/index.tsx';
 import Test from './pages/challengePage/Game.jsx';
 import ScoreExtraction from './pages/challengePage/Score/index';
 import { theme } from './theme';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Rootlayout from './layouts/Rootlayout';
 import { GlobalContextProvider } from './context/Context';
+import Loadable from './components/common/Loadable';
 
 const queryClient = new QueryClient();
+
+const AdminPage = Loadable(lazy(() => import('./pages/adminPage')));
+const ChallengePage = Loadable(lazy(() => import('./pages/challengePage')));
+const MainPage = Loadable(lazy(() => import('./pages/mainPage')));
+const ModePage = Loadable(lazy(() => import('./pages/modePage')));
+const MusicListPage = Loadable(lazy(() => import('./pages/musicListPage')));
+const PracticePage = Loadable(lazy(() => import('./pages/practicePage')));
+const UserPage = Loadable(lazy(() => import('./pages/userPage')));
+const ResultPage = Loadable(lazy(() => import('./pages/resultPage')));
+const PracticeResultPage = Loadable(lazy(() => import('./pages/PracticeResultPage')));
 
 const router = createBrowserRouter([
     {
