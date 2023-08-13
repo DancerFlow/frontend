@@ -5,6 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
 
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/construction.glb');
 export default function Construction({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();

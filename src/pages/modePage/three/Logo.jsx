@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { Vector3, MathUtils } from 'three';
 
+// glTF 모델을 사전 로드
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/dflogo.glb');
+
 export default function Logo() {
     const ref = useRef();
     const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/dflogo.glb');
-
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.children.forEach((mesh) => {
@@ -21,7 +23,6 @@ export default function Logo() {
 
     const handleHouseClick = (e) => {
         e.stopPropagation();
-        setClicked((cur) => !cur);
     };
 
     useFrame((state) => {
@@ -38,7 +39,7 @@ export default function Logo() {
             castShadow
             receiveShadow
             position={[0, 1, -15]}
-            onClick={(e) => handleHouseClick(e)}
+            onClick={handleHouseClick}
             scale={0.9}
         ></primitive>
     );

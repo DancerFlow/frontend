@@ -5,30 +5,24 @@ import { SkeletonUtils } from 'three-stdlib';
 import * as THREE from 'three';
 import { easing } from 'maath';
 import { useGetUserItemQuery } from '../../../api/useGetUserItem';
-import { GlobalContext } from '../../../context/Context';
-import LoadingView from '../../../components/common/LoadingView';
 
+useGLTF.preload('/models/defaultModel.glb');
 export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area, playerModel }) {
-    const { state } = useContext(GlobalContext);
-
     const ref = useRef();
     const [animationTime, setAnimationTime] = useState(0);
+    const { scene, animations } = useGLTF('/models/defaultModel.glb');
 
-    const gltf = useGLTF(playerModel);
-    const { scene, animations } = gltf;
-
-    gltf.scene.castShadow = true;
-    gltf.scene.receiveShadow = true;
-    gltf.scene.traverse(function (child) {
+    scene.castShadow = true;
+    scene.receiveShadow = true;
+    scene.traverse(function (child) {
         if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
         }
     });
 
-    let mixer = new THREE.AnimationMixer(gltf.scene.children[0]);
-
-    const actions = [mixer.clipAction(gltf.animations[3]), mixer.clipAction(gltf.animations[4]), mixer.clipAction(gltf.animations[1])];
+    let mixer = new THREE.AnimationMixer(scene.children[0]);
+    const actions = [mixer.clipAction(animations[3]), mixer.clipAction(animations[4]), mixer.clipAction(animations[1])];
 
     useEffect(() => {
         actions[playerAnimation].reset().fadeIn(0.1).play();
@@ -46,7 +40,7 @@ export default function Player({ destinationPoint, playerAnimation, setPlayerAni
         }
         //목적지 설정시 쳐다보기
         if (playerAnimation != 1) setPlayerAnimation(1);
-        gltf.scene.children[0].lookAt(new THREE.Vector3(destinationPoint[0], -0.7, destinationPoint[2]));
+        scene.children[0].lookAt(new THREE.Vector3(destinationPoint[0], -0.7, destinationPoint[2]));
     }, [destinationPoint]);
 
     useEffect(() => {
