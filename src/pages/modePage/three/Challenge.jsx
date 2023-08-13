@@ -3,12 +3,12 @@ import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { easing } from 'maath';
-
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/challenge.glb');
 export default function Challenge({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('/models/challenge.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/challenge.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
@@ -31,25 +31,19 @@ export default function Challenge({ area }) {
     });
 
     return (
-        <group ref={ref} position={[-8, -1.3, -8]}>
+        <group ref={ref} position={[-8.2, -1.3, -8]}>
             <primitive
                 object={gltf.scene}
                 scale={1.0}
-                rotation={[0, 0.2 * Math.PI, 0]}
+                rotation={[0, 0.13 * Math.PI, 0]}
                 castShadow
                 receiveShadow
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
+                onClick={() => navigate('/musiclist/challenge')}
             >
                 <meshStandardMaterial emissive={[0.5, 0.5, 0.5]} color={[0, 0, 0]} />
             </primitive>
-
-            {area === 1 && (
-                <group>
-                    <spotLight position={[-4, 8, -1]} intensity={1} color="pink" castShadow />
-                    <spotLight position={[0, 8, -4]} intensity={1} color="pink" castShadow />
-                </group>
-            )}
         </group>
     );
 }

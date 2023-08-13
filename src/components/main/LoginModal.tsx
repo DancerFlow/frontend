@@ -11,20 +11,23 @@ import { usePostLoginMutation } from '../../api/usePostLoginMutation';
 import { AxiosError } from 'axios';
 
 interface Props {
-    setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+    isModalView: boolean;
+    setIsModalView: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginModal = ({ setIsClicked }: Props) => {
+const LoginModal = ({ isModalView, setIsModalView }: Props) => {
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
+
     const { verifyUser, state } = useContext(GlobalContext);
     const navigate = useNavigate();
 
     const handleModalClick = () => {
-        setIsClicked(false);
+        setIsModalView(false);
         setIsSignUp(false);
     };
 
     const joinAsGuest = () => {
+        setIsModalView(false);
         navigate('/mode');
     };
 
@@ -41,34 +44,37 @@ const LoginModal = ({ setIsClicked }: Props) => {
     const { mutate: LoginMutate } = usePostLoginMutation({
         onSuccess: () => {
             verifyUser();
+            setIsModalView(false);
             navigate('/mode');
         },
         onError: (error: AxiosError) => {
-            if (error.response?.status === 500) window.alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-            else {
-                window.alert(`오류가 발생했습니다: ${error}`);
-            }
+            console.error(error.response?.data.message);
+            window.alert('아이디/비밀번호를 확인해주세요.');
         }
     });
 
     return (
         <>
-            <ModalBackground onClick={() => handleModalClick()}> </ModalBackground>
-            <FormS>
-                <FormContainer>
-                    {isSignUp ? (
-                        <SignUpForm setIsSignUp={setIsSignUp} onSubmit={signUpMutate} />
-                    ) : (
-                        <LoginForm setIsSignUp={setIsSignUp} onSubmit={LoginMutate} joinAsGuest={joinAsGuest} />
-                    )}
-                </FormContainer>
-            </FormS>
+            {isModalView && (
+                <div>
+                    <ModalBackground onClick={() => handleModalClick()}> </ModalBackground>
+                    <FormS>
+                        <FormContainer>
+                            {isSignUp ? (
+                                <SignUpForm setIsSignUp={setIsSignUp} onSubmit={signUpMutate} />
+                            ) : (
+                                <LoginForm setIsSignUp={setIsSignUp} onSubmit={LoginMutate} joinAsGuest={joinAsGuest} />
+                            )}
+                        </FormContainer>
+                    </FormS>
+                </div>
+            )}
         </>
     );
 };
 
 const ModalBackground = styled.div`
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 99;
@@ -77,7 +83,7 @@ const ModalBackground = styled.div`
     background-color: #00000042;
 `;
 const FormS = styled.div`
-    position: absolute;
+    position: fixed;
     z-index: 100;
     top: 50%;
     left: 50%;
@@ -112,62 +118,6 @@ const FormContainer = styled.div`
     input:focus {
         outline: 2px solid #27fd1c;
     }
-`;
-
-const FieldContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-const Fieldset = styled.fieldset`
-    text-transform: uppercase;
-    border-style: none;
-    width: 400px;
-    margin: 0;
-    padding: 0;
-    border: none;
-`;
-const LoginButton = styled.button.attrs({ type: 'submit' })`
-    height: 40px;
-    width: 200px;
-    border-radius: 0px;
-    border-style: none;
-    background-color: #27fd1c;
-
-    padding: 8px 20px;
-    letter-spacing: 0.8px;
-    display: block;
-    margin-top: 10px;
-    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.1);
-    cursor: pointer;
-    &:hover {
-        opacity: 0.8;
-    }
-`;
-
-const SelectContainer = styled.div`
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 10px;
-    a {
-        margin: 0px 10px;
-        border: solid #27fd1c;
-        border-width: 0 0 1px 0;
-        cursor: pointer;
-    }
-`;
-
-const ReturnButton = styled.div`
-    color: #27fd1c;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 24px;
-    padding: 10px;
-    font-family: 'NanumSquareNeoBold';
-    cursor: pointer;
 `;
 
 export default LoginModal;

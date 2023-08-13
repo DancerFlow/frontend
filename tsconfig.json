@@ -12,7 +12,7 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": false,
-        // "jsx": "react-jsx",
+        "outDir": "dist",
 
         /* Linting */
         "strict": true,
@@ -23,6 +23,7 @@
         //js파일 허용
         "allowJs": true
     },
-    "include": ["src"],
+    "include": ["src", "public/models/items"],
+    "exclude": ["src/pages/modePage/three/*.jsx", "src/components/main/ThreeIntro.jsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

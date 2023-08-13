@@ -5,7 +5,7 @@ import Three from './three';
 const ModePage = () => {
     return (
         <CanvasContainer>
-            <Three></Three>
+            <Three />
         </CanvasContainer>
     );
 };

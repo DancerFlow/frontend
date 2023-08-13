@@ -6,11 +6,12 @@ import { MathUtils, Vector3 } from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 import { easing } from 'maath';
 
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/practice.glb');
 export default function Practice({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('/models/practice.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/practice.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
@@ -31,7 +32,7 @@ export default function Practice({ area }) {
     const onPointerOut = useCallback(() => setHovered(false), []);
 
     return (
-        <group ref={ref} position={[8, -0.94, -10]}>
+        <group ref={ref} position={[7.8, -0.94, -10]}>
             <primitive
                 object={gltf.scene}
                 scale={1.4}
@@ -40,8 +41,8 @@ export default function Practice({ area }) {
                 receiveShadow
                 onPointerOut={onPointerOut}
                 onPointerOver={onPointerOver}
+                onClick={() => navigate('/musiclist/practice')}
             ></primitive>
-            {area === 0 && <spotLight position={[5, 5, -1]} color="blue" castShadow></spotLight>}
         </group>
     );
 }

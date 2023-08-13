@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import Filter from '../../components/musicList/filter/Filter';
-import Content from '../../components/musicList/content/';
+import Content from '../../components/musicList/content';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
 import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
 import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
-import { UserLikes } from '../../interface';
-import LaserAnimation from '../../hooks/LazerAnimation';
+import { UserLike } from '../../interface';
+import ModeBackground from '../../components/musicList/content/ModeBackground';
+import { useParams } from 'react-router-dom';
 
 export enum FilterType {
     Popular = 'popular',
@@ -19,6 +20,7 @@ const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState<FilterType | ''>(FilterType.Popular);
     const [inputValue, setInputValue] = useState('');
     const [searchMusic, setSearchMusic] = useState<string | undefined>(undefined);
+    const { mode } = useParams();
 
     // 전체 리스트 (좋아요, 최신순)
     const {
@@ -36,7 +38,6 @@ const MusicListPage = () => {
 
     // 찜한 목록 리스트
     const { data: userLikesList } = useGetUserLikesQuery();
-
     const handleSort = (item: FilterType): void => {
         setSelectedFilter(item);
         setSearchMusic(undefined);
@@ -47,26 +48,24 @@ const MusicListPage = () => {
         setSelectedFilter('');
     };
     // 찜한 목록 리스트를 musicList 형태로 변환
-    const musicListForm = (data: UserLikes[] | undefined) => {
-        if (!data) {
-            return [];
-        }
-        return data.map((userLike) => {
-            return {
-                ...userLike.music,
-                id: userLike.music.id,
-                music_genre: userLike.music.music_genre,
-                music_singer: {
-                    id: userLike.music.music_singer.id,
-                    name: userLike.music.music_singer.name
-                },
-                album_image_url: userLike.music.album_image_url
-            };
-        });
+    const musicListForm = (data: { userLikes: UserLike[]; maxPage: number } | undefined) => {
+        return (
+            data?.userLikes.map((userLike) => {
+                return {
+                    ...userLike.music,
+                    id: userLike.music.id,
+                    music_genre: userLike.music.music_genre,
+                    music_singer: {
+                        id: userLike.music.music_singer.id,
+                        name: userLike.music.music_singer.name
+                    },
+                    album_image_url: userLike.music.album_image_url
+                };
+            }) ?? []
+        );
     };
-
-    const musicIds = (data: UserLikes[] | undefined) => {
-        return data?.map(({ music_id }) => music_id) ?? [];
+    const musicIds = (data: { userLikes: UserLike[]; maxPage: number } | undefined) => {
+        return data?.userLikes.map(({ music_id }) => music_id) ?? [];
     };
 
     // 선택된 필터에 따라서 적절한 데이터를 가져옴
@@ -90,7 +89,7 @@ const MusicListPage = () => {
 
     return (
         <Wrapper>
-            <LaserAnimation />
+            <ModeBackground mode={mode} />
             <Filter
                 onFilter={handleSort}
                 selected={selectedFilter}
@@ -101,7 +100,7 @@ const MusicListPage = () => {
             {musicSearchLoading || isLoading ? null : error ? (
                 <div>Error</div>
             ) : (
-                <Content musicList={dataToShow} likeMusicIds={musicIds(userLikesList)} />
+                <Content musicList={dataToShow} likeMusicIds={musicIds(userLikesList)} mode={mode} />
             )}
         </Wrapper>
     );
@@ -110,7 +109,6 @@ const MusicListPage = () => {
 const Wrapper = styled.div`
     height: 100vh;
     width: 100%;
-    background: #2a1e57;
     position: relative;
 `;
 

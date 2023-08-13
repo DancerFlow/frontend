@@ -4,12 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
-
+import { useContext } from 'react';
+import { GlobalContext } from '../../../context/Context';
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/house2.glb');
 export default function Room({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
+    const { state } = useContext(GlobalContext);
 
-    const gltf = useGLTF('/models/house2.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/house2.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
@@ -31,10 +34,15 @@ export default function Room({ area }) {
 
     const handleHouseClick = (e) => {
         e.stopPropagation();
+        if (!state.userState.login) {
+            window.alert('로그인이 필요한 서비스입니다.');
+            return;
+        }
+        navigate('/user');
     };
 
     return (
-        <group ref={ref} scale={1} position={[-9, 1.1, 9]}>
+        <group ref={ref} scale={1} position={[-8, 1.1, 9]}>
             <primitive
                 object={gltf.scene}
                 scale={0.013}

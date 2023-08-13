@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import bgVideo from '../../assets/dancerflow.mp4';
+import { useContext } from 'react';
+import { GlobalContext } from '../../context/Context';
 
 interface Props {
     isClicked: boolean;
@@ -10,6 +11,7 @@ interface Props {
 const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
     const [isHover, setIsHover] = useState<boolean>(false);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const { bgmControl } = useContext(GlobalContext);
 
     useEffect(() => {
         if (videoRef.current == null) return;
@@ -47,24 +49,6 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
 
     return (
         <BackgroundContainer>
-            {/* <ConfirmSoundPlay onClick={(e) => e.currentTarget.classList.add('clear')}>
-                <span>신나는 브금이랑 함께 하실래요?</span>
-                <div
-                    onClick={() => {
-                        setIsSoundOn(true);
-                    }}
-                >
-                    넹!
-                </div>
-                <div
-                    onClick={() => {
-                        setIsSoundOn(false);
-                    }}
-                >
-                    아뇨
-                </div>
-            </ConfirmSoundPlay> */}
-
             <VideoS
                 ref={videoRef}
                 onTimeUpdate={onTimeUpdate}
@@ -73,68 +57,11 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
                 onMouseOut={() => setIsHover(false)}
                 onClick={handleOnClick}
             >
-                <source src={bgVideo} type="video/mp4"></source>
+                <source src={'https://dancerflow.s3.us-east-2.amazonaws.com/1691922511539-dancerflow.mp4'} type="video/mp4"></source>
             </VideoS>
         </BackgroundContainer>
     );
 };
-
-const ConfirmKeyframes = keyframes`
-    0%{
-        top: 90%;
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    70%{
-        top: 70%;
-        transform: translate(-50%, -50%) rotate(-3deg);
-    }
-    90%{
-        top: 55%;
-        transform: translate(-50%, -50%) rotate(-4deg);
-    }
-    100%{
-        top: 50%;
-        transform: translate(-50%, -50%) rotate(-5deg);
-    }
-`;
-
-const ConfirmSoundPlay = styled.div`
-    z-index: 99;
-    display: flex;
-    position: absolute;
-    width: 680px;
-    height: 120px;
-    background-color: ${(props) => props.theme.green};
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-5deg);
-    animation: ${ConfirmKeyframes} 0.3s linear 0s 1;
-    align-items: center;
-    font-family: 'NanumSquareNeoBold';
-    transition: 0.3s ease-out;
-    span {
-        margin-right: 80px;
-        margin-left: 150px;
-    }
-    div {
-        width: 60px;
-        height: 60px;
-        background-color: white;
-        line-height: 60px;
-        margin-left: 30px;
-        border-radius: 40px;
-        transition: transform 0.5s;
-        cursor: pointer;
-    }
-    div:hover {
-        opacity: 0.9;
-        transform: scale(1.05);
-    }
-    &.clear {
-        visibility: hidden;
-        opacity: 0;
-    }
-`;
 
 const BackgroundContainer = styled.div`
     width: 100vw;
@@ -145,10 +72,27 @@ const BackgroundContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 2;
 `;
+
+// const BackgroundContainer = styled.div`
+//     width: 334px;
+//     height: 216px;
+//     background-color: black;
+//     overflow: hidden;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     z-index: 2;
+// `;
 
 const VideoS = styled.video`
     width: 900px;
+
     margin: 50px;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 export default VideoContainer;

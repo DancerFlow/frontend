@@ -26,7 +26,7 @@ const musicVariants = {
 
 const musicInfoVariants = {
     hover: {
-        opacity: 0.8,
+        opacity: 1,
         transition: {
             delay: 0,
             type: 'tween'
@@ -113,6 +113,7 @@ const ContentSlide = ({ onMusicClick, musicList, onModalClose }: ModalFrameProps
                                 variants={musicVariants}
                             >
                                 <MusicInfo variants={musicInfoVariants}>
+                                    <div></div>
                                     <h1>{data.name}</h1>
                                     <h4>{data.music_singer.name}</h4>
                                 </MusicInfo>
@@ -133,8 +134,13 @@ const MusicListWrap = styled.div`
 
 const StyledSlider = styled(Slider)`
     // 슬라이더의 스타일을 정의합니다.
-    background-color: #ffffff1d;
-    border-radius: 20px;
+    /* background-color: #ffffff10;
+    box-shadow: 0 0 14px rgb(0, 0, 0);
+    border-radius: 0px; */
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: sepia(40%);
+    box-shadow: 1px 3px 7px 4px rgba(0, 0, 0, 0.3);
+    padding: 5px;
 `;
 
 const CustomArrow = styled.div`
@@ -144,7 +150,7 @@ const CustomArrow = styled.div`
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
-
+    cursor: pointer;
     &.prev {
         left: -40px;
     }
@@ -166,7 +172,7 @@ const MusicCard = styled(motion.div)<{ img: string }>`
     max-width: 250px;
     max-height: 250px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 00px;
     margin: 10px;
     background-image: url(${(props) => props.img});
     background-size: cover;
@@ -175,7 +181,7 @@ const MusicCard = styled(motion.div)<{ img: string }>`
 
     cursor: pointer;
     &:hover {
-        box-shadow: ${(props) => props.theme.pink} 0px 5px 15px;
+        box-shadow: 0 0 14px rgb(0, 0, 0);
     }
 
     @media screen and (max-width: 1500px) {
@@ -184,7 +190,6 @@ const MusicCard = styled(motion.div)<{ img: string }>`
 `;
 
 const MusicInfo = styled(motion.div)`
-    background-color: ${(props) => props.theme.pink};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -192,18 +197,19 @@ const MusicInfo = styled(motion.div)`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 30%;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: 100%;
+    background-color: #3d3d3d9f;
+
     cursor: pointer;
 
     h1 {
         text-align: center;
         font-size: 15px;
-        color: ${(props) => props.theme.yellow};
+        color: white;
         font-weight: 700;
         z-index: 99;
         margin-bottom: 5px;
+        font-family: 'NanumSquareNeoExtraBold';
         @media screen and (max-width: 1500px) {
             font-size: 15px;
         }
@@ -212,8 +218,9 @@ const MusicInfo = styled(motion.div)`
     h4 {
         text-align: center;
         font-size: 13px;
-        color: ${(props) => props.theme.blue};
-        font-weight: 700;
+        color: ${(props) => props.theme.pink};
+        font-family: 'NanumSquareNeoExtraBold';
+
         @media screen and (max-width: 1500px) {
             font-size: 10px;
         }

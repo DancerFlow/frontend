@@ -10,7 +10,7 @@ const Tropy = () => {
         const animation = Lottie.loadAnimation({
             container: lottieRef.current,
             renderer: 'svg',
-            loop: true,
+            loop: false,
             autoplay: true,
             animationData: animationData,
             rendererSettings: {
@@ -24,9 +24,12 @@ const Tropy = () => {
     return <Container ref={lottieRef} />;
 };
 const Container = styled.div`
+    width: 34px;
     background-color: ${(props) => props.theme.modal.content};
     border-radius: 10px;
-    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default Tropy;

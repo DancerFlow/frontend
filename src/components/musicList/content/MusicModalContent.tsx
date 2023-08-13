@@ -1,25 +1,35 @@
 import { Music } from '../../../interface';
 import ModalFrame from '../../common/ModalFrame';
 import styled from 'styled-components';
-import StartBtn from './StartBtn';
 import Tropy from './Tropy';
 import TopRanking from './TopRanking';
 import LikeBtn from './LikeBtn';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { SpeedSetting } from './SpeedSetting';
+import { useState } from 'react';
 interface ModalFrameProps {
     onModalOpen: boolean;
     onModalClose: () => void;
     musicDetailInfo: Music;
     musicRankInfo: any;
     isLiked: boolean;
+    mode: string | undefined;
 }
 
-const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked }: ModalFrameProps) => {
+const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRankInfo, isLiked, mode }: ModalFrameProps) => {
     const navigate = useNavigate();
+    const [speed, setSpeed] = useState(0.5);
+    const onSpeedChange = (newSpeed: number) => {
+        setSpeed(newSpeed);
+    };
+    const isPracticeMode = mode === 'practice';
 
     const onStartClick = () => {
-        navigate(`/challenge/${musicDetailInfo.id}`);
+        navigate(`/${mode}/${musicDetailInfo.id}`, { state: { speed } });
     };
+
     return musicDetailInfo ? (
         <ModalFrame onClose={onModalClose} isOpened={onModalOpen}>
             <MusicModalInfo>
@@ -35,43 +45,44 @@ const MusicModalContent = ({ onModalClose, onModalOpen, musicDetailInfo, musicRa
                             <h2>{musicDetailInfo.music_singer.name}</h2>
                         </div>
                     </div>
-                    <div className="description">
-                        <div className="description-content">{musicDetailInfo.description}</div>
-                    </div>
+
+                    <MusicModalFooter>
+                        <LikeBtn onClick={() => {}} isLiked={isLiked} musicId={musicDetailInfo.id} musicDetailInfo={musicDetailInfo} />
+
+                        <div>
+                            <FontAwesomeIcon icon={faPlay} size="xl" />
+                            <p>{musicDetailInfo.played}</p>
+                        </div>
+                    </MusicModalFooter>
+                    <GameStartBtn onClick={onStartClick} disabled={!musicDetailInfo.answer} aria-label="GAME START">
+                        {musicDetailInfo.answer ? 'GAME START' : 'Coming Soon'}
+                    </GameStartBtn>
                 </MusicModalInfoContent>
-                <MusicModalFooter>
-                    <LikeBtn onClick={() => {}} isLiked={isLiked} musicId={musicDetailInfo.id} musicDetailInfo={musicDetailInfo} />
-                    <div onClick={onStartClick}>
-                        <StartBtn key={musicDetailInfo.id} />
-                    </div>
-                    <div>
-                        <h1>플레이 횟수</h1>
-                        <p>{musicDetailInfo.played}</p>
-                    </div>
-                </MusicModalFooter>
             </MusicModalInfo>
-            <MusicModalRank>
-                <MusicModalRankHeader>
-                    <Tropy />
-                </MusicModalRankHeader>
-                <MusicModalRankContent>
-                    <div className="rankList">
-                        <TopRanking rankingList={musicRankInfo} />
-                    </div>
-                </MusicModalRankContent>
-            </MusicModalRank>
+            {isPracticeMode ? (
+                <SpeedSetting onSpeedChange={onSpeedChange} answer={musicDetailInfo.answer} selectedSpeed={speed} />
+            ) : (
+                <MusicModalRank>
+                    <MusicModalRankHeader>
+                        <Tropy />
+                    </MusicModalRankHeader>
+                    <MusicModalRankContent>
+                        <div className="rankList">
+                            <TopRanking rankingList={musicRankInfo} />
+                        </div>
+                    </MusicModalRankContent>
+                </MusicModalRank>
+            )}
         </ModalFrame>
     ) : null;
 };
 
 const MusicModalInfo = styled.div`
-    width: 50%;
-    height: 100%;
+    width: 100%;
+    height: 50%;
     background-color: ${(props) => props.theme.modal.container};
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     align-items: center;
     padding-left: 20px;
@@ -82,37 +93,41 @@ interface MusicModalInfoHeaderProps {
 }
 const MusicModalInfoHeader = styled.div`
     width: 100%;
-    height: 50%;
+    height: 100%;
     background-color: ${(props) => props.theme.modal.content};
-    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    div {
+        -webkit-box-reflect: below 0 linear-gradient(transparent, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.034));
+    }
 `;
 
 const MusicModalInfoImg = styled.div<MusicModalInfoHeaderProps>`
-    width: 90%;
-    height: 90%;
+    width: 80%;
+    padding-top: 80%;
+    box-sizing: border-box;
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.385);
 `;
 
 const MusicModalInfoContent = styled.div`
+    position: relative;
     width: 100%;
-    height: 35%;
+    height: 100%;
     background-color: ${(props) => props.theme.modal.content};
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     color: ${(props) => props.theme.modal.fontColorTwo};
     .header {
         width: 100%;
-        height: 40%;
+        height: 30%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -120,29 +135,29 @@ const MusicModalInfoContent = styled.div`
 
         .title {
             width: 100%;
-            height: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: #dddede;
 
             h1 {
                 font-size: 28px;
-                font-weight: bold;
-                margin: 0;
+                margin: 8px;
+                font-family: 'NanumSquareNeoExtraBold';
             }
         }
 
         .artist {
             width: 100%;
-            height: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: ${(props) => props.theme.modal.fontColorThree};
+            color: ${(props) => props.theme.pink};
+            margin-bottom: 40px;
 
             h2 {
-                font-size: 20px;
-                margin: 0;
+                font-size: 24px;
+                font-family: 'NanumSquareNeoExtraBold';
             }
         }
     }
@@ -165,8 +180,6 @@ const MusicModalInfoContent = styled.div`
             left: 0;
             right: 0;
             margin: auto;
-            border: 1px solid ${(props) => props.theme.modal.container};
-            border-radius: 10px;
         }
     }
 `;
@@ -176,16 +189,39 @@ const MusicModalFooter = styled.div`
     height: 10%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     position: relative;
+    margin-bottom: 60px;
+    svg {
+        margin-bottom: 6px;
+    }
+`;
+
+const GameStartBtn = styled.button<{ disabled: boolean }>`
+    width: 150px;
+    height: 40px;
+    margin-top: 20px;
+    border: 0;
+    border-radius: 5px;
+    font-size: 18px;
+    background: ${(props) => (props.disabled ? 'grey' : props.theme.pink)};
+    color: white;
+    position: relative;
+    transition: all 0.3s;
+    position: absolute;
+    bottom: 30px;
+    font-family: 'NanumSquareNeoExtraBold';
+    box-shadow: 0 0 16px rgb(0, 0, 0);
+    &:hover {
+        color: ${(props) => (!props.disabled ? props.theme.blue : 'white')};
+        cursor: ${(props) => (!props.disabled ? 'pointer' : 'not-allowed')};
+    }
 `;
 
 const MusicModalRank = styled.div`
-    width: 50%;
-    height: 100%;
+    width: 100%;
+    height: 50%;
     background-color: ${(props) => props.theme.modal.container};
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
 `;
 
 const MusicModalRankHeader = styled.div`
@@ -207,7 +243,6 @@ const MusicModalRankContent = styled.div`
         width: 90%;
         height: 90%;
         background-color: ${(props) => props.theme.modal.content};
-        border-radius: 10px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

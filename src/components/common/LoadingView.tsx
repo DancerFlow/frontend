@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import styled, { keyframes } from 'styled-components';
-import P5Screen from './P5Screen';
 
 interface Props {
     loadingScreen: boolean;
@@ -83,10 +82,12 @@ const LoadingContainer = styled.div`
     z-index: 999;
     width: 100vw;
     height: 100vh;
+    position: fixed;
     background-color: #0223ff;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     line-height: 50vh;
     transition: opacity 1s linear;
 

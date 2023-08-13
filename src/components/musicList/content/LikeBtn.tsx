@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
 import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
 import { useQueryClient } from 'react-query';
+import { useContext } from 'react';
+import { GlobalContext } from '../../../context/Context';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     onClick: () => void;
@@ -13,6 +17,7 @@ interface Props {
 
 const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }) => {
     const [liked, setLiked] = useState(isLiked);
+    const { state } = useContext(GlobalContext);
     const queryClient = useQueryClient();
     const patchMusicLikeMutation = usePatchMusicLikeMutation(musicId, {
         onSuccess: () => {
@@ -35,6 +40,10 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     });
 
     const handleClick = () => {
+        if (!state.userState.login) {
+            window.alert('로그인이 필요합니다.');
+            return;
+        }
         if (liked) {
             deleteMusicLikeMutation.mutate();
         } else {
@@ -44,11 +53,17 @@ const LikeBtn: React.FC<Props> = ({ onClick, isLiked, musicId, musicDetailInfo }
     };
 
     return (
-        <LikeController>
-            <button onClick={handleClick} style={{ backgroundColor: liked ? 'green' : 'gray', color: 'white' }}>
-                {liked ? 'Liked' : 'Like'}
-            </button>
-            <p>Likes: {musicDetailInfo.likes}</p>
+        <LikeController onClick={handleClick}>
+            <FontAwesomeIcon
+                icon={faHeart}
+                size="xl"
+                style={{
+                    color: `
+                ${liked ? '#fa22fb' : 'gray'}
+                `
+                }}
+            />
+            <p>{musicDetailInfo.likes}</p>
         </LikeController>
     );
 };
@@ -57,12 +72,13 @@ const LikeController = styled.div`
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 100px;
-    height: 50px;
     /* position: absolute;
     top: 1;
     left: 0; */
-    border-radius: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 export default LikeBtn;

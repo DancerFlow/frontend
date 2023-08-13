@@ -7,13 +7,35 @@ interface UserState {
     login: boolean;
     admin: boolean;
 }
+interface BgmState {
+    bgm: boolean;
+}
 interface State {
     userState: UserState;
+    bgmState: BgmState;
 }
-type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' };
 
-const initialState: State = {
-    userState: { login: false, admin: false }
+interface ContextType {
+    logIn: (userState: UserState) => void;
+    logOut: () => void;
+    verifyUser: () => void;
+    bgmControl: (bgmState: BgmState) => void;
+    state: State;
+}
+
+type Action = { type: 'LOGIN_SUCCESS'; payload: UserState } | { type: 'LOGOUT' } | { type: 'BGM_CONTROL'; payload: BgmState };
+
+const reducerInitialState: State = {
+    userState: { login: false, admin: false },
+    bgmState: { bgm: false }
+};
+
+const initialState: ContextType = {
+    logIn: () => {},
+    logOut: () => {},
+    verifyUser: () => {},
+    bgmControl: () => {},
+    state: reducerInitialState
 };
 
 const Reducer = (state: State, action: Action) => {
@@ -32,15 +54,21 @@ const Reducer = (state: State, action: Action) => {
                 userState: { login: false, admin: false }
             };
 
+        case 'BGM_CONTROL':
+            return {
+                ...state,
+                bgmState: action.payload
+            };
         default:
             return state;
     }
 };
 
-export const GlobalContext = createContext(initialState);
+export const GlobalContext = createContext<ContextType>(initialState);
 
 export const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, dispatch] = useReducer(Reducer, initialState);
+    const [state, dispatch] = useReducer(Reducer, reducerInitialState);
+
     const { data, refetch } = useGetUserVerifyQuery({
         onSuccess: (data: UserVerify) => {
             console.log(data);
@@ -73,12 +101,21 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
         refetch();
     };
 
+    const bgmControl = (bgmState: BgmState) => {
+        sessionStorage.setItem('noShowPopup', 'true');
+        dispatch({
+            type: 'BGM_CONTROL',
+            payload: bgmState
+        });
+    };
+
     return (
         <GlobalContext.Provider
             value={{
                 logIn,
                 logOut,
                 verifyUser,
+                bgmControl,
                 state
             }}
         >

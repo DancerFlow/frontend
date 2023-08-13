@@ -39,6 +39,11 @@ const LoginForm = ({ setIsSignUp, onSubmit, joinAsGuest }: Props) => {
         onSubmit({ email, password });
     };
 
+    const handleClickedSignUp = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        setIsSignUp(true);
+    };
+
     return (
         <>
             <FieldContainer>
@@ -54,7 +59,7 @@ const LoginForm = ({ setIsSignUp, onSubmit, joinAsGuest }: Props) => {
                 <p>{formValid}</p>
             </FieldContainer>
             <SelectContainer>
-                <a onClick={() => setIsSignUp(true)}>sign up</a>
+                <a onClick={(e) => handleClickedSignUp(e)}>sign up</a>
                 <a onClick={joinAsGuest}>join as a guest</a>
             </SelectContainer>
         </>
@@ -98,11 +103,13 @@ const SelectContainer = styled.div`
     bottom: 0;
     right: 0;
     padding: 10px;
+    display: flex;
     a {
         margin: 0px 10px;
         border: solid #27fd1c;
         border-width: 0 0 1px 0;
         cursor: pointer;
+        padding: 5px !important;
     }
 `;
 

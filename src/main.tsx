@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import App from './App.tsx';
+import App from './App';
 import './index.css';
-import { AdminPage, ChallengePage, MainPage, ModePage, MusicListPage, PracticePage, UserPage, ResultPage } from './pages/index.tsx';
-import Test from './pages/challengePage/Test.jsx';
-import ScoreExtraction from './pages/challengePage/Score/index.jsx';
-import { theme } from './theme.ts';
+import Test from './pages/challengePage/Game.jsx';
+import ScoreExtraction from './pages/challengePage/Score/index';
+import { theme } from './theme';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Rootlayout from './layouts/Rootlayout.tsx';
-import { GlobalContextProvider } from './context/Context.tsx';
+import Rootlayout from './layouts/Rootlayout';
+import { GlobalContextProvider } from './context/Context';
+import Loadable from './components/common/Loadable';
 
 const queryClient = new QueryClient();
+
+const AdminPage = Loadable(lazy(() => import('./pages/adminPage')));
+const ChallengePage = Loadable(lazy(() => import('./pages/challengePage')));
+const MainPage = Loadable(lazy(() => import('./pages/mainPage')));
+const ModePage = Loadable(lazy(() => import('./pages/modePage')));
+const MusicListPage = Loadable(lazy(() => import('./pages/musicListPage')));
+const PracticePage = Loadable(lazy(() => import('./pages/practicePage')));
+const UserPage = Loadable(lazy(() => import('./pages/userPage')));
+const ResultPage = Loadable(lazy(() => import('./pages/resultPage')));
+const PracticeResultPage = Loadable(lazy(() => import('./pages/PracticeResultPage')));
 
 const router = createBrowserRouter([
     {
@@ -28,15 +38,15 @@ const router = createBrowserRouter([
                 element: <AdminPage />
             },
             {
-                path: '/challenge/:musicId',
+                path: '/challenge',
                 element: <ChallengePage />,
                 children: [
                     {
-                        path: 'test',
+                        path: '/challenge/:musicId',
                         element: <Test />
                     },
                     {
-                        path: 'score',
+                        path: '/challenge/score/:musicId',
                         element: <ScoreExtraction />
                     }
                 ]
@@ -46,11 +56,11 @@ const router = createBrowserRouter([
                 element: <ModePage />
             },
             {
-                path: '/musiclist',
+                path: '/musiclist/:mode',
                 element: <MusicListPage />
             },
             {
-                path: '/practice',
+                path: '/practice/:musicId',
                 element: <PracticePage />
             },
             {
@@ -60,6 +70,11 @@ const router = createBrowserRouter([
             {
                 path: '/result',
                 element: <ResultPage />
+            },
+
+            {
+                path: '/practice/result/:musicId',
+                element: <PracticeResultPage />
             }
         ]
     }

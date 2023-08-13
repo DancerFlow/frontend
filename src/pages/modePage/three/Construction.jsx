@@ -5,11 +5,12 @@ import { useFrame } from '@react-three/fiber';
 import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
 
+useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/construction.glb');
 export default function Construction({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('/models/construction.glb');
+    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/construction.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {

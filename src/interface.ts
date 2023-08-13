@@ -31,8 +31,7 @@ export interface Profile {
     nickname: string;
     email: string;
     profile_image_url?: string;
-    current_tier: Tier;
-    // user_xp: number;
+    xp: number;
 }
 
 export interface UserRank {
@@ -42,6 +41,50 @@ export interface UserRank {
 
 export interface Stamps {
     created_at: string[];
+}
+
+interface MusicSinger {
+    id: number;
+    name: string;
+}
+export interface Music {
+    id: number;
+    name: string;
+    _genre: string | null;
+    music_singer: MusicSinger;
+    album_image_url: string;
+
+    likes?: number;
+    music_genre?: string;
+    played?: number;
+    description?: string;
+    answer: boolean;
+}
+
+export interface MusicRank {
+    id: number;
+    nickname: string;
+    profile_image_url: string;
+    score: number;
+    rank: number;
+}
+
+export interface UserLikeswithMaxPage {
+    userLikes: UserLike[];
+    maxPage: number;
+}
+
+export interface UserLike {
+    id: number;
+    user_id: number;
+    music_id: number;
+    created_at: Date;
+    music: Music;
+}
+
+export interface UserGameHistorywithMaxPage {
+    historyList: UserGameHistory[];
+    maxPage: number;
 }
 
 export interface UserGameHistory {
@@ -66,35 +109,20 @@ export interface UserGameHistoryDetail {
     music_score_list: { music_score: number; music_score_created_at: String }[];
 }
 
-interface MusicSinger {
-    id: number;
-    name: string;
-}
-export interface Music {
-    id: number;
-    name: string;
-    _genre: string | null;
-    music_singer: MusicSinger;
-    album_image_url: string;
-
-    likes?: number;
-    music_genre?: string;
-    played?: number;
-    description?: string;
+export interface ReusultRouteParams {
+    musicId: string;
+    scoreId: string;
+    [key: string]: string | undefined;
 }
 
-export interface MusicRank {
-    id: number;
-    nickname: string;
-    profile_image_url: string;
+export interface UserGameResult {
     score: number;
-    rank: number;
-}
-
-export interface UserLikes {
-    id: number;
-    user_id: number;
-    music_id: number;
-    created_at: Date;
-    music: Music;
+    rank: string;
+    perfect: string;
+    great: number;
+    good: number;
+    normal: number;
+    miss: number;
+    delta_xp: number;
+    xp: number;
 }
