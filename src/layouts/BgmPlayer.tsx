@@ -41,7 +41,7 @@ const BgmPlayer = () => {
                 </ConfirmSoundPlay>
             )}
             <ReactHowler
-                src={['https://dancerflow.s3.us-east-2.amazonaws.com/1691922549668-rukunetsu.mp3']}
+                src={['https://d1q7niitd49esc.cloudfront.net/rukunetsu.mp3']}
                 playing={state.bgmState.bgm}
                 volume={0.1}
                 loop={true}

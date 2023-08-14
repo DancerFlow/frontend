@@ -6,11 +6,11 @@ import * as THREE from 'three';
 import { easing } from 'maath';
 import { useGetUserItemQuery } from '../../../api/useGetUserItem';
 
-useGLTF.preload('/models/defaultModel.glb');
+useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/playerModel.glb');
 export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area, playerModel }) {
     const ref = useRef();
     const [animationTime, setAnimationTime] = useState(0);
-    const { scene, animations } = useGLTF('/models/defaultModel.glb');
+    const { scene, animations } = useGLTF('https://d1q7niitd49esc.cloudfront.net/models/playerModel.glb');
 
     scene.castShadow = true;
     scene.receiveShadow = true;

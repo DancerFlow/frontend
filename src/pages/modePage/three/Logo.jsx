@@ -5,11 +5,11 @@ import { useFrame } from '@react-three/fiber';
 import { Vector3, MathUtils } from 'three';
 
 // glTF 모델을 사전 로드
-useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/dflogo.glb');
+useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/dflogo.glb');
 
 export default function Logo() {
     const ref = useRef();
-    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/dflogo.glb');
+    const gltf = useGLTF('https://d1q7niitd49esc.cloudfront.net/models/dflogo.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.children.forEach((mesh) => {

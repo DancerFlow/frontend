@@ -3,12 +3,12 @@ import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { easing } from 'maath';
-useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/challenge.glb');
+useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/challenge.gltf');
 export default function Challenge({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
 
-    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/challenge.glb');
+    const gltf = useGLTF('https://d1q7niitd49esc.cloudfront.net/models/challenge.gltf');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
