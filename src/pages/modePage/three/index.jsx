@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { Canvas, extend, useThree } from '@react-three/fiber';
 import { Environment, Effects, useGLTF, Html } from '@react-three/drei';
 
-import Model from './Model';
 import Floor from './Floor';
 import Player from './Player';
 import Logo from './Logo';
