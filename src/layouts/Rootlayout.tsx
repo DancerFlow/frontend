@@ -8,7 +8,7 @@ export default function Rootlayout() {
 
     return (
         <>
-            {!isModePage && <NavBar />}
+            <NavBar />
             {!isModePage && <BgmPlayer />}
             <main>
                 <Outlet />
