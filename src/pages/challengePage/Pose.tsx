@@ -9,18 +9,18 @@ import Lottie from 'lottie-react';
 
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 import { GlobalContext } from '../../context/Context';
-import { test } from '../../hooks/scoring';
-import PerfectLottie from '../../assets/lottie/perfect.json';
-import GreatLottie from '../../assets/lottie/great.json';
-import GoodLottie from '../../assets/lottie/good.json';
-import NormalLottie from '../../assets/lottie/normal.json';
-import MissLottie from '../../assets/lottie/miss.json';
+import { scoring } from '../../hooks/scoring';
+import PerfectLottie from '../../assets/score/perfect.json';
+import GreatLottie from '../../assets/score/great.json';
+import GoodLottie from '../../assets/score/good.json';
+import NormalLottie from '../../assets/score/normal.json';
+import MissLottie from '../../assets/score/miss.json';
 
 // * Pose 컴포넌트와 관련된 코드. 상태와 이펙트 등을 포함
 const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) => {
     const context = useContext(GlobalContext); // globalcontext가 저장된 컨텍스트의 이름에 따라 수정해야 합니다.
     const isLoggedIn = context.state.userState.login;
-    const [testResult, setTestResult] = useState(0);
+    const [scoringResult, setScoringResult] = useState(0);
     const { musicId } = useParams();
     const scoreVideoRef = ref;
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -165,7 +165,7 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                 }
             };
             let lastSavedSecond = 0;
-            const testArr = [];
+            const keyPointsArr = [];
             let gameEndDirect = false;
             // pose 추정 실행
             const intervalId = setInterval(async () => {
@@ -210,21 +210,21 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                             time: currentSecond
                         };
 
-                        testArr.push(poseAddedTime);
+                        keyPointsArr.push(poseAddedTime);
 
                         //실시간 채점 결과 추출 후 저장
-                        const newTestResult = test(answerSheet, currentSecond, poses[0].keypoints);
-                        setTestResult(newTestResult);
+                        const newScoringResult = scoring(answerSheet, currentSecond, poses[0].keypoints);
+                        setScoringResult(newScoringResult);
                     }
                     if (!gameEndDirect && !gameEnd && scoreVideoRef.current.ended) {
-                        setSavedKeypoints(testArr);
+                        setSavedKeypoints(keyPointsArr);
                         gameEndDirect = true;
                         setGameEnd(true);
                     }
                 } catch (error) {
                     console.error('Error in estimatePoses:', error);
                 }
-            }, 100); // 50밀리초 간격으로 setInterval 함수 실행
+            }, 100); // 100밀리초 간격으로 setInterval 함수 실행
 
             return () => {
                 // clearInterval(intervalId); // Clear the interval
@@ -258,8 +258,8 @@ const Pose = forwardRef(({ setKeypointsDetected, gameStart, answerSheet }, ref) 
                 return 'Miss';
             }
         };
-        setScore(getFeedback(testResult));
-    }, [testResult]);
+        setScore(getFeedback(scoringResult));
+    }, [scoringResult]);
 
     // * video가 끝나면 mutation을 호출하는 이펙트
     useEffect(() => {
