@@ -57,7 +57,7 @@ const VideoContainer = ({ isClicked, setIsClicked }: Props) => {
                 onMouseOut={() => setIsHover(false)}
                 onClick={handleOnClick}
             >
-                <source src={'https://dancerflow.s3.us-east-2.amazonaws.com/1691922511539-dancerflow.mp4'} type="video/mp4"></source>
+                <source src={'https://d1q7niitd49esc.cloudfront.net/dancerflow.mp4'} type="video/mp4"></source>
             </VideoS>
         </BackgroundContainer>
     );

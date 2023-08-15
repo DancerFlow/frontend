@@ -89,7 +89,7 @@ const Game = () => {
                             {!gameStart && (
                                 <video
                                     className="countdown-video"
-                                    src={'https://dancerflow.s3.us-east-2.amazonaws.com/1691922558103-countdown.mp4'}
+                                    src={'https://d1q7niitd49esc.cloudfront.net/countdown.mp4'}
                                     onTimeUpdate={handleCountdownTimeUpdate}
                                     loop={false}
                                     ref={countDownVideoRef}

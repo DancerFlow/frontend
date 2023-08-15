@@ -7,7 +7,7 @@ import ProgressBar from '../common/ProgressBar';
 import { useGetUserProfileQuery } from '../../api/useGetUserProfileQuery';
 import { useState } from 'react';
 import { useGetGameStamps } from '../../api/useGetGameStamps';
-import smileSvg from '../../assets/smile.svg';
+import smileSvg from '/icons/smile.svg';
 import { getTier, getNextTier, tierImages, getPercentageToNextTier } from '../../utils/tierUtils';
 import ReactDOM from 'react-dom';
 import EditModal from './EditModal';

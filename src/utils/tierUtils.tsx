@@ -1,8 +1,8 @@
-import Bronze from '../assets/ranks/bronze.png';
-import Silver from '../assets/ranks/silver.png';
-import Gold from '../assets/ranks/gold.png';
-import Platinum from '../assets/ranks/platinum.png';
-import Diamond from '../assets/ranks/diamond.png';
+import Bronze from '/ranks/bronze.png';
+import Silver from '/ranks/silver.png';
+import Gold from '/ranks/gold.png';
+import Platinum from '/ranks/platinum.png';
+import Diamond from '/ranks/diamond.png';
 
 export enum Tier {
     BRONZE = 'BRONZE',

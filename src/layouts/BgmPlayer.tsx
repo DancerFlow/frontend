@@ -2,14 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import Lottie from 'lottie-react';
 import ReactHowler from 'react-howler';
 import styled, { keyframes } from 'styled-components';
-import { useContext } from 'react';
-
-import { GlobalContext } from '../context/Context';
+import { useBgmContext } from '../context/BgmContext';
 import bgmOnOff from '../assets/bgmOnOff.json';
 
-const BgmPlayer = () => {
+const BgmPlayer = React.memo(() => {
     const lottieRef = useRef<any>(null);
-    const { bgmControl, state } = useContext(GlobalContext);
+    const { bgmControl, state } = useBgmContext();
 
     useEffect(() => {
         state.bgmState.bgm ? lottieRef.current.playSegments([37, 67], true) : lottieRef.current.playSegments([5, 33], true);
@@ -18,7 +16,6 @@ const BgmPlayer = () => {
     const handleSound = () => {
         bgmControl({ bgm: !state.bgmState.bgm });
     };
-
     return (
         <>
             {!sessionStorage.getItem('noShowPopup') && (
@@ -41,8 +38,9 @@ const BgmPlayer = () => {
                 </ConfirmSoundPlay>
             )}
             <ReactHowler
-                src={['https://dancerflow.s3.us-east-2.amazonaws.com/1691922549668-rukunetsu.mp3']}
+                src={'https://d1q7niitd49esc.cloudfront.net/rukunetsu.mp3'}
                 playing={state.bgmState.bgm}
+                preload={false}
                 volume={0.1}
                 loop={true}
             />
@@ -51,7 +49,7 @@ const BgmPlayer = () => {
             </BgmController>
         </>
     );
-};
+});
 
 const ConfirmKeyframes = keyframes`
     0%{

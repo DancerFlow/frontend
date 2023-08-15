@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useGetUserProfileQuery } from '../api/useGetUserProfileQuery';
 import styled from 'styled-components';
 
-import tempImg from './KakaoTalk_Photo_2023-05-15-20-09-53.png';
+import tempImg from '/items/24.png';
 import { Profile } from '../interface';
 import LoginModal from '../components/main/LoginModal';
 
@@ -46,7 +46,9 @@ const ProfileContainer = styled.div`
 const ProfileImage = styled.img`
     width: 80px;
     height: 80px;
-    background-color: ${(props) => props.theme.green};
+    background-color: grey;
+    border-radius:20px;
+    
 `;
 
 const ProfileNickname = styled.p`

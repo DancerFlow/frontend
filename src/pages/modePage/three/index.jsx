@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { Canvas, extend, useThree } from '@react-three/fiber';
 import { Environment, Effects, useGLTF, Html } from '@react-three/drei';
 
-import Model from './Model';
 import Floor from './Floor';
 import Player from './Player';
 import Logo from './Logo';
@@ -29,12 +28,29 @@ const CAMERA_PROPS = {
     far: 1000
 };
 
+function throttle(func, limit) {
+    let inThrottle;
+    return function () {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => (inThrottle = false), limit);
+        }
+    };
+}
+
 const Three = () => {
     const [destinationPoint, setDestinatioPoint] = useState([0, 0, -2]);
     const [playerAnimation, setPlayerAnimation] = useState(0);
     const [area, setArea] = useState(-1); // 0: practice, 1: challenge, 2: construction, 3: room
     const [isLoading, setIsLoading] = useState(true);
     const roomRef = useRef();
+
+    const handlePlayerClick = throttle(() => {
+        setPlayerAnimation(2);
+    }, 1000);
 
     return (
         <Canvas orthographic={true} shadows camera={CAMERA_PROPS}>

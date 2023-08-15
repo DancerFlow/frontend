@@ -6,13 +6,13 @@ import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
 import { useContext } from 'react';
 import { GlobalContext } from '../../../context/Context';
-useGLTF.preload('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/house2.glb');
+useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/house.glb');
 export default function Room({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
     const { state } = useContext(GlobalContext);
 
-    const gltf = useGLTF('https://ai11dancerflow-upload-user-profile-image.s3.ap-northeast-2.amazonaws.com/house2.glb');
+    const gltf = useGLTF('https://d1q7niitd49esc.cloudfront.net/models/house.glb');
     gltf.scene.castShadow = true;
     gltf.scene.receiveShadow = true;
     gltf.scene.traverse(function (child) {
