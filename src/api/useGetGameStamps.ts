@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Stamps } from '../interface';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;

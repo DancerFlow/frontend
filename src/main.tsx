@@ -7,7 +7,7 @@ import './index.css';
 import Test from './pages/challengePage/Game.jsx';
 import ScoreExtraction from './pages/challengePage/Score/index';
 import { theme } from './theme';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Rootlayout from './layouts/Rootlayout';
 import { GlobalContextProvider } from './context/Context';
 import Loadable from './components/common/Loadable';

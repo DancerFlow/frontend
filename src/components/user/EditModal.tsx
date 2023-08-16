@@ -5,7 +5,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { Profile, Status } from '../../interface';
 // import { usePatchtUserPasswordMutation } from '../../api/usePatchtUserPasswordMutation';
 import axios, { AxiosError } from 'axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useDeleteLogoutMutation } from '../../api/useDeleteLogoutMutation';
 import { useNavigate } from 'react-router-dom';
 

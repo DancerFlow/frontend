@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { logoutAxios } from './authApi';
 
 export const useDeleteLogoutMutation = (options?: object) => {
