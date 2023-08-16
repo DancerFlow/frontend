@@ -3,7 +3,7 @@ import { MeshReflectorMaterial, useGLTF } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { easing } from 'maath';
-useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/challenge.gltf');
+
 export default function Challenge({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();

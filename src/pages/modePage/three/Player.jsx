@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import { easing } from 'maath';
 import { useGetUserItemQuery } from '../../../api/useGetUserItem';
 
-useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/playerModel.glb');
 export default function Player({ destinationPoint, playerAnimation, setPlayerAnimation, setArea, area, playerModel }) {
     const ref = useRef();
     const [animationTime, setAnimationTime] = useState(0);

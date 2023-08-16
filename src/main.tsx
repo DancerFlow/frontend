@@ -13,10 +13,10 @@ import { GlobalContextProvider } from './context/Context';
 import Loadable from './components/common/Loadable';
 
 const queryClient = new QueryClient();
+import { MainPage } from './pages/index';
 
 const AdminPage = Loadable(lazy(() => import('./pages/adminPage')));
 const ChallengePage = Loadable(lazy(() => import('./pages/challengePage')));
-const MainPage = Loadable(lazy(() => import('./pages/mainPage')));
 const ModePage = Loadable(lazy(() => import('./pages/modePage')));
 const MusicListPage = Loadable(lazy(() => import('./pages/musicListPage')));
 const PracticePage = Loadable(lazy(() => import('./pages/practicePage')));

@@ -6,7 +6,6 @@ import { MathUtils, Vector3 } from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 import { easing } from 'maath';
 
-useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/practice.glb');
 export default function Practice({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();

@@ -7,7 +7,7 @@ import LoadingView from './LoadingView';
 
 const Loadable = (Component) => (props) =>
     (
-        <Suspense fallback={<LoadingView />}>
+        <Suspense fallback={<LoadingView loadingScreen={true} />}>
             <Component {...props} />
         </Suspense>
     );

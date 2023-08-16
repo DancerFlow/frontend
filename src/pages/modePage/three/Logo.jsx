@@ -4,9 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useFrame } from '@react-three/fiber';
 import { Vector3, MathUtils } from 'three';
 
-// glTF 모델을 사전 로드
-useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/dflogo.glb');
-
 export default function Logo() {
     const ref = useRef();
     const gltf = useGLTF('https://d1q7niitd49esc.cloudfront.net/models/dflogo.glb');

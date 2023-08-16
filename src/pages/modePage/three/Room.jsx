@@ -6,7 +6,7 @@ import { MathUtils, Vector3 } from 'three';
 import { easing } from 'maath';
 import { useContext } from 'react';
 import { GlobalContext } from '../../../context/Context';
-useGLTF.preload('https://d1q7niitd49esc.cloudfront.net/models/house.glb');
+
 export default function Room({ area }) {
     const [hovered, setHovered] = useState(false);
     const ref = useRef();
