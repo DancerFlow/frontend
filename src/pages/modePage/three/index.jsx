@@ -3,14 +3,22 @@ import * as THREE from 'three';
 import { Canvas, extend, useThree } from '@react-three/fiber';
 import { Environment, Effects, useGLTF, Html } from '@react-three/drei';
 
-import Floor from './Floor';
-import Player from './Player';
-import Logo from './Logo';
-import Practice from './Practice';
-import Challenge from './Challenge';
-import Construction from './Construction';
-import Room from './Room';
-import LoadingView from '../../../components/common/LoadingView';
+// import Floor from './Floor';
+// import Player from './Player';
+// import Logo from './Logo';
+// import Practice from './Practice';
+// import Challenge from './Challenge';
+// import Construction from './Construction';
+// import Room from './Room';
+const LazyFloor = Loadable(() => import('./Floor'));
+const LazyPlayer = Loadable(() => import('./Player'));
+const LazyLogo = Loadable(() => import('./Logo'));
+const LazyPractice = Loadable(() => import('./Practice'));
+const LazyChallenge = Loadable(() => import('./Challenge'));
+const LazyConstruction = Loadable(() => import('./Construction'));
+const LazyRoom = Loadable(() => import('./Room'));
+
+import Loadable from '../../../components/common/Loadable';
 
 const FLOOR_WIDTH = 30;
 const FLOOR_HEIGHT = 30;
@@ -67,27 +75,20 @@ const Three = () => {
                 shadow-camera-bottom={-20}
                 color="white"
             />
-            <Suspense
-                fallback={
-                    <Html center>
-                        <LoadingView loadingScreen={true} />
-                    </Html>
-                }
-            >
-                <Floor setDestinatioPoint={setDestinatioPoint} width={FLOOR_WIDTH} height={FLOOR_HEIGHT} center={FLOOR_CENTER}></Floor>
-                <Construction area={area}></Construction>
-                <Practice area={area}></Practice>
-                <Room area={area}></Room>
-                <Challenge area={area}></Challenge>
-                <Logo />
-                <Player
-                    destinationPoint={destinationPoint}
-                    playerAnimation={playerAnimation}
-                    setPlayerAnimation={setPlayerAnimation}
-                    setArea={setArea}
-                    area={area}
-                ></Player>
-            </Suspense>
+
+            <LazyFloor setDestinatioPoint={setDestinatioPoint} width={FLOOR_WIDTH} height={FLOOR_HEIGHT} center={FLOOR_CENTER} />
+            <LazyConstruction area={area} />
+            <LazyPractice area={area}></LazyPractice>
+            <LazyRoom area={area} />
+            <LazyChallenge area={area} />
+            <LazyLogo />
+            <LazyPlayer
+                destinationPoint={destinationPoint}
+                playerAnimation={playerAnimation}
+                setPlayerAnimation={setPlayerAnimation}
+                setArea={setArea}
+                area={area}
+            />
         </Canvas>
     );
 };

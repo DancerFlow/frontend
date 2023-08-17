@@ -10,19 +10,20 @@ import { theme } from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Rootlayout from './layouts/Rootlayout';
 import { GlobalContextProvider } from './context/Context';
-import Loadable from './components/common/Loadable';
 
 const queryClient = new QueryClient();
-import { MainPage } from './pages/index';
 
-const AdminPage = Loadable(lazy(() => import('./pages/adminPage')));
-const ChallengePage = Loadable(lazy(() => import('./pages/challengePage')));
-const ModePage = Loadable(lazy(() => import('./pages/modePage')));
-const MusicListPage = Loadable(lazy(() => import('./pages/musicListPage')));
-const PracticePage = Loadable(lazy(() => import('./pages/practicePage')));
-const UserPage = Loadable(lazy(() => import('./pages/userPage')));
-const ResultPage = Loadable(lazy(() => import('./pages/resultPage')));
-const PracticeResultPage = Loadable(lazy(() => import('./pages/PracticeResultPage')));
+import {
+    AdminPage,
+    ChallengePage,
+    MainPage,
+    ModePage,
+    MusicListPage,
+    PracticePage,
+    UserPage,
+    ResultPage,
+    PracticeResultPage
+} from './pages/index';
 
 const router = createBrowserRouter([
     {
