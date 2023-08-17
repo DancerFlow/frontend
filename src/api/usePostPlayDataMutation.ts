@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { PostGuestPlayData, PostUserPlayData } from './gameApi';
 
 export const usePostGuestPlayDataMutation = (musicId: number, playData: any, options?: object) => {

@@ -1,6 +1,6 @@
 import { verifyAxios } from './authApi';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetUserVerifyQuery = (options: object) => {
-    return useQuery('userVerify', () => verifyAxios(), options);
+    return useQuery({ queryKey: ['userVerify', 1], queryFn: () => verifyAxios(), ...options });
 };

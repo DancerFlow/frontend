@@ -7,22 +7,23 @@ import './index.css';
 import Test from './pages/challengePage/Game.jsx';
 import ScoreExtraction from './pages/challengePage/Score/index';
 import { theme } from './theme';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Rootlayout from './layouts/Rootlayout';
 import { GlobalContextProvider } from './context/Context';
-import Loadable from './components/common/Loadable';
 
 const queryClient = new QueryClient();
 
-const AdminPage = Loadable(lazy(() => import('./pages/adminPage')));
-const ChallengePage = Loadable(lazy(() => import('./pages/challengePage')));
-const MainPage = Loadable(lazy(() => import('./pages/mainPage')));
-const ModePage = Loadable(lazy(() => import('./pages/modePage')));
-const MusicListPage = Loadable(lazy(() => import('./pages/musicListPage')));
-const PracticePage = Loadable(lazy(() => import('./pages/practicePage')));
-const UserPage = Loadable(lazy(() => import('./pages/userPage')));
-const ResultPage = Loadable(lazy(() => import('./pages/resultPage')));
-const PracticeResultPage = Loadable(lazy(() => import('./pages/PracticeResultPage')));
+import {
+    AdminPage,
+    ChallengePage,
+    MainPage,
+    ModePage,
+    MusicListPage,
+    PracticePage,
+    UserPage,
+    ResultPage,
+    PracticeResultPage
+} from './pages/index';
 
 const router = createBrowserRouter([
     {

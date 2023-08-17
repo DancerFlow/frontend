@@ -1,5 +1,5 @@
 import './App.css';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 function App() {
     return (
         <>

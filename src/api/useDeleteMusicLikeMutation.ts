@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { deleteMusicLike } from './musicApi';
 
 export const useDeleteMusicLikeMutation = (musicId: number, options?: object) => {

@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { loginAxios } from './authApi';
 
 export const usePostLoginMutation = (options?: object) => {

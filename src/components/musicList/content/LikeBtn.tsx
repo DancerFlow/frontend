@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { usePatchMusicLikeMutation } from '../../../api/usePatchMusicLikeMutation';
 import { useDeleteMusicLikeMutation } from '../../../api/useDeleteMusicLikeMutation';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { GlobalContext } from '../../../context/Context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { patchMusicLike } from './musicApi';
 
 export const usePatchMusicLikeMutation = (musicId: number, options?: object) => {
