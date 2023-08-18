@@ -9,7 +9,7 @@ import Lottie from 'lottie-react';
 
 import { usePostGuestPlayDataMutation, usePostUserPlayDataMutation } from '../../api/usePostPlayDataMutation';
 import { GlobalContext } from '../../context/Context';
-import { scoring } from '../../hooks/scoring';
+import { scoring } from '../../AI/scoring/scoring';
 import PerfectLottie from '../../assets/score/perfect.json';
 import GreatLottie from '../../assets/score/great.json';
 import GoodLottie from '../../assets/score/good.json';

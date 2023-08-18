@@ -8,7 +8,7 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 
 import { GlobalContext } from '../../context/Context';
-import { scoring } from '../../hooks/scoring';
+import { scoring } from '../../AI/scoring/scoring';
 import PerfectLottie from '../../assets/score/perfect.json';
 import GreatLottie from '../../assets/score/great.json';
 import GoodLottie from '../../assets/score/good.json';
