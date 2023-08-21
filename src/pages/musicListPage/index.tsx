@@ -3,7 +3,6 @@ import Filter from '../../components/musicList/filter/Filter';
 import Content from '../../components/musicList/content';
 import { useState } from 'react';
 import { useGetMusicListQuery } from '../../api/useGetMusicListQuery';
-import { useGetMusicSearchQuery } from '../../api/useGetMusicSearchQuery';
 import { useGetUserLikesQuery } from '../../api/useGetUserLikesQuery';
 
 import { UserLike } from '../../interface';
@@ -13,13 +12,14 @@ import { useParams } from 'react-router-dom';
 export enum FilterType {
     Popular = 'popular',
     Latest = 'latest',
-    Like = 'isLiked'
+    Like = 'isLiked',
+    Serach = 'search'
 }
 
 const MusicListPage = () => {
     const [selectedFilter, setSelectedFilter] = useState<FilterType | ''>(FilterType.Popular);
     const [inputValue, setInputValue] = useState('');
-    const [searchMusic, setSearchMusic] = useState<string | undefined>(undefined);
+    const [searchMusic, setSearchMusic] = useState<FilterType | ' '>(FilterType.Serach);
     const { mode } = useParams();
 
     // 전체 리스트 (좋아요, 최신순)
@@ -34,7 +34,7 @@ const MusicListPage = () => {
     });
 
     // 이름 검색 리스트
-    const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicSearchQuery(searchMusic || undefined);
+    const { isLoading: musicSearchLoading, data: musicSearchList } = useGetMusicListQuery(searchMusic || undefined);
 
     // 찜한 목록 리스트
     const { data: userLikesList } = useGetUserLikesQuery();
